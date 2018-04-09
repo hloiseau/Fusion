@@ -286,7 +286,7 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
-/NetCoreSampleProf/NetCoreSample
+
 
 # Built application files
 *.apk
