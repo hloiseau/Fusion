@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Fusion</string>
+    <string name="incident_no">Incident No</string>
+    <string name="short_description">Short Description</string>
+    <string name="description">Description</string>
+    <string name="get_data">Get Data</string>
+</resources>
