@@ -22,7 +22,7 @@ begin
 		return 2;
 	end;
 
-    update iti.tUsers set FirstName = @FirstName, LastName = @LastName, u.Mail = @Mail where UsersId = @UsersId;
+    update iti.tUsers set FirstName = @FirstName, LastName = @LastName, Mail = @Mail where UsersId = @UsersId;
 	commit;
     return 0;
 end;

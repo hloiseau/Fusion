@@ -1,4 +1,4 @@
-create table test.tDevices
+create table iti.tDevices
 (
     DevicesId int identity(0, 1),
     [Name] nvarchar(32) not null,
@@ -11,5 +11,5 @@ create table test.tDevices
     constraint CK_tDevices_Type check([Type] in ('Mobile', 'Computer', 'Tablet', 'Laptop'))
 );
 
-insert into test.tDevices([Name],									 [Type],			[Token])
+insert into iti.tDevices([Name],									 [Type],			[Token])
                   values(left(convert(nvarchar(36), newid()), 32), 'Mobile', left(convert(nvarchar(36), newid()), 32));

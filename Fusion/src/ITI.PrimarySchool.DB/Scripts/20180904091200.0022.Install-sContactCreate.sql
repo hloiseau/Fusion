@@ -3,7 +3,8 @@ create proc iti.sContactCreate
 	@FirstName nvarchar(32),
     @LastName  nvarchar(32),
 	@Mail nvarchar(32),
-	@PhoneNumber nvarchar(32) out
+	@PhoneNumber nvarchar(32),
+	@ContactId int out
 )
 as
 begin

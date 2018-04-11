@@ -1,4 +1,4 @@
-create table iti.tContactId
+create table iti.tContact
 (
   ContactId INT NOT NULL,
   FirstName varchar(32),
@@ -6,5 +6,5 @@ create table iti.tContactId
   Mail varchar(32) NOT NULL,
   PhoneNumber VARCHAR(32) NOT NULL,
 
-  constraint PK_tUsersDevice primary key(ContactId)
+  constraint PK_tContact primary key(ContactId)
 )

@@ -4,7 +4,7 @@ create table iti.tUsersDevice
     UsersId int not null,
     DevicesId  int not null,
 
-    constraint PK_tUsersDevice primary key(DeviceId),
+    constraint PK_tUsersDevice primary key(UsersDeviceId),
 	constraint FK_tUsersDevice_tUsers foreign key(UsersId) references iti.tUsers(UsersId),
 	constraint FK_tUsersDevice_tDevices foreign key(DevicesId) references iti.tDevices(DevicesId)
 );
