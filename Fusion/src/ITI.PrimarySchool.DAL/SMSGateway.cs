@@ -16,147 +16,42 @@ namespace Fusion.DAL
             _connectionString = connectionString;
         }
 
-        public async Task<UserData> FindById( int userId )
+        public async Task<IEnumerable<SMSData>> ListAll()
         {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.[Password], u.GithubAccessToken, u.GoogleRefreshToken, u.GoogleId, u.GithubId from iti.vUser u where u.UserId = @UserId",
-                    new { UserId = userId } );
+                return await con.QueryAsync<SMSData>(@"select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS");
             }
         }
 
-        public async Task<Result<UserData>> FindGitHubUser( int userId )
+        public async Task<Result<SMSData>> FindById( int smsId )
         {
             using( SqlConnection con = new SqlConnection( _connectionString ) )
             {
-                UserData user = await con.QueryFirstOrDefaultAsync<UserData>(
-                    @"select u.UserId,
-                             u.Email,
-                             u.[Password],
-                             u.GithubAccessToken,
-                             u.GoogleRefreshToken,
-                             u.GoogleId,
-                             u.GithubId
-                      from iti.vUser u
-                      where u.UserId = @UserId;",
-                    new { UserId = userId } );
+                SMSData sms = await con.QueryFirstOrDefaultAsync<SMSData>(
+                   "select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS where SMSId = smsId",
+                    new { SMSId = smsId } );
 
-                if( user == null ) return Result.Failure<UserData>( Status.BadRequest, "Unknown user." );
-                if( user.GithubId == 0) return Result.Failure<UserData>( Status.BadRequest, "This user is not a known github user." );
-
-                return Result.Success( user );
+                if (sms == null) return Result.Failure<SMSData>(Status.NotFound, "SMS not found.");
+                return Result.Success(sms);
+            }
+        }
+        
+        public async Task<IEnumerable<SMSData>> FindByNumber( string number )
+        {
+            using( SqlConnection con = new SqlConnection( _connectionString ) )
+            {
+                return await con.QueryAsync<SMSData>(
+                    "select SMSId, DevicesId, UsersId, Extern, [Time], [Message],direction from iti.tSMS where Extern = Number",
+                    new { Number = number } );
             }
         }
 
-        public async Task<UserData> FindByEmail( string email )
+        public async Task Delete( int smsId )
         {
             using( SqlConnection con = new SqlConnection( _connectionString ) )
             {
-                return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.[Password], u.GithubAccessToken, u.GoogleRefreshToken, u.GoogleId, u.GithubId from iti.vUser u where u.Email = @Email",
-                    new { Email = email } );
-            }
-        }
-
-        public async Task<UserData> FindByGoogleId( string googleId )
-        {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
-            {
-                return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.[Password], u.GithubAccessToken, u.GoogleRefreshToken, u.GoogleId, u.GithubId from iti.vUser u where u.GoogleId = @GoogleId",
-                    new { GoogleId = googleId } );
-            }
-        }
-
-        public async Task<UserData> FindByGithubId( int githubId )
-        {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
-            {
-                return await con.QueryFirstOrDefaultAsync<UserData>(
-                    "select u.UserId, u.Email, u.[Password], u.GithubAccessToken, u.GoogleRefreshToken, u.GoogleId, u.GithubId from iti.vUser u where u.GithubId = @GithubId",
-                    new { GithubId = githubId } );
-            }
-        }
-
-        public async Task<Result<int>> CreatePasswordUser( string email, byte[] password )
-        {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
-            {
-                var p = new DynamicParameters();
-                p.Add( "@Email", email );
-                p.Add( "@Password", password );
-                p.Add( "@UserId", dbType: DbType.Int32, direction: ParameterDirection.Output );
-                p.Add( "@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue );
-                await con.ExecuteAsync( "iti.sPasswordUserCreate", p, commandType: CommandType.StoredProcedure );
-
-                int status = p.Get<int>( "@Status" );
-                if( status == 1 ) return Result.Failure<int>( Status.BadRequest, "An account with this email already exists." );
-
-                Debug.Assert( status == 0 );
-                return Result.Success( p.Get<int>( "@UserId" ) );
-            }
-        }
-
-        public async Task CreateOrUpdateGithubUser( string email, int githubId, string accessToken )
-        {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
-            {
-                await con.ExecuteAsync(
-                    "iti.sGithubUserCreateOrUpdate",
-                    new { Email = email, GithubId = githubId, AccessToken = accessToken },
-                    commandType: CommandType.StoredProcedure );
-            }
-        }
-
-        public async Task CreateOrUpdateGoogleUser( string email, string googleId, string refreshToken )
-        {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
-            {
-                await con.ExecuteAsync(
-                    "iti.sGoogleUserCreateOrUpdate",
-                    new { Email = email, GoogleId = googleId, RefreshToken = refreshToken },
-                    commandType: CommandType.StoredProcedure );
-            }
-        }
-
-        public async Task<IEnumerable<string>> GetAuthenticationProviders( string userId )
-        {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
-            {
-                return await con.QueryAsync<string>(
-                    "select p.ProviderName from iti.vAuthenticationProvider p where p.UserId = @UserId",
-                    new { UserId = userId } );
-            }
-        }
-
-        public async Task Delete( int userId )
-        {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
-            {
-                await con.ExecuteAsync( "iti.sUserDelete", new { UserId = userId }, commandType: CommandType.StoredProcedure );
-            }
-        }
-
-        public async Task UpdateEmail( int userId, string email )
-        {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
-            {
-                await con.ExecuteAsync(
-                    "iti.sUserUpdate",
-                    new { UserId = userId, Email = email },
-                    commandType: CommandType.StoredProcedure );
-            }
-        }
-
-        public async Task UpdatePassword( int userId, byte[] password )
-        {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
-            {
-                await con.ExecuteAsync(
-                    "iti.sPasswordUserUpdate",
-                    new { UserId = userId, Password = password },
-                    commandType: CommandType.StoredProcedure );
+                await con.ExecuteAsync( "iti.sSMSDelete", new { SMSId = smsId }, commandType: CommandType.StoredProcedure );
             }
         }
     }
