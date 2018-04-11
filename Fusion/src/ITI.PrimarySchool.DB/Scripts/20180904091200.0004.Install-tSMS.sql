@@ -1,14 +1,14 @@
 create table iti.tSMS
 (
-  idSMS INT NOT NULL,
+  SMSId INT NOT NULL,
   DevicesId INT NOT NULL,
   UsersId INT NOT NULL,
   Extern VARCHAR(45) NOT NULL,
   [Time] DATETIME NOT NULL,
   [Message] TEXT,
-  direction BIT(1) NOT NULL,
+  direction BIT NOT NULL Default 0,
 
-  constraint PK_tUsersDevice primary key(DeviceId),
-  constraint FK_tUsersDevice_tUsers foreign key(UsersId) references test.tUsers(UsersId),
-  constraint FK_tUsersDevice_tDevices foreign key(DevicesId) references test.tUsers(DevicesId)
+  constraint PK_tSMS primary key(SMSId),
+  constraint FK_tSMS_tUsers foreign key(UsersId) references iti.tUsers(UsersId),
+  constraint FK_tSMS_tDevices foreign key(DevicesId) references iti.tDevices(DevicesId)
 )

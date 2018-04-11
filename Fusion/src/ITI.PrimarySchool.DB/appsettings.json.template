@@ -1,5 +1,5 @@
 ﻿{
   "ConnectionStrings": {
-    "PrimarySchoolDB": "<connection string>"
+    "FusionDB": "<connection string>"
   }
 }

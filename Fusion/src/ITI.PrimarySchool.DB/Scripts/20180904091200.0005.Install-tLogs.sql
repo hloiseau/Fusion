@@ -6,6 +6,6 @@ create table iti.tLogs
   DevicesId int not null,
   [Action] text,
 
-  constraint PK_tUsersDevice primary key(LogId),
-  constraint FK_tUsersDevice_tUsers foreign key(UsersId) references test.tUsers(UsersId)
+  constraint PK_tLogs primary key(LogId),
+  constraint FK_tUsers foreign key(UsersId) references iti.tUsers(UsersId)
 )
