@@ -12,7 +12,7 @@ namespace Fusion.DB
 
         public static int Main( string[] args )
         {
-            var connectionString = Configuration[ "ConnectionStrings:PrimarySchoolDB" ];
+            var connectionString = Configuration[ "ConnectionStrings:FusionDB" ];
 
             EnsureDatabase.For.SqlDatabase( connectionString );
 
