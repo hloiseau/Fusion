@@ -4,7 +4,7 @@ namespace Fusion.DAL
 {
     public class SMSData
     {
-        public string idSMS { get; set; }
+        public int SMSId { get; set; }
 
         public int DevicesId { get; set; }
 
