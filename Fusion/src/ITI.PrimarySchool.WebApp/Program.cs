@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,7 +21,11 @@ namespace Fusion.WebApp
 
         public static IWebHost BuildWebHost( string[] args ) =>
             new WebHostBuilder()
-                .UseKestrel()
+                .UseKestrel(options =>
+                    {
+                        options.Listen(IPAddress.Any, 5000);
+                    }
+                    )
                 .UseContentRoot( Directory.GetCurrentDirectory() )
                 .ConfigureAppConfiguration( ( hostingContext, config ) =>
                 {
