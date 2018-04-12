@@ -7,41 +7,41 @@ using Dapper;
 
 namespace Fusion.DAL
 {
-    public class SMSGateway
+    public class ContactGateway
     {
         readonly string _connectionString;
 
-        public SMSGateway( string connectionString )
+        public ContactGateway( string connectionString )
         {
             _connectionString = connectionString;
         }
 
-        public async Task<IEnumerable<SMSData>> ListAll()
+        public async Task<IEnumerable<ContactData>> ListAll()
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                return await con.QueryAsync<SMSData>(@"select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS");
+                return await con.QueryAsync<ContactData>(@"select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS");
             }
         }
 
-        public async Task<Result<SMSData>> FindById( int smsId )
+        public async Task<Result<ContactData>> FindById( int smsId )
         {
             using( SqlConnection con = new SqlConnection( _connectionString ) )
             {
-                SMSData sms = await con.QueryFirstOrDefaultAsync<SMSData>(
+                ContactData sms = await con.QueryFirstOrDefaultAsync<ContactData>(
                    "select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS where SMSId = smsId",
                     new { SMSId = smsId } );
 
-                if (sms == null) return Result.Failure<SMSData>(Status.NotFound, "SMS not found.");
+                if (sms == null) return Result.Failure<ContactData>(Status.NotFound, "SMS not found.");
                 return Result.Success(sms);
             }
         }
         
-        public async Task<IEnumerable<SMSData>> FindByNumber( string number )
+        public async Task<IEnumerable<ContactData>> FindByNumber( string number )
         {
             using( SqlConnection con = new SqlConnection( _connectionString ) )
             {
-                return await con.QueryAsync<SMSData>(
+                return await con.QueryAsync<ContactData>(
                     "select SMSId, DevicesId, UsersId, Extern, [Time], [Message],direction from iti.tSMS where Extern = Number",
                     new { Number = number } );
             }

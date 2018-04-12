@@ -1,19 +1,21 @@
-﻿namespace Fusion.DAL
+﻿using System;
+
+namespace Fusion.DAL
 {
     public class SMSData
     {
-        public int UserId { get; set; }
+        public int SMSId { get; set; }
 
-        public string Email { get; set; }
+        public int DevicesId { get; set; }
 
-        public byte[] Password { get; set; }
+        public int UsersId { get; set; }
 
-        public string GithubAccessToken { get; set; }
+        public string Extern { get; set; }
         
-        public string GoogleRefreshToken { get; set; }
+        public DateTime Time { get; set; }
 
-        public string GoogleId { get; set; }
+        public string Message { get; set; }
 
-        public int GithubId { get; set; }
+        public byte[] Direction { get; set; }
     }
 }
