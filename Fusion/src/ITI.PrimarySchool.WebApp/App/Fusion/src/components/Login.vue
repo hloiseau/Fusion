@@ -5,13 +5,14 @@
 
             <button type="button" @click="login('Google')" class="btn btn-lg btn-block btn-primary">
                 <i class="fa fa-google" aria-hidden="true"></i> Se connecter via Google</button>
-            <button type="button" @click="login('GitHub')" class="btn btn-lg btn-block btn-primary">
-                <i class="fa fa-github" aria-hidden="true"></i> Se connecter via GitHub</button>
-            <button type="button" @click="login('Base')" class="btn btn-lg btn-block btn-default">Se connecter via ITI.PrimarySchool</button>
+            <i class="el-icon-edit"></i>
+            <!-- `checked` should be true or false -->
+  <el-checkbox v-model="checked">Option</el-checkbox>
+          <p>caca jaune</p>
         </div>
     </div>
 </template>
-
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script>
 import AuthService from '../services/AuthService'
 import Vue from 'vue'
@@ -19,8 +20,10 @@ import Vue from 'vue'
 export default {
     data() {
         return {
-            endpoint: null
+            endpoint: null,
+            checked: true
         }
+        
     },
 
     mounted() {

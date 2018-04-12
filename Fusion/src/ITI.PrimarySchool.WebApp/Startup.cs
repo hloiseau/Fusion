@@ -29,18 +29,12 @@ namespace Fusion.WebApp
             services.AddOptions();
 
             services.AddMvc();
-            services.AddSingleton( _ => new UserGateway( Configuration[ "ConnectionStrings:PrimarySchoolDB" ] ) );
-            services.AddSingleton( _ => new ClassGateway( Configuration[ "ConnectionStrings:PrimarySchoolDB" ] ) );
-            services.AddSingleton( _ => new StudentGateway( Configuration[ "ConnectionStrings:PrimarySchoolDB" ] ) );
-            services.AddSingleton( _ => new TeacherGateway( Configuration[ "ConnectionStrings:PrimarySchoolDB" ] ) );
+            services.AddSingleton( _ => new UserGateway( Configuration["ConnectionStrings:FusionDB"] ) );
             services.AddSingleton<PasswordHasher>();
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();
-            services.AddSingleton<GitHubService>();
-            services.AddSingleton<GitHubClient>();
             services.AddSingleton<GoogleAuthenticationManager>();
             services.AddSingleton<GithubAuthenticationManager>();
-            services.AddSingleton<StockService>();
 
             string secretKey = Configuration[ "JwtBearer:SigningKey" ];
             SymmetricSecurityKey signingKey = new SymmetricSecurityKey( Encoding.ASCII.GetBytes( secretKey ) );
@@ -82,24 +76,6 @@ namespace Fusion.WebApp
                         OnCreatingTicket = ctx => ctx.HttpContext.RequestServices.GetRequiredService<GoogleAuthenticationManager>().OnCreatingTicket( ctx )
                     };
                     o.AccessType = "offline";
-                } )
-                .AddOAuth( "GitHub", o =>
-                {
-                    o.SignInScheme = CookieAuthentication.AuthenticationScheme;
-                    o.ClientId = Configuration[ "Authentication:Github:ClientId" ];
-                    o.ClientSecret = Configuration[ "Authentication:Github:ClientSecret" ];
-                    o.CallbackPath = new PathString( "/signin-github" );
-
-                    o.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
-                    o.TokenEndpoint = "https://github.com/login/oauth/access_token";
-                    o.UserInformationEndpoint = "https://api.github.com/user";
-
-                    o.Scope.Add( "user" );
-
-                    o.Events = new OAuthEvents
-                    {
-                        OnCreatingTicket = ctx => ctx.HttpContext.RequestServices.GetRequiredService<GithubAuthenticationManager>().OnCreatingTicket( ctx )
-                    };
                 } );
         }
 
