@@ -29,20 +29,18 @@ namespace Fusion.WebApp
             services.AddOptions();
 
             services.AddMvc();
-<<<<<<< HEAD
+            services.AddSingleton( _ => new ContactGateway( Configuration["ConnectionStrings:FusionDB"] ) );
             services.AddSingleton( _ => new UserGateway( Configuration["ConnectionStrings:FusionDB"] ) );
+<<<<<<< HEAD
+            services.AddSingleton( _ => new SMSGateway( Configuration["ConnectionStrings:FusionDB"] ) );
 =======
-            services.AddSingleton( _ => new UserGateway( Configuration[ "ConnectionStrings:PrimarySchoolDB" ] ) );
-            services.AddSingleton( _ => new SMSGateway( Configuration[ "ConnectionStrings:PrimarySchoolDB" ] ) );
->>>>>>> 60cc86627f550f4e212b216bffdcc8ced583c2a0
+            services.AddSingleton( _ => new SMSGateway( Configuration[ "ConnectionStrings:FusionDB" ] ) );
+>>>>>>> bcf58513b6822c2047523da8335f3760d96b8d65
             services.AddSingleton<PasswordHasher>();
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();
             services.AddSingleton<GoogleAuthenticationManager>();
-<<<<<<< HEAD
-            services.AddSingleton<GithubAuthenticationManager>();
-=======
->>>>>>> 60cc86627f550f4e212b216bffdcc8ced583c2a0
+
 
             string secretKey = Configuration[ "JwtBearer:SigningKey" ];
             SymmetricSecurityKey signingKey = new SymmetricSecurityKey( Encoding.ASCII.GetBytes( secretKey ) );
@@ -86,11 +84,7 @@ namespace Fusion.WebApp
                                 .OnCreatingTicket(ctx)
                     };
                     o.AccessType = "offline";
-<<<<<<< HEAD
-                } );
-=======
                 });
->>>>>>> 60cc86627f550f4e212b216bffdcc8ced583c2a0
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

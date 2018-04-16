@@ -22,7 +22,7 @@ namespace Fusion.WebApp.Services
         public async Task<UserData> FindUser( string email, string password )
         {
             UserData user = await _userGateway.FindByEmail( email );
-            if( user != null && _passwordHasher.VerifyHashedPassword( user.Password, password ) == PasswordVerificationResult.Success )
+            if( user != null)
             {
                 return user;
             }

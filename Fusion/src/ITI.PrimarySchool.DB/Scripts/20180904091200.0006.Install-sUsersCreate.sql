@@ -10,7 +10,7 @@ begin
 	set transaction isolation level serializable;
 	begin tran;
 
-	if exists(select * from iti.tUser u where u.FirstName = @FirstName and u.LastName = @LastName and u.Mail = @Mail)
+	if exists(select * from iti.tUsers u where u.FirstName = @FirstName and u.LastName = @LastName and u.Mail = @Mail)
 	begin
 		rollback;
 		return 1;

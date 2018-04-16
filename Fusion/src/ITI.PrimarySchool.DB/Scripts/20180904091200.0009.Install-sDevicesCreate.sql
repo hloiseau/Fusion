@@ -1,8 +1,8 @@
-create proc iti.sUsersCreate
+create proc iti.sDevicesCreate
 (
-	@Name nvarchar(32) not null,
-    @Type  nvarchar(8) not null,
-	@Token text not null,
+	@Name nvarchar(32),
+    @Type  nvarchar(8),
+	@Token nvarchar(250),
 	@DevicesId int out
 )
 as
