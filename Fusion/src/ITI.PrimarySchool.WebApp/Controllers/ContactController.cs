@@ -26,13 +26,12 @@ namespace Fusion.WebApp.Controllers
         }
 
         
-        [HttpPost]
-        [AllowAnonymous]
+        [HttpPost("android/newtoken/{token}", Name = "GetAllInfo")]
         [ValidateAntiForgeryToken]
-        public async Task<Result> token(string token1, string token2)
+        public async Task<Result> token(string token)
         {
-            _contactViewModel.Token = token1;
-            _contactViewModel.ConfirmToken = token2;
+            _contactViewModel.Token = token;
+            //_contactGateway.SaveToken = token;
             return Result.Success();
         }
     }
