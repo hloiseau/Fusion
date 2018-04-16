@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 namespace Fusion.WebApp.Controllers
 {
 
-
+    [Route( "api/[controller]" )]
     public class ContactController : Controller
     {
 
@@ -25,10 +25,10 @@ namespace Fusion.WebApp.Controllers
         }
 
         
-        [HttpPost("Android/newToken")]
-        public async Task<Result> token([FromBody] TokenVewModel model)
+        [HttpPost]
+        public async Task<Result> Token([FromBody] TokenVewModel model)
         {
-            _contactGateway.AddDevice(model.Token);
+            await _contactGateway.AddDevice(model.Token);
             return Result.Success();
         }
     }

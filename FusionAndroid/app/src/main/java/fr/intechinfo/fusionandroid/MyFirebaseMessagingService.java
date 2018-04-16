@@ -5,11 +5,6 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.List;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
-
 import static android.content.ContentValues.TAG;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {

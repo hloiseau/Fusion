@@ -13,6 +13,6 @@ public interface RetrofitAPI {
     Call<List<Contact>> CreateContacts(@Body List<Contact> lsContact);
 
     @Headers("'Content-Type': 'application/json'")
-    @POST("Android/newToken")
-    Call<String> CreateNewDevice(@Body String token);
+    @POST("/api/contact")
+    Call<String> CreateNewDevice(@Body Token token);
 }

@@ -5,7 +5,7 @@ namespace Fusion.WebApp.Authentication
 {
     public class TokenProviderOptions
     {
-        public string Path { get; set; } = "/token";
+        public string Path { get; set; } = "/Token";
 
         public string Issuer { get; set; }
 
