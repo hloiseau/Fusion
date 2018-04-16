@@ -36,7 +36,28 @@ namespace Fusion.DAL
                 return Result.Success(sms);
             }
         }
-        
+
+        public async Task<Result<int>> AddDevice(string token)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@Name", "device");
+                p.Add("@Type", "Mobile");
+                p.Add("@Token", token);
+                p.Add("@DeviceId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("iti.tDevices", p, commandType: CommandType.StoredProcedure);
+
+                int status = p.Get<int>("@Status");
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A student with this name already exists.");
+                if (status == 2) return Result.Failure<int>(Status.BadRequest, "A student with GitHub login already exists.");
+
+                Debug.Assert(status == 0);
+                return Result.Success(Status.Created, p.Get<int>("@DeviceId"));
+            }
+        }
+
         public async Task<Result<ContactData>> FindByNumber( string number )
         {
             using( SqlConnection con = new SqlConnection( _connectionString ) )

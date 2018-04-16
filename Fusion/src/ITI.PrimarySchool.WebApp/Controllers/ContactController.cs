@@ -30,8 +30,7 @@ namespace Fusion.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<Result> token(string token)
         {
-            _contactViewModel.Token = token;
-            //_contactGateway.SaveToken = token;
+            _contactGateway.SaveToken() = token;
             return Result.Success();
         }
     }
