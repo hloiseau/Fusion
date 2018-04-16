@@ -18,7 +18,6 @@ namespace Fusion.WebApp.Controllers
     {
 
         readonly ContactGateway _contactGateway;
-        private ContactViewModel _contactViewModel;
         
         public ContactController(ContactGateway contactGateway)
         {
@@ -26,11 +25,10 @@ namespace Fusion.WebApp.Controllers
         }
 
         
-        [HttpPost("android/newtoken/{token}", Name = "GetAllInfo")]
-        [ValidateAntiForgeryToken]
-        public async Task<Result> token(string token)
+        [HttpPost("Android/newToken")]
+        public async Task<Result> token([FromBody] TokenVewModel model)
         {
-            _contactGateway.SaveToken() = token;
+            _contactGateway.AddDevice(model.Token);
             return Result.Success();
         }
     }

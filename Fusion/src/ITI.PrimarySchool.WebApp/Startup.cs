@@ -29,12 +29,14 @@ namespace Fusion.WebApp
             services.AddOptions();
 
             services.AddMvc();
+            services.AddSingleton( _ => new ContactGateway( Configuration["ConnectionStrings:FusionDB"] ) );
             services.AddSingleton( _ => new UserGateway( Configuration["ConnectionStrings:FusionDB"] ) );
-            services.AddSingleton( _ => new SMSGateway( Configuration[ "ConnectionStrings:PrimarySchoolDB" ] ) );
+            services.AddSingleton( _ => new SMSGateway( Configuration[ "ConnectionStrings:FusionDB" ] ) );
             services.AddSingleton<PasswordHasher>();
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();
             services.AddSingleton<GoogleAuthenticationManager>();
+
 
             string secretKey = Configuration[ "JwtBearer:SigningKey" ];
             SymmetricSecurityKey signingKey = new SymmetricSecurityKey( Encoding.ASCII.GetBytes( secretKey ) );
