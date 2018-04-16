@@ -37,13 +37,16 @@ namespace Fusion.DAL
             }
         }
         
-        public async Task<IEnumerable<ContactData>> FindByNumber( string number )
+        public async Task<Result<ContactData>> FindByNumber( string number )
         {
             using( SqlConnection con = new SqlConnection( _connectionString ) )
             {
-                return await con.QueryAsync<ContactData>(
-                    "select SMSId, DevicesId, UsersId, Extern, [Time], [Message],direction from iti.tSMS where Extern = Number",
+                ContactData contact = await con.QueryFirstOrDefaultAsync<ContactData>(
+                     "select SMSId, DevicesId, UsersId, Extern, [Time], [Message],direction from iti.tSMS where Extern = Number",
                     new { Number = number } );
+
+                if (contact == null) return Result.Failure<ContactData>(Status.NotFound, "Contact not found.");
+                return Result.Success(contact);
             }
         }
 
