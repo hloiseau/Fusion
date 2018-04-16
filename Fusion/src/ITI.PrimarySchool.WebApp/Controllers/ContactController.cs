@@ -26,11 +26,12 @@ namespace Fusion.WebApp.Controllers
         }
 
         
-        [HttpPost("android/newtoken/{token}", Name = "GetAllInfo")]
+        [HttpPost("Android/newToken")]
         [ValidateAntiForgeryToken]
-        public async Task<Result> token(string token)
+        public async Task<Result> Token(string token)
         {
-            _contactGateway.SaveToken() = token;
+            
+            await _contactGateway.AddDevice(token);
             return Result.Success();
         }
     }

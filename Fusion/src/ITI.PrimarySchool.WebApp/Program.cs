@@ -21,11 +21,7 @@ namespace Fusion.WebApp
 
         public static IWebHost BuildWebHost( string[] args ) =>
             new WebHostBuilder()
-                .UseKestrel(options =>
-                    {
-                        options.Listen(IPAddress.Any, 5000);
-                    }
-                    )
+                .UseKestrel()
                 .UseContentRoot( Directory.GetCurrentDirectory() )
                 .ConfigureAppConfiguration( ( hostingContext, config ) =>
                 {

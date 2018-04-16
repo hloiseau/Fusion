@@ -20,12 +20,7 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
     }
 
     public void sendRegistrationToServer(String Token){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.8.111.192:5000")
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
-        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
-        retrofitAPI.CreateNewDevice(Token);
+
     }
 
 
