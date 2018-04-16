@@ -165,10 +165,9 @@ public class PermissionUtil {
         // and returned in the Activity's onRequestPermissionsResult()
         // int PERMISSION_ALL = 1;
         final String[] PERMISSIONS = {
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.CAMERA};
+                Manifest.permission.SEND_SMS,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.READ_PHONE_STATE};
         if(!hasPermissions(activity, PERMISSIONS)) {
             showMessageOKCancel(activity, "These permissions are mandatory for the application. Please allow access.",
                     new DialogInterface.OnClickListener() {
@@ -204,7 +203,6 @@ public class PermissionUtil {
                         }
                     });
         }
-
         setGAlleryPermissionIntent();
     }
 
