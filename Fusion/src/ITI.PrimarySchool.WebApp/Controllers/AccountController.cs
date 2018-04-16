@@ -52,7 +52,7 @@ namespace Fusion.WebApp.Controllers
                     ModelState.AddModelError( string.Empty, "Invalid login attempt." );
                     return View( model );
                 }
-                await SignIn( user.Email, user.UserId.ToString() );
+                await SignIn( user.Mail, user.UserId.ToString() );
                 return RedirectToAction( nameof( Authenticated ) );
             }
 

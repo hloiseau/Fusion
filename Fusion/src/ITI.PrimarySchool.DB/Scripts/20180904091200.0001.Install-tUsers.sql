@@ -1,9 +1,9 @@
 create table iti.tUsers
 (
     UsersId int identity(0, 1),
-    FirstName nvarchar(32) not null,
-    LastName  nvarchar(32) not null,
-	Mail nvarchar(45) not null,
+    FirstName nvarchar(32),
+    LastName  nvarchar(32),
+	Mail nvarchar(45),
 
     constraint PK_tUsers primary key(UsersId),
     constraint UK_tUsers_FirstName_LastName unique(FirstName, LastName),

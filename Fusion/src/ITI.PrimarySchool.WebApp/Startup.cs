@@ -30,7 +30,7 @@ namespace Fusion.WebApp
 
             services.AddMvc();
             services.AddSingleton( _ => new UserGateway( Configuration["ConnectionStrings:FusionDB"] ) );
-            services.AddSingleton( _ => new SMSGateway( Configuration[ "ConnectionStrings:PrimarySchoolDB" ] ) );
+            services.AddSingleton( _ => new SMSGateway( Configuration["ConnectionStrings:FusionDB"] ) );
             services.AddSingleton<PasswordHasher>();
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();

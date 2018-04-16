@@ -6,31 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\20180904091200.0000.Create-schema-iti.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0001.Install-tUsers.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0002.Install-tDevices.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0003.Install-tUsersDevice.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0004.Install-tSMS.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0005.Install-tLogs.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0006.Install-sUsersCreate.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0007.Install-sUsersDelete.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0008.Install-sUsersUpdate.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0009.Install-sDevicesCreate.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0010.Install-sDevicesDelete.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0011.Install-sDevicesUpdate.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0012.Install-sSMSCreate.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0013.Install-sSMSDelete.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0014.Install-sSMSUpdate.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0015.Install-sUserDeviceCreate.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0016.Install-sUserDeviceDelete.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0017.Install-sUserDeviceUpdate.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0018.Install-sLogsCreate.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0019.Install-sLogsDelete.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0020.Install-sLogsUpdate.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0021.Install-tContact.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0022.Install-sContactCreate.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0023.Install-sContactDelete.sql" />
-    <EmbeddedResource Include="Scripts\20180904091200.0024.Install-sContactUpdate.sql" />
+    <EmbeddedResource Include="Scripts\*.sql" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
 
 
