@@ -18,12 +18,22 @@ namespace Fusion.WebApp.Controllers
     {
 
         readonly ContactGateway _contactGateway;
-
+        private ContactViewModel _contactViewModel;
+        
         public ContactController(ContactGateway contactGateway)
         {
             _contactGateway = contactGateway;
         }
 
-        //post decode Json (nom : nb_tel)
+        
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<Result> token(string token1, string token2)
+        {
+            _contactViewModel.Token = token1;
+            _contactViewModel.ConfirmToken = token2;
+            return Result.Success();
+        }
     }
 }
