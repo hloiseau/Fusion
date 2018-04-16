@@ -11,7 +11,7 @@ namespace Fusion.DAL
     {
         readonly string _connectionString;
 
-        public ContactGateway( string connectionString )
+        public ContactGateway(string connectionString)
         {
             _connectionString = connectionString;
         }
@@ -24,13 +24,13 @@ namespace Fusion.DAL
             }
         }
 
-        public async Task<Result<ContactData>> FindById( int smsId )
+        public async Task<Result<ContactData>> FindById(int smsId)
         {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 ContactData sms = await con.QueryFirstOrDefaultAsync<ContactData>(
                    "select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS where SMSId = smsId",
-                    new { SMSId = smsId } );
+                    new { SMSId = smsId });
 
                 if (sms == null) return Result.Failure<ContactData>(Status.NotFound, "SMS not found.");
                 return Result.Success(sms);
@@ -42,40 +42,42 @@ namespace Fusion.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@Name", "device");
+                p.Add("@Name", "Device_test");
                 p.Add("@Type", "Mobile");
                 p.Add("@Token", token);
-                p.Add("@DeviceId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("@DevicesId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
-                await con.ExecuteAsync("iti.tDevices", p, commandType: CommandType.StoredProcedure);
+                await con.ExecuteAsync("iti.sDevicesCreate", p, commandType: CommandType.StoredProcedure);
 
                 int status = p.Get<int>("@Status");
                 if (status == 1) return Result.Failure<int>(Status.BadRequest, "A student with this name already exists.");
                 if (status == 2) return Result.Failure<int>(Status.BadRequest, "A student with GitHub login already exists.");
 
                 Debug.Assert(status == 0);
-                return Result.Success(Status.Created, p.Get<int>("@DeviceId"));
+                return Result.Success(Status.Created, p.Get<int>("@StudentId"));
             }
+
+            return Result.Success(1);
         }
 
-        public async Task<Result<ContactData>> FindByNumber( string number )
+        public async Task<Result<ContactData>> FindByNumber(string number)
         {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 ContactData contact = await con.QueryFirstOrDefaultAsync<ContactData>(
                      "select SMSId, DevicesId, UsersId, Extern, [Time], [Message],direction from iti.tSMS where Extern = Number",
-                    new { Number = number } );
+                    new { Number = number });
 
                 if (contact == null) return Result.Failure<ContactData>(Status.NotFound, "Contact not found.");
                 return Result.Success(contact);
             }
         }
 
-        public async Task Delete( int smsId )
+        public async Task Delete(int smsId)
         {
-            using( SqlConnection con = new SqlConnection( _connectionString ) )
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                await con.ExecuteAsync( "iti.sSMSDelete", new { SMSId = smsId }, commandType: CommandType.StoredProcedure );
+                await con.ExecuteAsync("iti.sSMSDelete", new { SMSId = smsId }, commandType: CommandType.StoredProcedure);
             }
         }
     }
