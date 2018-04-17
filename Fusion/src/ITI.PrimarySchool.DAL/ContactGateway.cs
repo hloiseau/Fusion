@@ -54,7 +54,7 @@ namespace Fusion.DAL
                 if (status == 2) return Result.Failure<int>(Status.BadRequest, "A student with GitHub login already exists.");
 
                 Debug.Assert(status == 0);
-                return Result.Success(Status.Created, p.Get<int>("@StudentId"));
+                return Result.Success(Status.Created, p.Get<int>("@DevicesId"));
             }
 
             return Result.Success(1);
