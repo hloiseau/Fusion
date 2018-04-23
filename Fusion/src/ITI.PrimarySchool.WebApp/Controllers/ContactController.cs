@@ -16,23 +16,14 @@ namespace Fusion.WebApp.Controllers
     [Route("api/[controller]")]
     public class ContactController : Controller
     {
-
         readonly ContactGateway _contactGateway;
 
         public ContactController(ContactGateway contactGateway)
         {
             _contactGateway = contactGateway;
-        }
+        }        
 
-
-        [HttpPost]
-        public async Task<Result> Token([FromBody] TokenVewModel model)
-        {
-            await _contactGateway.AddConctact(model.Token);
-            return Result.Success();
-        }
-
-        [HttpPost("/sync/contact")]
+        [HttpPost("/sync")]
         public async Task<IActionResult> ReciveContactList([FromBody] ContactVewModel model)
         {
             Result result = null;
