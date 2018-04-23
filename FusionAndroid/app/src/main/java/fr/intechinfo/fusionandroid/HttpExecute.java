@@ -21,6 +21,7 @@ public class HttpExecute extends Thread {
                .addConverterFactory(JacksonConverterFactory.create())
                .build();
        return retrofit.create(RetrofitAPI.class);
+
    }
 
     public void run(){

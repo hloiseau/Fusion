@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fusion.DAL", "src\ITI.Prima
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fusion.WebApp", "src\ITI.PrimarySchool.WebApp\Fusion.WebApp.csproj", "{E3D525F3-EBC0-4E34-8E94-2E85893933A3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationFactory", "..\..\..\Users\hugo\DEV\NetCoreSample\NotificationFactory\NotificationFactory.csproj", "{1079CFC6-2A3C-46D1-9FA1-A5E161F07EB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{E3D525F3-EBC0-4E34-8E94-2E85893933A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3D525F3-EBC0-4E34-8E94-2E85893933A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3D525F3-EBC0-4E34-8E94-2E85893933A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1079CFC6-2A3C-46D1-9FA1-A5E161F07EB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1079CFC6-2A3C-46D1-9FA1-A5E161F07EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1079CFC6-2A3C-46D1-9FA1-A5E161F07EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1079CFC6-2A3C-46D1-9FA1-A5E161F07EB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

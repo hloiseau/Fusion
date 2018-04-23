@@ -21,7 +21,7 @@ public class ContentCollector {
         Uri message = Uri.parse("content://contacts/people");
         ContentResolver cr = context.getContentResolver();
 
-        Cursor c =cr.query(message, null, null, null, null);
+        Cursor c = cr.query(message, null, null, null, null);
         int totalContacts = c.getCount();
 
         if(c.moveToFirst()){
