@@ -28,7 +28,7 @@ namespace Fusion.WebApp.Controllers
         [HttpPost]
         public async Task<Result> Token([FromBody] TokenVewModel model)
         {
-            await _contactGateway.AddDevice(model.Token);
+            await _contactGateway.AddConctact(model.Token);
             return Result.Success();
         }
     }

@@ -1,6 +1,6 @@
 create table iti.tSMS
 (
-  SMSId INT NOT NULL,
+  SMSId int identity(0, 1),
   DevicesId INT NOT NULL,
   UsersId INT NOT NULL,
   Extern VARCHAR(45) NOT NULL,

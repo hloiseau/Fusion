@@ -8,7 +8,7 @@
             <i class="el-icon-edit"></i>
             <!-- `checked` should be true or false -->
   <el-checkbox v-model="checked">Option</el-checkbox>
-          <p>caca jaune</p>
+          
         </div>
     </div>
 </template>

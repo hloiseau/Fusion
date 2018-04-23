@@ -20,44 +20,42 @@ namespace Fusion.DAL
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                return await con.QueryAsync<ContactData>(@"select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS");
+                return await con.QueryAsync<ContactData>(@"select ContactId, FirstName, LastName, Mail, PhoneNumber, from iti.tContact");
             }
         }
 
-        public async Task<Result<ContactData>> FindById(int smsId)
+        public async Task<Result<ContactData>> FindById(int ContactId)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 ContactData sms = await con.QueryFirstOrDefaultAsync<ContactData>(
-                   "select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS where SMSId = smsId",
-                    new { SMSId = smsId });
+                   "select ContactId, FirstName, LastName, Mail, PhoneNumber, from iti.tContact where ContactId = ContactId",
+                    new { ContactId = ContactId });
 
-                if (sms == null) return Result.Failure<ContactData>(Status.NotFound, "SMS not found.");
+                if (sms == null) return Result.Failure<ContactData>(Status.NotFound, "Contact not found.");
                 return Result.Success(sms);
             }
         }
 
-        public async Task<Result<int>> AddDevice(string token)
+        public async Task<Result<int>> AddContact(string firstName, string lastName, string mail, string phoneNumber, string token)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@Name", "Device_test");
-                p.Add("@Type", "Mobile");
-                p.Add("@Token", token);
-                p.Add("@DevicesId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("@FirstName", firstName );
+                p.Add("@LastName", lastName);
+                p.Add("@Mail", lastName);
+                p.Add("@PhoneNumber", phoneNumber);
+                p.Add("@ContactId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
-                await con.ExecuteAsync("iti.sDevicesCreate", p, commandType: CommandType.StoredProcedure);
+                await con.ExecuteAsync("iti.sContactCreate", p, commandType: CommandType.StoredProcedure);
 
                 int status = p.Get<int>("@Status");
-                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A student with this name already exists.");
-                if (status == 2) return Result.Failure<int>(Status.BadRequest, "A student with GitHub login already exists.");
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A contact with this name already exists.");
 
                 Debug.Assert(status == 0);
-                return Result.Success(Status.Created, p.Get<int>("@DevicesId"));
+                return Result.Success(Status.Created, p.Get<int>("@ContactId"));
             }
-
-            return Result.Success(1);
         }
 
         public async Task<Result<ContactData>> FindByNumber(string number)

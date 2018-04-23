@@ -1,6 +1,6 @@
 create table iti.tContact
 (
-  ContactId INT NOT NULL,
+  ContactId int identity(0, 1),
   FirstName varchar(32),
   LastName varchar(32),
   Mail varchar(32) NOT NULL,
