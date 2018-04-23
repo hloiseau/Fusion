@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Fusion.DAL;
@@ -10,10 +11,10 @@ namespace Fusion.WebApp.Authentication
     {
         public async Task OnCreatingTicket( OAuthCreatingTicketContext ctx )
         {
-            TUserInfo userInfo = await GetUserInfoFromContext( ctx );
-            await CreateOrUpdateUser( userInfo );
-            UserData user = await FindUser( userInfo );
-            ctx.Principal = CreatePrincipal( user );
+            TUserInfo userInfo = await GetUserInfoFromContext(ctx);
+            await CreateOrUpdateUser(userInfo);
+            UserData user = await FindUser(userInfo);
+            ctx.Principal = CreatePrincipal(user);
         }
 
         protected abstract Task<TUserInfo> GetUserInfoFromContext( OAuthCreatingTicketContext ctx );

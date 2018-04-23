@@ -5,7 +5,7 @@ import AuthService from './services/AuthService'
  */
 
 // Allowed urls to access the application (if your website is http://mywebsite.com, you have to add it)
-AuthService.allowedOrigins = ['http://localhost:62752', /* 'http://mywebsite.com' */];
+AuthService.allowedOrigins = ['http://localhost:5000'];
 
 // Server-side endpoint to logout
 AuthService.logoutEndpoint = '/Account/LogOff';
