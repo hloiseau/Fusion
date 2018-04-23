@@ -71,7 +71,11 @@ namespace Fusion.DAL
                 await con.ExecuteAsync("iti.sContactCreate", p, commandType: CommandType.StoredProcedure);
 
                 int status = p.Get<int>("@Status");
+<<<<<<< HEAD
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A contact with this name already exists.");
+=======
                 if (status == 1) return Result.Failure<int>(Status.BadRequest, "A Device with this name already exists.");
+>>>>>>> d18beb70b3cdba50b22d6348e8ddf0e269e44d23
 
                 Debug.Assert(status == 0);
                 return Result.Success(Status.Created, p.Get<int>("@ContactId"));
