@@ -16,6 +16,26 @@ namespace Fusion.DAL
             _connectionString = connectionString;
         }
 
+        public async Task<Result<int>> ReciveContactList(string name, string mail, string number)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@firstName", name);
+                p.Add("@mail", mail);
+                p.Add("@number", number);
+                p.Add("@ContactId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                await con.ExecuteAsync("iti.sContactCreate", p, commandType: CommandType.StoredProcedure);
+
+                int status = p.Get<int>("@Status");
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A Conctact with this name already exists.");
+
+                Debug.Assert(status == 0);
+                return Result.Success(Status.Created, p.Get<int>("@ContactId"));
+            }
+        }
+
         public async Task<IEnumerable<ContactData>> ListAll()
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
@@ -50,8 +70,7 @@ namespace Fusion.DAL
                 await con.ExecuteAsync("iti.sDevicesCreate", p, commandType: CommandType.StoredProcedure);
 
                 int status = p.Get<int>("@Status");
-                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A student with this name already exists.");
-                if (status == 2) return Result.Failure<int>(Status.BadRequest, "A student with GitHub login already exists.");
+                if (status == 1) return Result.Failure<int>(Status.BadRequest, "A Device with this name already exists.");
 
                 Debug.Assert(status == 0);
                 return Result.Success(Status.Created, p.Get<int>("@DevicesId"));
