@@ -47,6 +47,14 @@ namespace Fusion.DAL
             }
         }
 
+        public async Task AddSMS(int UsersId, string Extern, string Message, bool direction)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                await con.ExecuteAsync("iti.sSMSDelete", new { SMSId = smsId }, commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public async Task Delete( int smsId )
         {
             using( SqlConnection con = new SqlConnection( _connectionString ) )

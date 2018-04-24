@@ -2,6 +2,8 @@
   <div id="app">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <header>
+  
+      
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <router-link class="navbar-brand" to="/">ITI.PrimarySchool</router-link>
 
@@ -20,8 +22,8 @@
             <li class="nav-item">
               <router-link class="nav-link" to="/teachers">Gestion des professeurs</router-link>
             </li>
-            <li class="nav-item" v-required-providers="['GitHub']">
-              <router-link class="nav-link" to="/github/following">Elèves suivis sur GitHub</router-link>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/contacts">Contacts</router-link>
             </li>
           </ul>
 

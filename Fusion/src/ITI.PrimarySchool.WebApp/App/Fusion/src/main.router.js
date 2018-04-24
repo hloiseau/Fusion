@@ -20,6 +20,8 @@ import TeacherList from './components/teachers/TeacherList.vue'
 import TeacherEdit from './components/teachers/TeacherEdit.vue'
 import TeacherAssign from './components/teachers/TeacherAssign.vue'
 
+import ContactList from './Components/contacts/ContactList.vue'
+
 import FollowingList from './components/github/FollowingList.vue'
 
 import PlaygroundPage from './components/Playground/PlaygroundPage.vue'
@@ -41,6 +43,8 @@ const routes = [
     { path: '/teachers', component: TeacherList, beforeEnter: requireAuth },
     { path: '/teachers/:mode([create|edit]+)/:id?', component: TeacherEdit, beforeEnter: requireAuth },
     { path: '/teachers/assign/:id', component: TeacherAssign, beforeEnter: requireAuth },
+
+    { path: '/contacts', component: ContactList, beforeEnter: requireAuth },
 
     { path: '/github/following', component: FollowingList, beforeEnter: requireAuth, meta: { requiredProviders: ['GitHub'] } }
 ];

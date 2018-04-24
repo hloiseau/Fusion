@@ -29,6 +29,7 @@ namespace Fusion.WebApp
             services.AddOptions();
 
             services.AddMvc();
+            services.AddSingleton( _ => new DeviceGateway( Configuration["ConnectionStrings:FusionDB"] ) );
             services.AddSingleton( _ => new ContactGateway( Configuration["ConnectionStrings:FusionDB"] ) );
             services.AddSingleton( _ => new UserGateway( Configuration["ConnectionStrings:FusionDB"] ) );
             services.AddSingleton( _ => new SMSGateway( Configuration[ "ConnectionStrings:FusionDB" ] ) );
