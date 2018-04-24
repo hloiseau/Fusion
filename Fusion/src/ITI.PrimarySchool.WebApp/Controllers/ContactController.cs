@@ -34,6 +34,7 @@ namespace Fusion.WebApp.Controllers
         [HttpPost("sync")]
         public async Task<IActionResult> ReciveContactList([FromBody] ContactVewModel model)
         {
+            
             Result result = null;
             for (int i = 0; i <= model.Contact.Count; i++)
             {
@@ -45,3 +46,9 @@ namespace Fusion.WebApp.Controllers
 
     }
 }
+
+/*
+ Request.Body.Seek(0, SeekOrigin.Begin);
+ StreamReader sr = new StreamReader(Request.Body);
+ string body = await sr.ReadToEndAsync();
+ */
