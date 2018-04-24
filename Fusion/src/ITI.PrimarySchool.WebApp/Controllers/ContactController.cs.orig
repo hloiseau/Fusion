@@ -21,7 +21,8 @@ namespace Fusion.WebApp.Controllers
         public ContactController(ContactGateway contactGateway)
         {
             _contactGateway = contactGateway;
-        }        
+<<<<<<< HEAD
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetContactList()
@@ -29,8 +30,11 @@ namespace Fusion.WebApp.Controllers
             IEnumerable<ContactData> result = await _contactGateway.ListAll();
             return Ok(result);
         }
+=======
+        }        
+>>>>>>> 0c023e4ae2539d56078fc732ab52911dd2b15744
 
-        [HttpPost("/sync/contact")]
+        [HttpPost("/sync")]
         public async Task<IActionResult> ReciveContactList([FromBody] ContactVewModel model)
         {
             Result result = null;
