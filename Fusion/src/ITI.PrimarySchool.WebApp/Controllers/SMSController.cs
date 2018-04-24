@@ -25,12 +25,12 @@ namespace Fusion.WebApp.Controllers
         }
 
         [HttpPost("/sendSMS")]
-        public async Task<IActionResult> ReciveContactList([FromBody] SMSVewModel model)
+        public async Task<IActionResult> ReciveSMSList([FromBody] SMSVewModel model)
         {
             Result result = null;
             for (int i = 0; i <= model.smsLs.Count; i++)
             {
-                result = await _smsGateway.AddSMS(model.smsLs[i].UsersId, model.smsLs[i].Extern, model.smsLs[i].Message, model.smsLs[i].direction);
+                result = await _smsGateway.AddSMS(1, model.smsLs[i].Extern, model.smsLs[i].Message, model.smsLs[i].direction);
             }
             return Ok(result);
         }
