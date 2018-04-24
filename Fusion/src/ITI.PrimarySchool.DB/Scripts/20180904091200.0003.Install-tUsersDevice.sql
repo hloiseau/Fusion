@@ -8,3 +8,5 @@ create table iti.tUsersDevice
 	constraint FK_tUsersDevice_tUsers foreign key(UsersId) references iti.tUsers(UsersId),
 	constraint FK_tUsersDevice_tDevices foreign key(DevicesId) references iti.tDevices(DevicesId)
 );
+
+insert into iti.tUsersDevice(UsersId, DevicesId) values(0, 0);

@@ -2,7 +2,7 @@ import { getAsync, postAsync, putAsync, deleteAsync } from '../helpers/apiHelper
 
 const endpoint = "/api/contact";
 
-class ClassApiService {
+class ContactApiService {
     constructor() {
 
     }
@@ -28,4 +28,4 @@ class ClassApiService {
     }
 }
 
-export default new ClassApiService()
+export default new ContactApiService()
