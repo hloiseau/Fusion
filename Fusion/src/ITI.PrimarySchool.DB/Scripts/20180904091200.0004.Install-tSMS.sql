@@ -12,3 +12,5 @@ create table iti.tSMS
   constraint FK_tSMS_tUsers foreign key(UsersId) references iti.tUsers(UsersId),
   constraint FK_tSMS_tDevices foreign key(DevicesId) references iti.tDevices(DevicesId)
 )
+
+insert into iti.tSMS(DevicesId, UsersId, Extern, [Time], [Message], direction) values(0, 0, left(convert(nvarchar(49), newid()), 45), '01:00', 'This is a message from a phone', 0);

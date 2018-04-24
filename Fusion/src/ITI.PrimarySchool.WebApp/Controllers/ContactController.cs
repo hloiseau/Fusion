@@ -24,12 +24,11 @@ namespace Fusion.WebApp.Controllers
             _contactGateway = contactGateway;
         }
 
-
-        [HttpPost]
-        public async Task<Result> Token([FromBody] TokenVewModel model)
+        [HttpGet]
+        public async Task<IActionResult> GetContactList()
         {
-            await _contactGateway.AddConctact(model.Token);
-            return Result.Success();
+            IEnumerable<ContactData> result = await _contactGateway.ListAll();
+            return Ok(result);
         }
 
         [HttpPost("/sync/contact")]
@@ -43,11 +42,6 @@ namespace Fusion.WebApp.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetContactList()
-        {
-            IEnumerable<ContactData> result = await _contactGateway.ListAll();
-            return Ok(result);
-        }
+
     }
 }
