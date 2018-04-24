@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Fusion.DAL;
@@ -32,13 +33,13 @@ namespace Fusion.WebApp.Controllers
             return Result.Success();
         }
 
-        [HttpPost("/sync/contact")]
+        [HttpPost("sync")]
         public async Task<IActionResult> ReciveContactList([FromBody] ContactVewModel model)
         {
             Result result = null;
-            for (int i = 0; i <= model.ContactLs.Count; i++)
+            for (int i = 0; i <= model.Contact.Count; i++)
             {
-                result = await _contactGateway.ReciveContactList(model.ContactLs[i].Name, model.ContactLs[i].Mail, model.ContactLs[i].Number);
+                result = await _contactGateway.ReciveContactList(model.Contact[i]._name, null,model.Contact[i]._number);
             }
             return Ok(result);
         }

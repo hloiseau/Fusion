@@ -8,9 +8,10 @@ import retrofit2.http.POST;
 
 public interface RetrofitAPI {
 
+
     @Headers("'Content-Type': 'application/json'")
-    @POST("/api/contact/synccontact")
-    Call<List<Contact>> CreateContacts(@Body ContactsList lsContact);
+    @POST("/api/contact/sync")
+    Call<ContactsList> CreateContacts(@Body ContactsList lsContact);
 
     @Headers("'Content-Type': 'application/json'")
     @POST("/api/sms/syncsms")
@@ -19,6 +20,4 @@ public interface RetrofitAPI {
     @Headers("'Content-Type': 'application/json'")
     @POST("/api/contact")
     Call<String> CreateNewDevice(@Body Token token);
-
-
 }

@@ -46,7 +46,7 @@ public class ContentCollector {
         Uri message = Telephony.MmsSms.CONTENT_URI;
         ContentResolver cr = context.getContentResolver();
 
-        Cursor c =cr.query(message, null, null, null, null);
+        Cursor c = cr.query(message, null, null, null, null);
         int totalSMS = c.getCount();
 
         if(c.moveToFirst()){
