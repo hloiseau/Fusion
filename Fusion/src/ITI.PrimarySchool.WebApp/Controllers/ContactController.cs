@@ -38,9 +38,9 @@ namespace Fusion.WebApp.Controllers
             StreamReader sr = new StreamReader(Request.Body);
             string body = await sr.ReadToEndAsync();
             Result result = null;
-            for (int i = 0; i < model.Contact.Count; i++)
+            for (int i = 0; i < model.Contacts.Count; i++)
             {
-                result = await _contactGateway.ReciveContactList(model.Contact[i]._name, null, model.Contact[i]._number);
+                result = await _contactGateway.ReciveContactList(model.Contacts[i].Name, null, model.Contacts[i].Number);
             }
             return Ok(result);
         }

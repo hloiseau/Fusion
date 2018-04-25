@@ -43,7 +43,7 @@ public class ContentCollector {
     public List<SMS> GetSMS(Context context){
         List<SMS> lstSMS = new ArrayList<>();
         SMS sms;
-        Uri message = Telephony.MmsSms.CONTENT_URI;
+        Uri message = Telephony.Sms.CONTENT_URI;
         ContentResolver cr = context.getContentResolver();
 
         Cursor c = cr.query(message, null, null, null, null);
@@ -53,11 +53,12 @@ public class ContentCollector {
             for(int i = 0; i<totalSMS; i++) {
                 String address = c.getString(c.getColumnIndexOrThrow("ADDRESS"));
                 String body = c.getString(c.getColumnIndexOrThrow("BODY"));
-                String creator = c.getString(c.getColumnIndexOrThrow("CREATOR"));
                 String date = c.getString(c.getColumnIndexOrThrow("DATE"));
                 String type = c.getString(c.getColumnIndexOrThrow("TYPE"));
-                sms = new SMS(address, body, creator, date, type);
-                lstSMS.add(sms);
+                sms = new SMS(address, body, date, type);
+                if(type.equals("1")|| type.equals("2")){
+                    lstSMS.add(sms);
+                }
                 c.moveToNext();
             }
         } else {

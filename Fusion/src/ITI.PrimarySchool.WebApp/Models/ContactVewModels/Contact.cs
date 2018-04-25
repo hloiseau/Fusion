@@ -7,9 +7,9 @@ namespace Fusion.WebApp.Models.AccountViewModels
     public class Contact
     {
         [Required]
-        public string _name { get; set; }
+        public string Name { get; set; }
         [Required]
-        public string _number { get; set; }
+        public string Number { get; set; }
 
     }
 }

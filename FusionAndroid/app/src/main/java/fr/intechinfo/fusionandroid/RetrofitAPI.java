@@ -14,7 +14,7 @@ public interface RetrofitAPI {
     Call<ContactsList> CreateContacts(@Body ContactsList lsContact);
 
     @Headers("'Content-Type': 'application/json'")
-    @POST("/api/sms/syncsms")
+    @POST("/api/sms/receivesms")
     Call<SMSList> CreateSMS(@Body SMSList lsSMS);
 
     @Headers("'Content-Type': 'application/json'")

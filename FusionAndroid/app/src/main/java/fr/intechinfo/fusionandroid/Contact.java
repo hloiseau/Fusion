@@ -1,18 +1,18 @@
 package fr.intechinfo.fusionandroid;
 
 public class Contact {
-    private String _name;
-    private String _number;
+    private String Name;
+    private String Number;
     public Contact(){
     }
 
     public String GetName(){
-        return _name;
+        return Name;
     }
     public String GetNumber(){
-        return _number;
+        return Number;
     }
-    public void SetName(String name) { _name = name; }
-    public void SetNumber(String number) { _number = number; }
+    public void SetName(String name) { Name = name; }
+    public void SetNumber(String number) { Number = number; }
 
 }
