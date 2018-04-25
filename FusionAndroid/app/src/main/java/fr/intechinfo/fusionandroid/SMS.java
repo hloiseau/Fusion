@@ -2,34 +2,29 @@ package fr.intechinfo.fusionandroid;
 
 
 public class SMS {
-    private String _address;
-    private String _body;
-    private String _creator;
-    private String _date;
-    private String _type;
+    private String Address;
+    private String Body;
+    private String Date;
+    private String Type;
 
-    public SMS(String address, String body, String creator, String date, String type){
-        _address = address;
-        _body = body;
-        _creator = creator;
-        _date = date;
-        _type = type;
+    public SMS(String address, String body, String date, String type){
+        Address = address;
+        Body = body;
+        Date = date;
+        Type = type;
     }
 
     public String GetAddress(){
-        return _address;
+        return Address;
     }
     public String GetBody(){
-        return _body;
-    }
-    public String GetCreator(){
-        return _creator;
+        return Body;
     }
     public String GetDate(){
-        return _date;
+        return Date;
     }
     public String GetType(){
-        return _type;
+        return Type;
     }
 
 

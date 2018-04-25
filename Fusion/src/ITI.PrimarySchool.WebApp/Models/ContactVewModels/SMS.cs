@@ -4,18 +4,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fusion.WebApp.Models.AccountViewModels
 {
-    public class SMS
+    public class Sms
     {
+      
+        public string Address { get; set; } // number of the sender
 
-        [Required]
-        public string UsersId { get; set; } // user of app
-        [Required]
-        public string Extern { get; set; } // number of the guy
-        [Required]
-        public string Time { get; set; }
+        public string Date { get; set; }
 
-        public string Message { get; set; }
-        [Required]
-        public bool direction { get; set; } // message for userId ou extern VALUE 0 or 1
+        public string Body { get; set; }
+
+        public string Type { get; set; } // message inbox "1" sent "2"
     } 
 }

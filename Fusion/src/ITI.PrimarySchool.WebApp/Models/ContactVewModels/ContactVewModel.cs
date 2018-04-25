@@ -7,6 +7,6 @@ namespace Fusion.WebApp.Models.AccountViewModels
 {
     public class ContactVewModel
     {
-        public List<Contact> Contact { get; set; } 
+        public List<Contact> Contacts { get; set; } 
     }
 }

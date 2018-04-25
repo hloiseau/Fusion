@@ -1,44 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Fusion.DAL;
-using Fusion.WebApp.Authentication;
+﻿using Fusion.DAL;
 using Fusion.WebApp.Models.AccountViewModels;
-using Fusion.WebApp.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication;
-
+using System;
+using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.IO;
+using System.Threading.Tasks;
 namespace Fusion.WebApp.Controllers
 {
 
     [Route("api/[controller]")]
-    public class SMSController : Controller
+    public class SmsController : Controller
     {
 
         readonly SMSGateway _smsGateway;
 
-        public SMSController( SMSGateway smsGateway)
+        public SmsController( SMSGateway smsGateway)
         {
             _smsGateway = smsGateway;
         }
 
-        [HttpPost("/ReciveSMS")]
+        [HttpPost("receivesms")]
         public async Task<IActionResult> ReciveSMSList([FromBody] SMSVewModel model)
         {
+            Request.Body.Seek(0, SeekOrigin.Begin);
+            StreamReader sr = new StreamReader(Request.Body);
+            string body = await sr.ReadToEndAsync();
+            bool isSent = false;
             Result result = null;
-            for (int i = 1; i <= model.smsLs.Count; i++)
+            for (int i = 0; i < model.sms.Count; i++)
             {
-                result = await _smsGateway.AddSMS(1, model.smsLs[i].Extern, model.smsLs[i].Message, model.smsLs[i].direction);
+                if (model.sms[i].Type == "1") isSent = true;
+                else isSent = false;
+                result = await _smsGateway.AddSMS(0, model.sms[i].Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.sms[i].Date)).DateTime, model.sms[i].Body, isSent);
             }
             return Ok(result);
         }
 
         [HttpPost("/SendNewSMS")]
-        public async Task<IActionResult> SendNewSMS(SMS model)
+        public async Task<IActionResult> SendNewSMS(Sms model)
         {
-            string result =  NotificationFactory.SendNotificationFromFirebaseCloud(model.Extern, model.Message);
+            string result =  NotificationFactory.SendNotificationFromFirebaseCloud(model.Address, model.Body);
             
             return Ok(result);
         }

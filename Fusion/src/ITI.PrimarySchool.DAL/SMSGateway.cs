@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Dapper;
@@ -47,13 +49,15 @@ namespace Fusion.DAL
             }
         }
 
-        public async Task<Result<int>> AddSMS(int usersId, string Extern, string Message, bool direction)
+        public async Task<Result<int>> AddSMS(int usersId, string Extern, DateTime date, string Message, bool direction)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
+                p.Add("@DevicesId", 0);
                 p.Add("@UsersId", usersId);
                 p.Add("@Extern", Extern);
+                p.Add("@Time", date);
                 p.Add("@Message", Message);
                 p.Add("@direction", direction);
                 p.Add("@SMSId", dbType: DbType.Int32, direction: ParameterDirection.Output);
