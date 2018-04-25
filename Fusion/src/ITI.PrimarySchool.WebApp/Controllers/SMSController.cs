@@ -36,12 +36,10 @@ namespace Fusion.WebApp.Controllers
         }
 
         [HttpPost("/SendNewSMS")]
-        public async Task<IActionResult> SendNewSMS(SMSVewModel model)
+        public async Task<IActionResult> SendNewSMS(SMS model)
         {
-            Result result = null;
+            string result =  NotificationFactory.SendNotificationFromFirebaseCloud(model.Extern, model.Message);
             
-            // will send sms from pc to phone
-
             return Ok(result);
         }
 
