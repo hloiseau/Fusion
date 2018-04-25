@@ -3,13 +3,13 @@ package fr.intechinfo.fusionandroid;
 import java.util.List;
 
 public class ContactsList {
-    List<Contact> contact;
+    List<Contact> Contacts;
 
     public List<Contact> GetContact(){
-        return this.contact;
+        return this.Contacts;
     }
 
     public void SetContact(List<Contact> contact) {
-        this.contact = contact;
+        this.Contacts = contact;
     }
 }

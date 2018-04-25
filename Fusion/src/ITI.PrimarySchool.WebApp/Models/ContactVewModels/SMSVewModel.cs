@@ -7,6 +7,6 @@ namespace Fusion.WebApp.Models.AccountViewModels
 {
     public class SMSVewModel
     {
-        public List<SMS> smsLs { get; set; }
+        public List<Sms> sms { get; set; }
     }
 }
