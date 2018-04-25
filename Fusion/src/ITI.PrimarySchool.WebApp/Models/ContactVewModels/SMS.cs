@@ -6,7 +6,6 @@ namespace Fusion.WebApp.Models.AccountViewModels
 {
     public class SMS
     {
-
         [Required]
         public string UsersId { get; set; } // user of app
         [Required]
@@ -16,6 +15,6 @@ namespace Fusion.WebApp.Models.AccountViewModels
 
         public string Message { get; set; }
         [Required]
-        public bool direction { get; set; } // message for userId ou extern VALUE 0 or 1
+        public bool direction { get; set; } // message for userId ou extern VALUE 1 j'ai envoyer 2 j'ai recus
     } 
 }

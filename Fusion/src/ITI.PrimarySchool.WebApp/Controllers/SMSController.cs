@@ -24,18 +24,18 @@ namespace Fusion.WebApp.Controllers
             _smsGateway = smsGateway;
         }
 
-        [HttpPost("/ReciveSMS")]
-        public async Task<IActionResult> ReciveSMSList([FromBody] SMSVewModel model)
+        [HttpPost("recivsms")]
+        public async Task<IActionResult> ReciveSMSList([FromBody] SMSViewModel model)
         {
             Result result = null;
-            for (int i = 1; i <= model.smsLs.Count; i++)
+            for (int i = 0; i < model.smsLs.Count; i++)
             {
                 result = await _smsGateway.AddSMS(1, model.smsLs[i].Extern, model.smsLs[i].Message, model.smsLs[i].direction);
             }
             return Ok(result);
         }
 
-        [HttpPost("/SendNewSMS")]
+        [HttpPost("SendNewSMS")]
         public async Task<IActionResult> SendNewSMS(SMS model)
         {
             string result =  NotificationFactory.SendNotificationFromFirebaseCloud(model.Extern, model.Message);

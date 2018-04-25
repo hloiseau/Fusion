@@ -44,7 +44,6 @@ namespace Fusion.WebApp.Controllers
             }
             return Ok(result);
         }
-
     }
 }
 
