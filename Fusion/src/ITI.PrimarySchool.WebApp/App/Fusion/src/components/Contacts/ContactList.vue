@@ -1,37 +1,35 @@
 <template>
     <div>
         <div class="mb-4 d-flex justify-content-between">
-            <h1>Gestion des classes</h1>
+            <h1>Gestion des Contacts</h1>
         </div>
 
-       <!--< <el-table :data="contactList" style="width: 100%">
-            <el-table-column prop="FirstName" label="Prénom"></el-table-column>
-            <el-table-column prop="LastName" label="Nom"></el-table-column>
-            <el-table-column prop="Numéro" label="Numéro"></el-table-column>
-        </el-table>-->
+        <el-table :data="contactList" style="width: 100%">
+            <el-table-column prop="contactId" label="ID"></el-table-column>
+            <el-table-column prop="firstName" label="Prénom"></el-table-column>
+            <el-table-column prop="lastName" label="Nom"></el-table-column>
+            <el-table-column prop="mail" label="mail"></el-table-column>
+            <el-table-column prop="phoneNumber" label="Numéro"></el-table-column>
+        </el-table>
 
         <table class="table table-striped table-hover table-bordered">
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Prénom</th>
                     <th>Nom</th>
-                    <th>Niveau</th>
-                    <th>Options</th>
+                    <th>Mail</th>
+                    <th>Phone Number</th>
                 </tr>
             </thead>
 
             <tbody>
-                
-                <tr v-for="i of contactList" :key="i.ContactId">
-                    <td>{{ i.Firstname }}</td>
-                    <td>
-                        <router-link :to="`classes/edit/${i.ContactId}`">
-                            <i class="fa fa-pencil"></i>
-                        </router-link>
-                        <a href="#" @click="deleteClass(i.ContactId)">
-                            <i class="fa fa-trash"></i>
-                        </a>
-                    </td>
+                <tr v-for="i of contactList">
+                    <td>{{ i.contactId }}</td>
+                    <td>{{ i.firstName }}</td>
+                    <td>{{ i.lastName }}</td>
+                    <td>{{ i.mail }}</td>
+                    <td>{{ i.phoneNumber }}</td>
                 </tr>
             </tbody>
         </table>
@@ -48,10 +46,9 @@ export default {
             contactList: []
         }
     },
-
-    async mounted() {
-        await this.refreshList();
-    },
+        async mounted() {
+            await this.refreshList();
+        },
 
     methods: {
         ...mapActions(['notifyLoading', 'notifyError']),

@@ -40,7 +40,7 @@ namespace Fusion.DAL
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                return await con.QueryAsync<ContactData>(@"select ContactId, FirstName, LastName, Mail, PhoneNumber, from iti.vContact");
+                return await con.QueryAsync<ContactData>(@"select ContactId, FirstName, LastName, Mail, PhoneNumber from iti.vContact");
             }
         }
 
