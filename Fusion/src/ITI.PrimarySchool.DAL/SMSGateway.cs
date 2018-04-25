@@ -49,7 +49,7 @@ namespace Fusion.DAL
             }
         }
 
-        public async Task<Result<int>> AddSMS(int usersId, string Extern, SqlDateTime date, string Message, bool direction)
+        public async Task<Result<int>> AddSMS(int usersId, string Extern, DateTime date, string Message, bool direction)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {

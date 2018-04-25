@@ -32,7 +32,7 @@ namespace Fusion.WebApp.Controllers
             {
                 if (model.sms[i].Type == "1") isSent = true;
                 else isSent = false;
-                result = await _smsGateway.AddSMS(1, model.sms[i].Address, SqlDateTime.Parse(model.sms[i].Date,), model.sms[i].Body, isSent);
+                result = await _smsGateway.AddSMS(0, model.sms[i].Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.sms[i].Date)).DateTime, model.sms[i].Body, isSent);
             }
             return Ok(result);
         }
