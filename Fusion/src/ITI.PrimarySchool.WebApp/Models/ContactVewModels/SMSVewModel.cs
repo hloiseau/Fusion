@@ -1,15 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 
 namespace Fusion.WebApp.Models.AccountViewModels
 {
-    public class Contact
+    public class SMSVewModel
     {
-        [Required]
-        public string _name { get; set; }
-        [Required]
-        public string _number { get; set; }
-
+        public List<SMS> smsLs { get; set; }
     }
 }

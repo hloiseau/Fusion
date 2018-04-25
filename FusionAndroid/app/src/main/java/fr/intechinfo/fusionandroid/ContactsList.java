@@ -4,7 +4,12 @@ import java.util.List;
 
 public class ContactsList {
     List<Contact> contact;
-    public ContactsList(List<Contact> contact){
+
+    public List<Contact> GetContact(){
+        return this.contact;
+    }
+
+    public void SetContact(List<Contact> contact) {
         this.contact = contact;
     }
 }

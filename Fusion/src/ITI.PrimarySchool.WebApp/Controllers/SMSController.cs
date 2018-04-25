@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 namespace Fusion.WebApp.Controllers
 {
 
-
+    [Route("api/[controller]")]
     public class SMSController : Controller
     {
 
@@ -22,6 +22,32 @@ namespace Fusion.WebApp.Controllers
         public SMSController( SMSGateway smsGateway)
         {
             _smsGateway = smsGateway;
+        }
+
+        [HttpPost("/ReciveSMS")]
+        public async Task<IActionResult> ReciveSMSList([FromBody] SMSVewModel model)
+        {
+            Result result = null;
+            for (int i = 1; i <= model.smsLs.Count; i++)
+            {
+                result = await _smsGateway.AddSMS(1, model.smsLs[i].Extern, model.smsLs[i].Message, model.smsLs[i].direction);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("/SendNewSMS")]
+        public async Task<IActionResult> SendNewSMS(SMS model)
+        {
+            string result =  NotificationFactory.SendNotificationFromFirebaseCloud(model.Extern, model.Message);
+            
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSMSList()
+        {
+            IEnumerable<SMSData> result = await _smsGateway.ListAll();
+            return Ok(result);
         }
 
 

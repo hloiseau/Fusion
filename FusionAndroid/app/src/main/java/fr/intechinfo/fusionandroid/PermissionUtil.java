@@ -165,6 +165,7 @@ public class PermissionUtil {
         // and returned in the Activity's onRequestPermissionsResult()
         // int PERMISSION_ALL = 1;
         final String[] PERMISSIONS = {
+                Manifest.permission.READ_SMS,
                 Manifest.permission.SEND_SMS,
                 Manifest.permission.READ_CONTACTS,
                 Manifest.permission.READ_PHONE_STATE};

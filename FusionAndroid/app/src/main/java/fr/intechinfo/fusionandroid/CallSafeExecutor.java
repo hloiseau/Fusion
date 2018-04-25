@@ -10,11 +10,11 @@ public class CallSafeExecutor {
     public CallSafeExecutor(Call call){
         this.call = call;
     }
-    public Response execute(){
+    public Response execute() throws Exception {
         try {
             return this.call.execute();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new Exception(e);
         }
     }
 }
