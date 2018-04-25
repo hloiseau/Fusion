@@ -15,9 +15,9 @@ public interface RetrofitAPI {
 
     @Headers("'Content-Type': 'application/json'")
     @POST("/api/sms/syncsms")
-    Call<List<SMS>> CreateSMS(@Body List<SMS> lsSMS);
+    Call<SMSList> CreateSMS(@Body SMSList lsSMS);
 
     @Headers("'Content-Type': 'application/json'")
     @POST("/api/contact")
-    Call<String> CreateNewDevice(@Body Token token);
+    Call<Token> CreateNewDevice(@Body Token token);
 }
