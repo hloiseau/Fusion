@@ -50,7 +50,7 @@ namespace Fusion.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 ContactData sms = await con.QueryFirstOrDefaultAsync<ContactData>(
-                   "select ContactId, FirstName, LastName, Mail, PhoneNumber, from iti.tContact where ContactId = ContactId",
+                   "select ContactId, FirstName, LastName, Mail, PhoneNumber from iti.tContact where ContactId = ContactId",
                     new { ContactId = ContactId });
 
                 if (sms == null) return Result.Failure<ContactData>(Status.NotFound, "Contact not found.");

@@ -45,6 +45,12 @@ namespace Fusion.WebApp.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}", Name = "GetContact")]
+        public async Task<IActionResult> GetContactById(int id)
+        {
+            Result<ContactData> result = await _contactGateway.FindById(id);
+            return this.CreateResult(result);
+        }
     }
 }
 

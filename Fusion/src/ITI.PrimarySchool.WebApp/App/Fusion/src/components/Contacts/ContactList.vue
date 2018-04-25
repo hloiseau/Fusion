@@ -4,22 +4,29 @@
             <h1>Gestion des Contacts</h1>
         </div>
 
-        <el-table :data="contactList" style="width: 100%">
+        <!--<el-table :data="contactList" style="width: 100%">
             <el-table-column prop="contactId" label="ID"></el-table-column>
             <el-table-column prop="firstName" label="Prénom"></el-table-column>
             <el-table-column prop="lastName" label="Nom"></el-table-column>
             <el-table-column prop="mail" label="mail"></el-table-column>
             <el-table-column prop="phoneNumber" label="Numéro"></el-table-column>
+            <el-table-column label="Opérations">
+                 <template slot-scope="scope">
+                     <router-link :to="`Contacts/sendSMS/${contactList}`"><i class="el-icon-message"></i></router-link>
+                </template>
+            </el-table-column>
         </el-table>
+        ICI : {{contactList[contactId]}}-->
 
-        <table class="table table-striped table-hover table-bordered">
+        <<table class="table table-striped table-hover table-bordered">
             <thead>
-                <tr>
+                <tr>    
                     <th>ID</th>
                     <th>Prénom</th>
                     <th>Nom</th>
                     <th>Mail</th>
                     <th>Phone Number</th>
+                    <th> Opérations</th>
                 </tr>
             </thead>
 
@@ -30,9 +37,10 @@
                     <td>{{ i.lastName }}</td>
                     <td>{{ i.mail }}</td>
                     <td>{{ i.phoneNumber }}</td>
+                    <router-link :to="`contacts/sendSMS/${i.contactId}`"><i class="el-icon-message"></i></router-link>
                 </tr>
             </tbody>
-        </table>
+        </table>-->
     </div>
 </template>
 
@@ -66,20 +74,8 @@ export default {
             }
         },
 
-        async deleteClass(classId) {
-            try {
-                this.notifyLoading(true);
-                await ClassApiService.deleteClassAsync(classId);
-                this.notifyLoading(false);
-
-                await this.refreshList();
-            }
-            catch (error) {
-                this.notifyError(error);
-            }
-            finally {
-                this.notifyLoading(false);
-            }
+        handleEdit(index, row) {
+            console.log(index, row);
         }
     }
 }

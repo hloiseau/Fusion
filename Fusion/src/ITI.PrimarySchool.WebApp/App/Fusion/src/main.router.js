@@ -3,8 +3,6 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
-print('JE SUIS UN PUTAIN DE PONEY EN RUTE BUIEN +++£')
-
 import requireAuth from './helpers/requireAuth';
 
 // Components
@@ -23,6 +21,7 @@ import TeacherEdit from './components/teachers/TeacherEdit.vue'
 import TeacherAssign from './components/teachers/TeacherAssign.vue'
 
 import ContactList from './Components/contacts/ContactList.vue'
+import sendSMS from './components/contacts/sendSMS.vue'
 
 import SMSList from './components/SMS/SMSList.vue'
 import ContactSMS from './components/SMS/SMSContact.vue'
@@ -50,6 +49,7 @@ const routes = [
     { path: '/teachers/assign/:id', component: TeacherAssign, beforeEnter: requireAuth },
 
     { path: '/contacts', component: ContactList, beforeEnter: requireAuth },
+    { path: '/contacts/sendSMS/:id', component: sendSMS, beforeEnter: requireAuth },
 
     { path: '/SMS', component: SMSList, beforeEnter: requireAuth },
     { path: '/SMS/Contact/:id', component: ContactSMS, beforeEnter: requireAuth },

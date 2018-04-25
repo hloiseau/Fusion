@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="mb-4 d-flex justify-content-between">
-            <h1>Gestion des élèves</h1>
+            <h1>SMS</h1>
 
             <div>
                 <router-link class="btn btn-primary" :to="`students/create`"><i class="fa fa-plus"></i> Ajouter un élève</router-link>
