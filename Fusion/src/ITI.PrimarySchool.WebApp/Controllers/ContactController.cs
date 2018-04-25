@@ -34,11 +34,13 @@ namespace Fusion.WebApp.Controllers
         [HttpPost("sync")]
         public async Task<IActionResult> ReciveContactList([FromBody] ContactVewModel model)
         {
-            
+            Request.Body.Seek(0, SeekOrigin.Begin);
+            StreamReader sr = new StreamReader(Request.Body);
+            string body = await sr.ReadToEndAsync();
             Result result = null;
-            for (int i = 0; i <= model.Contact.Count; i++)
+            for (int i = 0; i < model.Contact.Count; i++)
             {
-                result = await _contactGateway.ReciveContactList(model.Contact[i]._name, null,model.Contact[i]._number);
+                result = await _contactGateway.ReciveContactList(model.Contact[i]._name, null, model.Contact[i]._number);
             }
             return Ok(result);
         }
