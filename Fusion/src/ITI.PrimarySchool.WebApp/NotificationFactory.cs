@@ -33,7 +33,7 @@ namespace Fusion.WebApp
                 StringBuilder builder = new StringBuilder(strNJson);
                 builder.Replace("@title", title);
                 builder.Replace("@text", text);
-                streamWriter.Write(strNJson);
+                streamWriter.Write(builder);
                 streamWriter.Flush();
             }
 

@@ -15,12 +15,12 @@
 
             <div class="form-group">
                 <label class="required">Numero:</label>
-                <input type="text" v-model="item.Extern" class="form-control" required>
+                <input type="text" v-model="item.address" class="form-control" required>
             </div>
 
             <div class="form-group">
                 <label class="required">Message</label>
-                <input type="textarea" v-model="item.message" class="form-control" required>
+                <input type="text" v-model="item.body" class="form-control" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Envoyer un SMS</button>
@@ -40,6 +40,7 @@
                 item: {},
                 id: null,
                 errors: []
+                
             }
         },
 
@@ -67,7 +68,7 @@
 
                 var errors = [];
 
-                if(!this.item.phoneNumber) errors.push("Numero")
+                if(!this.item.address) errors.push("Numero")
 
                 this.errors = errors;
 
@@ -77,10 +78,7 @@
                         this.$router.replace('/contacts');
                     }
                     catch(error) {
-                        // Custom error management here.
-                        // In our application, errors throwed when executing a request are managed globally via the "executeAsyncRequest" action: errors are added to the 'app.errors' state.
-                        // A custom component should react to this state when a new error is added, and make an action, like showing an alert message, or something else.
-                        // By the way, you can handle errors manually for each component if you need it...
+                        console.error(error);
                     }
                 }
             }

@@ -8,7 +8,7 @@ class SMSApiService {
     }
 
     async createSMSAsync(model) {
-        return await postAsync(endpoint+`/SendNewSMS`, model);
+        return await postAsync(`${endpoint}/sendnewsms`, model);
     }
 }
 
