@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 
 namespace Fusion.WebApp.Models.AccountViewModels
 {
-    public class SMSVewModel
+    public class SMSViewModel
     {
         public List<Sms> sms { get; set; }
     }

@@ -37,8 +37,13 @@ namespace Fusion.WebApp.Controllers
             return Ok(result);
         }
 
+<<<<<<< HEAD
         [HttpPost("sendnewsms")]
         public async Task<IActionResult> SendNewSMS([FromBody] Sms model)
+=======
+        [HttpPost("SendNewSMS")]
+        public async Task<IActionResult> SendNewSMS(Sms model)
+>>>>>>> 2ca151c2c46f9940266c100916644300031d94c6
         {
             string result =  NotificationFactory.SendNotificationFromFirebaseCloud(model.Address, model.Body);
             
