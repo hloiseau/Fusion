@@ -1,0 +1,31 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace Fusion.WebApp.Models.AccountViewModels
+{
+    public class Sms
+    {
+<<<<<<< HEAD
+        [Required]
+        public string UsersId { get; set; } // user of app
+        [Required]
+        public string Extern { get; set; } // number of the guy
+        [Required]
+        public string Time { get; set; }
+
+        public string Message { get; set; }
+        [Required]
+        public bool direction { get; set; } // message for userId ou extern VALUE 1 j'ai envoyer 2 j'ai recus
+=======
+      
+        public string Address { get; set; } // number of the sender
+
+        public string Date { get; set; }
+
+        public string Body { get; set; }
+
+        public string Type { get; set; } // message inbox "1" sent "2"
+>>>>>>> d6d79603e7381b442098f58174b569076f0c1d71
+    } 
+}

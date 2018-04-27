@@ -1,0 +1,57 @@
+﻿using Fusion.DAL;
+using Fusion.WebApp.Models.AccountViewModels;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.IO;
+using System.Threading.Tasks;
+namespace Fusion.WebApp.Controllers
+{
+
+    [Route("api/[controller]")]
+    public class SmsController : Controller
+    {
+
+        readonly SMSGateway _smsGateway;
+
+        public SmsController( SMSGateway smsGateway)
+        {
+            _smsGateway = smsGateway;
+        }
+
+        [HttpPost("recivsms")]
+        public async Task<IActionResult> ReciveSMSList([FromBody] SMSViewModel model)
+        {
+            Request.Body.Seek(0, SeekOrigin.Begin);
+            StreamReader sr = new StreamReader(Request.Body);
+            string body = await sr.ReadToEndAsync();
+            bool isSent = false;
+            Result result = null;
+            for (int i = 0; i < model.sms.Count; i++)
+            {
+                if (model.sms[i].Type == "1") isSent = true;
+                else isSent = false;
+                result = await _smsGateway.AddSMS(0, model.sms[i].Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.sms[i].Date)).DateTime, model.sms[i].Body, isSent);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("sendnewsms")]
+        public async Task<IActionResult> SendNewSMS([FromBody] Sms model)
+        {
+            string result =  NotificationFactory.SendNotificationFromFirebaseCloud(model.Address, model.Body);
+            
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSMSList()
+        {
+            IEnumerable<SMSData> result = await _smsGateway.ListAll();
+            return Ok(result);
+        }
+
+
+    }
+}

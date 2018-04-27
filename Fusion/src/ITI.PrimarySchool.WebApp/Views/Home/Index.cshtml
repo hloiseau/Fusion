@@ -1,0 +1,51 @@
+﻿﻿@using Fusion.WebApp.Services;
+@{
+    string email = ( string )ViewData[ "Email" ];
+    IEnumerable<string> providers = ( IEnumerable<string> )ViewData[ "Providers" ];
+    string providerNames = providers == null ? string.Empty : string.Join( ",", providers.Select( p => string.Format( "'{0}'", p ) ) );
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SPA</title>
+
+    @Html.Partial("_AppStyles")
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        (function () {
+            var PrimarySchool = (function () {
+                var identity = null;
+
+                var getIdentity = function () {
+                    return identity;
+                };
+
+                var setIdentity = function (i) {
+                    identity = i;
+                };
+
+                return {
+                    getIdentity: getIdentity,
+                    setIdentity: setIdentity
+                };
+            })();
+
+            this.ITI = this.ITI || {};
+            this.ITI.PrimarySchool = PrimarySchool;
+        })();
+    </script>
+
+    <environment names="Development">
+        <script type="text/javascript" src="http://localhost:8080/dist/primary-school.js"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script type="text/javascript" src="~/dist/primary-school.js"></script>
+    </environment>
+</body>
+</html>

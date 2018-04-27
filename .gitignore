@@ -290,6 +290,11 @@ __pycache__/
 *.apk
 *.ap_
 
+
+# Built application files
+*.apk
+*.ap_
+
 # Files for the ART/Dalvik VM
 *.dex
 
@@ -350,3 +355,4 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+/Fusion/src/ITI.PrimarySchool.WebApp/appsettings.json

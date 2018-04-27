@@ -1,0 +1,5 @@
+﻿{
+  "ConnectionStrings": {
+    "FusionDB": "<connection string>"
+  }
+}
