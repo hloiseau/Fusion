@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Fusion.WebApp.Controllers
 {
-    
+
     [Route("api/[controller]")]
     public class ContactController : Controller
     {
@@ -22,13 +22,20 @@ namespace Fusion.WebApp.Controllers
         public ContactController(ContactGateway contactGateway)
         {
             _contactGateway = contactGateway;
-        }        
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetContactList()
         {
             IEnumerable<ContactData> result = await _contactGateway.ListAll();
             return Ok(result);
+        }
+
+        [HttpGet("{id}", Name = "GetContact")]
+        public async Task<IActionResult> GetContactById(int id)
+        {
+            Result<ContactData> result = await _contactGateway.FindById(id);
+            return this.CreateResult(result);
         }
 
         [HttpPost("sync")]
@@ -43,13 +50,6 @@ namespace Fusion.WebApp.Controllers
                 result = await _contactGateway.ReciveContactList(model.Contacts[i].Name, null, model.Contacts[i].Number);
             }
             return Ok(result);
-        }
-
-        [HttpGet("{id}", Name = "GetContact")]
-        public async Task<IActionResult> GetContactById(int id)
-        {
-            Result<ContactData> result = await _contactGateway.FindById(id);
-            return this.CreateResult(result);
         }
     }
 }

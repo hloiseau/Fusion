@@ -53,6 +53,7 @@
                 const item = await this.executeAsyncRequest(() => ContactApiService.getContactAsync(this.id));
 
                 this.item = item;
+                this.item.address = item.phoneNumber;
             }
             catch(error) {
                 console.error(error);
