@@ -50,7 +50,7 @@ namespace Fusion.WebApp.Controllers
             return Ok(result);
         }
 
-        [HttpGet("sms/{number}")]
+        [HttpGet("{number}", Name = "GetSMSByContact")]
         public async Task<IActionResult> DisplaySMSByNumber(string number)
         {
             IEnumerable<SMSData> result = await _smsGateway.FindByNumber(number);

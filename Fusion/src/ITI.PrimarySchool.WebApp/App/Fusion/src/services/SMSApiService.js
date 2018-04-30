@@ -7,8 +7,12 @@ class SMSApiService {
 
     }
 
-    async getSMSByContactAsync(contactId) {
-        return await getAsync(`${endpoint}/${contactId}`);
+    async getContactListAsync() {
+        return await getAsync(endpoint);
+    }
+
+    async getSMSByContactAsync(phoneNumber) {
+        return await getAsync(`${endpoint}/${phoneNumber}`);
     }
 
     async createSMSAsync(model) {
