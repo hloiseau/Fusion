@@ -18,7 +18,7 @@
         </el-table>
         ICI : {{contactList[contactId]}}-->
 
-        <<table class="table table-striped table-hover table-bordered">
+        <table class="table table-striped table-hover table-bordered">
             <thead>
                 <tr>    
                     <th>ID</th>
@@ -40,7 +40,7 @@
                     <router-link :to="`contacts/sendSMS/${i.contactId}`"><i class="el-icon-message"></i></router-link>
                 </tr>
             </tbody>
-        </table>-->
+        </table>
     </div>
 </template>
 
