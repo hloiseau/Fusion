@@ -22,7 +22,7 @@ namespace Fusion.DAL
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                return await con.QueryAsync<SMSData>(@"select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS");
+                return await con.QueryAsync<SMSData>(@"select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS  order by [Time]");
             }
         }
 
