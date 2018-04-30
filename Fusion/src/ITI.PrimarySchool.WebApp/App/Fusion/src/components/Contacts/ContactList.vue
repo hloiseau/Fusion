@@ -3,7 +3,7 @@
         <div class="mb-4 d-flex justify-content-between">
             <h1>Gestion des Contacts</h1>
         </div>
-
+        
         <!--<el-table :data="contactList" style="width: 100%">
             <el-table-column prop="contactId" label="ID"></el-table-column>
             <el-table-column prop="firstName" label="Prénom"></el-table-column>
@@ -11,14 +11,15 @@
             <el-table-column prop="mail" label="mail"></el-table-column>
             <el-table-column prop="phoneNumber" label="Numéro"></el-table-column>
             <el-table-column label="Opérations">
-                 <template slot-scope="scope">
-                     <router-link :to="`Contacts/sendSMS/${contactList}`"><i class="el-icon-message"></i></router-link>
+                <template slot-scope="scope">
+                     <router-link :to="`Contacts/sendSMS/${contactList[0].contactId}`"><i class="el-icon-message"></i></router-link>
                 </template>
             </el-table-column>
-        </el-table>
-        ICI : {{contactList[contactId]}}-->
+        </el-table>-->
+        
+        
 
-        <<table class="table table-striped table-hover table-bordered">
+        <table class="table table-striped table-hover table-bordered">
             <thead>
                 <tr>    
                     <th>ID</th>
@@ -74,9 +75,9 @@ export default {
             }
         },
 
-        handleEdit(index, row) {
-            console.log(index, row);
-        }
+      GoToSendSMS(row) {
+        this.$refs.singleTable.setCurrentRow(row);
+      }
     }
 }
 </script>
