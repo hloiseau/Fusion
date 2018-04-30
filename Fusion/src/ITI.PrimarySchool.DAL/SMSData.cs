@@ -16,6 +16,6 @@ namespace Fusion.DAL
 
         public string Message { get; set; }
 
-        public byte[] Direction { get; set; }
+        public bool Direction { get; set; }
     }
 }

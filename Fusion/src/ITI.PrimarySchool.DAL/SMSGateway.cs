@@ -31,7 +31,7 @@ namespace Fusion.DAL
             using( SqlConnection con = new SqlConnection( _connectionString ) )
             {
                 SMSData sms = await con.QueryFirstOrDefaultAsync<SMSData>(
-                   "select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS where SMSId = smsId",
+                   "select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS where SMSId = @smsId",
                     new { SMSId = smsId } );
 
                 if (sms == null) return Result.Failure<SMSData>(Status.NotFound, "SMS not found.");
@@ -44,7 +44,7 @@ namespace Fusion.DAL
             using( SqlConnection con = new SqlConnection( _connectionString ) )
             {
                 return await con.QueryAsync<SMSData>(
-                    "select SMSId, DevicesId, UsersId, Extern, [Time], [Message],direction from iti.tSMS where Extern = 'Number' order by [Time]",
+                    "select SMSId, DevicesId, UsersId, Extern, [Time], [Message],direction from iti.tSMS where Extern = @Number order by [Time]",
                     new { Number = number } );
             }
         }
