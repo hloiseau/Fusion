@@ -5,10 +5,7 @@
 
             <el-button type="primary" @click="login('Google')">
                 <i class="fa fa-google" aria-hidden="true"></i> Se connecter via Google</el-button>
-            <i class="el-icon-edit"></i>
-            <!-- `checked` should be true or false -->
-  <el-checkbox v-model="checked">Option</el-checkbox>
-          
+
         </div>
     </div>
 </template>

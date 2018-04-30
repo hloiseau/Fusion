@@ -14,20 +14,11 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent" v-if="auth.isConnected">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <router-link class="nav-link" to="/classes">Gestion des classes</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/students">Gestion des élèves</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/teachers">Gestion des professeurs</router-link>
-            </li>
-            <li class="nav-item">
               <router-link class="nav-link" to="/contacts">Contacts</router-link>
             </li>
-           <li class="nav-item">
+           <!--<li class="nav-item">
               <router-link class="nav-link" to="/SMS">SMS</router-link>
-            </li>
+            </li>-->
           </ul>
 
           <ul class="navbar-nav my-2 my-md-0">
