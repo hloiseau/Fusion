@@ -36,6 +36,10 @@
         </div>
 
         <div class="form-group">
+
+                <label class="required">Numero:</label>
+                <input type="text" v-model="item.address" class="form-control" required>
+
             <label class="required">Message</label>
             <input type="text" v-model="item.body" class="form-control" required>
         </div>
