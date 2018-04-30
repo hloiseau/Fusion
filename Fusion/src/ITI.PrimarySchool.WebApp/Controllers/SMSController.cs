@@ -41,7 +41,19 @@ namespace Fusion.WebApp.Controllers
         public async Task<IActionResult> SendNewSMS([FromBody] Sms model)
         {
             string result =  NotificationFactory.SendNotificationFromFirebaseCloud(model.Address, model.Body);
-            
+
+            bool isSent = false;
+            if (model.Type == "1") isSent = true;
+            else isSent = false;
+            await _smsGateway.AddSMS(0, model.Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.Date)).DateTime, model.Body, isSent);
+
+            return Ok(result);
+        }
+
+        [HttpGet("sms/{number}")]
+        public async Task<IActionResult> DisplaySMSByNumber(string number)
+        {
+            IEnumerable<SMSData> result = await _smsGateway.FindByNumber(number);
             return Ok(result);
         }
 
@@ -51,7 +63,6 @@ namespace Fusion.WebApp.Controllers
             IEnumerable<SMSData> result = await _smsGateway.ListAll();
             return Ok(result);
         }
-
 
     }
 }

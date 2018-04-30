@@ -41,7 +41,7 @@
                     <router-link :to="`contacts/sendSMS/${i.contactId}`"><i class="el-icon-message"></i></router-link>
                 </tr>
             </tbody>
-        </table>-->
+        </table>
     </div>
 </template>
 

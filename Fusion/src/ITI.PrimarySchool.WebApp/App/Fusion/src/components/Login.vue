@@ -5,7 +5,7 @@
 
             <el-button type="primary" @click="login('Google')">
                 <i class="fa fa-google" aria-hidden="true"></i> Se connecter via Google</el-button>
-          
+
         </div>
     </div>
 </template>
