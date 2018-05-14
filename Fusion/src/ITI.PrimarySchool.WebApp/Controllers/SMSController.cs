@@ -20,8 +20,8 @@ namespace Fusion.WebApp.Controllers
             _smsGateway = smsGateway;
         }
 
-        [HttpPost("recivsms")]
-        public async Task<IActionResult> ReciveSMSList([FromBody] SMSViewModel model)
+        [HttpPost("receivesms")]
+        public async Task<IActionResult> ReceiveSMSList([FromBody] SMSViewModel model)
         {
             Request.Body.Seek(0, SeekOrigin.Begin);
             StreamReader sr = new StreamReader(Request.Body);
@@ -53,7 +53,7 @@ namespace Fusion.WebApp.Controllers
         [HttpGet("{number}", Name = "GetSMSByContact")]
         public async Task<IActionResult> DisplaySMSByNumber(string number)
         {
-            IEnumerable<SMSData> result = await _smsGateway.FindByNumber(number);
+            IEnumerable<SMSData> result = await _smsGateway.FindByNumber(number.Replace(" ",string.Empty));
             return Ok(result);
         }
 

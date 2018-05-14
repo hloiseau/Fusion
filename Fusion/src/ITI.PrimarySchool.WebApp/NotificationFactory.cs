@@ -24,7 +24,7 @@ namespace Fusion.WebApp
                 string strNJson =
                     @"{
                     ""to"": ""/topics/ServiceNow"",                  
-                    ""notification"": {
+                    ""data"": {
                         ""title"": ""@title"",
                         ""text"": ""@text"",
                         ""sound"":""default""

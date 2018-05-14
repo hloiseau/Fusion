@@ -15,25 +15,27 @@ public class ContentCollector {
 
     }
 
+
     public List<Contact> GetContacts(Context context){
-        List<Contact> lstContact = new ArrayList<Contact>();
+        List<Contact> lstContact = new ArrayList<>();
         Contact contact;
-        Uri message = Uri.parse("content://contacts/people");
-        ContentResolver cr = context.getContentResolver();
 
-        Cursor c = cr.query(message, null, null, null, null);
-        int totalContacts = c.getCount();
 
-        if(c.moveToFirst()){
-            for(int i = 0; i<totalContacts; i++){
-                contact = new Contact();
-                contact.SetName(c.getString(c.getColumnIndexOrThrow("NAME")));
-                contact.SetNumber(c.getString(c.getColumnIndexOrThrow("NUMBER")));
-                lstContact.add(contact);
-                c.moveToNext();
+        Cursor c = context.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null,null, null, null);
+
+        while (c.moveToNext()) {
+            contact = new Contact();
+            contact.SetName(c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME)));
+            String hasPhone = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+            String id = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+            if (hasPhone.equals("1")){
+                Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,null,null);
+                if(phones.moveToFirst()){
+                    contact.SetNumber(phones.getString(phones.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+                }
+                phones.close();
             }
-        } else {
-            throw new RuntimeException("you have no Contacts");
+            lstContact.add(contact);
         }
         c.close();
 
