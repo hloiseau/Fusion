@@ -4,6 +4,8 @@
     <string name="short_description">Short Description</string>
     <string name="description">Description</string>
     <string name="get_data">Get Data</string>
-    <string name="edit_message">Enter a message</string>
-    <string name="button_send">Send</string>
+    <string name="button_note">Envoyer une note</string>
+    <string name="button_navigateur">Ouvrir un navigateur</string>
+    <string name="button_URL">Envoyer un URL</string>
+    <string name="button_file_Manager">Gestion des fichiers</string>
 </resources>
