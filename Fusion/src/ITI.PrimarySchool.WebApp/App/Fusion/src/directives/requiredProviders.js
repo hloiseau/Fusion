@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import AuthService from '../services/AuthService'
 
-export default Vue.directive('required-providers', {
+export default Vue.directive('required-' +
+    'provider' +
+    '' +
+    's', {
     bind(el, binding) {
         var providers = binding.value;
 

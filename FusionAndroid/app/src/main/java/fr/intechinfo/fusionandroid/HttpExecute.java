@@ -19,11 +19,10 @@ public class HttpExecute extends Thread {
     
    public static RetrofitAPI BuildAPI(){
        Retrofit retrofit = new Retrofit.Builder()
-               .baseUrl("http://192.168.42.244:5000")
+               .baseUrl("http://10.10.90.7:5000")
                .addConverterFactory(GsonConverterFactory.create())
                .build();
        return retrofit.create(RetrofitAPI.class);
-
    }
 
     public void run(){
