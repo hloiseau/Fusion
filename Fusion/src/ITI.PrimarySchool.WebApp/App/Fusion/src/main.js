@@ -2,7 +2,6 @@ import './main.polyfills'
 import './main.vendors'
 import './main.auth'
 
-
 import Vue from 'vue'
 import store from './store'
 import router from './main.router'
