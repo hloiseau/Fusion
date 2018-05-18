@@ -1,8 +1,8 @@
 ﻿﻿@using Fusion.WebApp.Services;
 @{
-    string email = ( string )ViewData[ "Email" ];
-    IEnumerable<string> providers = ( IEnumerable<string> )ViewData[ "Providers" ];
-    string providerNames = providers == null ? string.Empty : string.Join( ",", providers.Select( p => string.Format( "'{0}'", p ) ) );
+    string email = (string)ViewData["Email"];
+    IEnumerable<string> providers = (IEnumerable<string>)ViewData["Providers"];
+    string providerNames = providers == null ? string.Empty : string.Join(",", providers.Select(p => string.Format("'{0}'", p)));
 }
 <!DOCTYPE html>
 
@@ -38,8 +38,50 @@
             this.ITI = this.ITI || {};
             this.ITI.PrimarySchool = PrimarySchool;
         })();
-    </script>
 
+        src="https://cdn.pubnub.com/pubnub-3.7.13.min.js";
+        src="https://code.jquery.com/jquery-1.12.0.min.js";
+
+        $(document).ready(function () {
+            var pubnub = PUBNUB({
+                subscribe_key: 'demo'
+            });
+            pubnub.subscribe({
+                channel: "pubnub-html5-notification-demo", // Subscribing to PubNub's channel
+                message: function (message) {
+                    console.log(message);
+                    bamboula(message.text);
+                }
+            })
+        });
+
+        function bamboula(message) {
+            if (message == undefined) {
+                message = "°-° undifind °-°";
+            };
+            // Let's check if the browser supports notifications
+            if (!("Notification" in window)) {
+                alert("This browser does not support desktop notification");
+            }
+            // Let's check whether notification permissions have already been granted
+            else if (Notification.permission === "granted") {
+                // If it's okay let's create a notification
+                var notification = new Notification(message);
+            }
+            // Otherwise, we need to ask the user for permission
+            else if (Notification.permission !== 'denied') {
+                Notification.requestPermission(function (permission) {
+                    // If the user accepts, let's create a notification
+                    if (permission === "granted") {
+                        var notification = new Notification("Hi there!");   
+                    }
+                });
+            }
+        }
+
+        bamboula('Bienvenue ! \n petit coquin ');
+
+    </script>
     <environment names="Development">
         <script type="text/javascript" src="http://localhost:8080/dist/primary-school.js"></script>
     </environment>

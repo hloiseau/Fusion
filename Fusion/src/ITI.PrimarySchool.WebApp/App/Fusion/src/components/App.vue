@@ -11,6 +11,8 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
+        <button onclick="bamboula('name_exemple :\nmessage_exemple')">Notify me!</button> <!-- message <= 25 of length => else just a notif like "new message of contact_name" -->
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent" v-if="auth.isConnected">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
@@ -57,6 +59,7 @@ export default {
     auth: () => AuthService
   }
 }
+
 </script>
 
 <style lang="scss" scoped>
@@ -69,6 +72,8 @@ export default {
 a.router-link-active {
   font-weight: bold;
 }
+
+
 </style>
 
 <style lang="scss">
