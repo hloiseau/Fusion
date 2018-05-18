@@ -1,16 +1,19 @@
 package fr.intechinfo.fusionandroid;
 
 import android.app.FragmentManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -21,28 +24,29 @@ import retrofit2.Call;
 import static android.content.ContentValues.TAG;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private DrawerLayout mDrawerLayout;
-    private Fragment actualFragment;
+    //For design
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+
+    private Fragment fragmentNews;
+    private Fragment fragmentProfile;
+    private Fragment fragmentParams;
+
+    //For data - Identify each fragment with a number
+    private static final int FRAGMENT_NEWS = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Add the toolbar and the Icon
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
-
-        //Find our drawer view & Setup drawer view
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        setupDrawerContent(navigationView);
+        //Configure all views
+        this.configureToolBar();
+        this.configureDrawerLayout();
+        this.configureNavigationView();
 
         onNewIntent(getIntent());
         FirebaseMessaging.getInstance().subscribeToTopic("ServiceNow");
@@ -70,52 +74,76 @@ public class MainActivity extends AppCompatActivity {
         new HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start();
     }
 
-    private void setupDrawerContent(NavigationView navigationView){
-        navigationView.setNavigationItemSelectedListener(
-            new NavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(MenuItem menuItem) {
-                    selectDrawerItem(menuItem);
-                    mDrawerLayout.closeDrawers();   // close drawer when item is tapped
-
-                    // Add code here to update the UI based on the item selected
-                    // For example, swap UI fragments here
-
-                    return true;
-                }
-            });
+    @Override
+    public void onBackPressed() {
+        // 5 - Handle back click to close menu
+        if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
-    public void selectDrawerItem(MenuItem menuItem){
-        //Create a new fragment and specify the fragment to show based on nav item cliked
-        Fragment fragment = null;
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
 
-        switch (menuItem.getItemId()){
-            case R.id.nav_computer:
-                this.showComputerFragment();
+        // 4 - Handle Navigation Item Click
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.activity_main_drawer_news :
+                this.showFragment(FRAGMENT_NEWS);
+                break;
+            case R.id.activity_main_drawer_profile:
+                break;
+            case R.id.activity_main_drawer_settings:
                 break;
             default:
                 break;
         }
 
-        // Insert the fragment by replacing any existing fragment
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        this.drawerLayout.closeDrawer(GravityCompat.START);
 
-        menuItem.setChecked(true);      // set item as selected to persist highlight
+        return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
+    private void configureToolBar(){
+        this.toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    private void configureDrawerLayout(){
+        this.drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    private void configureNavigationView(){
+        this.navigationView = (NavigationView) findViewById(R.id.activity_main_nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void showFragment(int fragmentIdentifier){
+        switch (fragmentIdentifier){
+            case FRAGMENT_NEWS :
+                this.showNewsFragment();
+                break;
+            default:
+                break;
         }
-        return super.onOptionsItemSelected(menuItem);
     }
 
-    private void showComputerFragment(){
-
+    private void showNewsFragment() {
+        if (this.fragmentNews == null) this.fragmentNews = NewsFragment.newInstance();
+        this.startTransactionFragment(this.fragmentNews);
     }
+
+    private void startTransactionFragment(Fragment fragment){
+        if(!fragment.isVisible()){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.activity_main_frame_layout, fragment).commit();
+        }
+    }
+
 }
