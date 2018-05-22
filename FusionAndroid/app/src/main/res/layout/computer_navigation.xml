@@ -1,40 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/FileManager"
-        android:layout_width="154dp"
-        android:layout_height="103dp"
-        android:text="@string/button_file_Manager"
-        tools:layout_editor_absoluteX="195dp"
-        tools:layout_editor_absoluteY="55dp" />
+    <android.support.v7.widget.GridLayout
+        android:layout_width="370dp"
+        android:layout_height="467dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="6dp">
 
-    <Button
-        android:id="@+id/Open_Navigator"
-        android:layout_width="154dp"
-        android:layout_height="103dp"
-        android:text="@string/button_navigateur"
-        tools:layout_editor_absoluteX="195dp"
-        tools:layout_editor_absoluteY="187dp" />
+        <Button
+            android:id="@+id/send_note"
+            android:layout_gravity="left|top"
+            android:text="@string/button_note" />
 
-    <Button
-        android:id="@+id/Send_URL"
-        android:layout_width="154dp"
-        android:layout_height="103dp"
-        android:text="@string/button_URL"
-        tools:layout_editor_absoluteX="30dp"
-        tools:layout_editor_absoluteY="187dp" />
+        <Button
+            android:id="@+id/FileManager"
+            android:layout_gravity="left|top"
+            android:text="@string/button_file_Manager"
+            app:layout_column="1"
+            app:layout_row="0" />
 
-    <Button
-        android:id="@+id/Send_Note"
-        android:layout_width="154dp"
-        android:layout_height="103dp"
-        android:text="@string/button_note"
-        tools:layout_editor_absoluteX="30dp"
-        tools:layout_editor_absoluteY="55dp" />
+        <Button
+            android:id="@+id/Send_URL"
+            android:text="@string/button_URL"
+            app:layout_column="0"
+            app:layout_row="1" />
+
+        <Button
+            android:id="@+id/Open_Navigator"
+            android:text="@string/button_navigateur"
+            app:layout_column="1"
+            app:layout_row="1" />
+
+    </android.support.v7.widget.GridLayout>
 
 </android.support.constraint.ConstraintLayout>
