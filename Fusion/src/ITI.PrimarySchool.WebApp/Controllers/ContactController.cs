@@ -10,6 +10,7 @@ using Fusion.WebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Cors;
 
 namespace Fusion.WebApp.Controllers
 {

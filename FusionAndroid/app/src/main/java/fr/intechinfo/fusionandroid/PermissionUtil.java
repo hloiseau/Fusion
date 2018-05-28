@@ -168,7 +168,8 @@ public class PermissionUtil {
                 Manifest.permission.READ_SMS,
                 Manifest.permission.SEND_SMS,
                 Manifest.permission.READ_CONTACTS,
-                Manifest.permission.READ_PHONE_STATE};
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.RECEIVE_SMS};
         if(!hasPermissions(activity, PERMISSIONS)) {
             showMessageOKCancel(activity, "These permissions are mandatory for the application. Please allow access.",
                     new DialogInterface.OnClickListener() {

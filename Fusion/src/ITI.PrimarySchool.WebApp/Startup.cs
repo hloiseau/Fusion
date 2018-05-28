@@ -27,7 +27,7 @@ namespace Fusion.WebApp
         public void ConfigureServices( IServiceCollection services )
         {
             services.AddOptions();
-
+            services.AddCors();
             services.AddMvc();
             services.AddSingleton( _ => new DeviceGateway( Configuration["ConnectionStrings:FusionDB"] ) );
             services.AddSingleton( _ => new ContactGateway( Configuration["ConnectionStrings:FusionDB"] ) );
@@ -92,6 +92,10 @@ namespace Fusion.WebApp
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(builder =>
+                builder.WithOrigins("http://localhost:9080")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
             string secretKey = Configuration[ "JwtBearer:SigningKey" ];
             SymmetricSecurityKey signingKey = new SymmetricSecurityKey( Encoding.ASCII.GetBytes( secretKey ) );
 
