@@ -44,6 +44,8 @@ app.on('activate', () => {
   }
 })
 
+
+
 /**
  * Auto Updater
  *
