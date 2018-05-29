@@ -32,11 +32,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var navigationView: NavigationView? = null
 
     private var fragmentNews: Fragment? = null
-    private val fragmentProfile: Fragment? = null
-    private val fragmentParams: Fragment? = null
 
-    private val mDrawerLayout: DrawerLayout? = null
-    private val actualFragment: Fragment? = null
     private val RC_SIGN_IN = 28
 
     public override fun onStart() {
@@ -70,7 +66,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,7 +111,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onBackPressed() {
-        // 5 - Handle back click to close menu
+        // Handle back click to close menu
         if (this.drawerLayout!!.isDrawerOpen(GravityCompat.START)) {
             this.drawerLayout!!.closeDrawer(GravityCompat.START)
         } else {
@@ -126,7 +121,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
-        // 4 - Handle Navigation Item Click
+        // Handle Navigation Item Click
         val id = item.itemId
 
         when (id) {
@@ -182,7 +177,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     companion object {
-
         //For data - Identify each fragment with a number
         private val FRAGMENT_NEWS = 0
         private val TAG = "MainActivity"

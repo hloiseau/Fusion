@@ -18,9 +18,9 @@
             <li class="nav-item">
               <router-link class="nav-link" to="/contacts">Contacts</router-link>
             </li>
-           <!--<li class="nav-item">
-              <router-link class="nav-link" to="/SMS">SMS</router-link>
-            </li>-->
+           <li class="nav-item">
+              <router-link class="nav-link" to="/file">File Sender</router-link>
+            </li>
           </ul>
 
           <ul class="navbar-nav my-2 my-md-0">
