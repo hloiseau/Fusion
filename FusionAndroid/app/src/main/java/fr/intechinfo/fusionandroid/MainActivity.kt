@@ -84,13 +84,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
+                .requestId()
+                .requestProfile()
                 .build()
         val googleSignInClient = GoogleSignIn.getClient(this, gso)
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
 
+        var personId: String? = ""
+        val acct = GoogleSignIn.getLastSignedInAccount(this)
+        if (acct != null) {
+            val personName = acct.displayName
+            val personGivenName = acct.givenName
+            val personFamilyName = acct.familyName
+            val personEmail = acct.email
+            personId = acct.id
+        }
+        else {
+            personId = ""
+        }
+
         onNewIntent(intent)
-        FirebaseMessaging.getInstance().subscribeToTopic("ServiceNow")
+        FirebaseMessaging.getInstance().subscribeToTopic(personId)
         PermissionUtil.initPermissions(this)
         val retrofitAPI = HttpExecute.BuildAPI()
         val token = Token()

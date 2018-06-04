@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Fusion.DAL;
+using Fusion.WebApp.Authentication;
 
 namespace Fusion.WebApp
 {
@@ -12,6 +14,9 @@ namespace Fusion.WebApp
     {
         public static String SendNotificationFromFirebaseCloud(string title, string text)
         {
+            //recup du google Id ou token
+            string googleId = GoogleAuthenticationManager.GoogleIdGeneral;
+
             var result = "-1";
             var webAddr = "https://fcm.googleapis.com/fcm/send";
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(webAddr);
@@ -23,15 +28,14 @@ namespace Fusion.WebApp
                
                 string strNJson =
                     @"{
-                    ""to"": ""/topics/ServiceNow"",                  
+                    ""to"": ""/topics/@googleId"",
                     ""data"": {
                         ""title"": ""@title"",
                         ""text"": ""@text"",
-                        ""sound"":""default""
                     }
                 }";
                 StringBuilder builder = new StringBuilder(strNJson);
-                builder.Replace("@title", title);
+                builder.Replace("@googleId", googleId);
                 builder.Replace("@text", text);
                 streamWriter.Write(builder);
                 streamWriter.Flush();
