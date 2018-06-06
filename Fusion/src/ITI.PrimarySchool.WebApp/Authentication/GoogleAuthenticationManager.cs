@@ -8,7 +8,7 @@ namespace Fusion.WebApp.Authentication
     public class GoogleAuthenticationManager : AuthenticationManager<GoogleUserInfo>
     {
         readonly UserGateway _userGateway;
-
+        public static string GoogleIdgeneral { get; private set; } 
         public GoogleAuthenticationManager( UserService userService, UserGateway userGateway )
         {
             _userGateway = userGateway;
@@ -18,17 +18,20 @@ namespace Fusion.WebApp.Authentication
         {
             if( userInfo.RefreshToken != null )
             {
+                GoogleIdgeneral = userInfo.GoogleId;
                 await _userGateway.CreateOrUpdateGoogleUser( userInfo.Email, userInfo.GoogleId, userInfo.RefreshToken );
             }
         }
 
         protected override Task<UserData> FindUser( GoogleUserInfo userInfo )
         {
+            GoogleIdgeneral = userInfo.GoogleId;
             return _userGateway.FindByGoogleId( userInfo.GoogleId );
         }
 
         protected override Task<GoogleUserInfo> GetUserInfoFromContext( OAuthCreatingTicketContext ctx )
         {
+            GoogleIdgeneral = ctx.GetGoogleId();
             return Task.FromResult( new GoogleUserInfo
             {
                 RefreshToken = ctx.RefreshToken,

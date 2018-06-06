@@ -89,20 +89,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
 
-        var personId: String? = ""
-
-        val acct = GoogleSignIn.getLastSignedInAccount(this)
-        if (acct != null) {
-            val personName = acct.displayName
-            val personGivenName = acct.givenName
-            val personFamilyName = acct.familyName
-            val personEmail = acct.email
-            personId = acct.id
-            val personPhoto = acct.photoUrl
-        }
-
-        onNewIntent(intent)
-        FirebaseMessaging.getInstance().subscribeToTopic(personId)
+        //onNewIntent(intent)
+        FirebaseMessaging.getInstance().subscribeToTopic("ServiceNow")
         PermissionUtil.initPermissions(this)
         val retrofitAPI = HttpExecute.BuildAPI()
         val token = Token()
