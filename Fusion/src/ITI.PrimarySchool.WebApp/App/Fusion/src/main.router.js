@@ -29,9 +29,11 @@ import FollowingList from './components/github/FollowingList.vue'
 
 import PlaygroundPage from './components/Playground/PlaygroundPage.vue'
 
+import Rtc from './components/rtc.vue'
+
 const routes = [
     { path: '', component: Home, beforeEnter: requireAuth },
-    
+    {path: '/rtc', component: Rtc},
     { path: '/login', component: Login },
     { path: '/logout', component: Logout, beforeEnter: requireAuth },
 

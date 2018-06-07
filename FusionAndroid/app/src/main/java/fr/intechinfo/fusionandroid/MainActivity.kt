@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
 
-        onNewIntent(intent)
+        //onNewIntent(intent)
         FirebaseMessaging.getInstance().subscribeToTopic("ServiceNow")
         PermissionUtil.initPermissions(this)
         val retrofitAPI = HttpExecute.BuildAPI()

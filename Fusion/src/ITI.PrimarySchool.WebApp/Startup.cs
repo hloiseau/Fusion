@@ -93,7 +93,7 @@ namespace Fusion.WebApp
             }
 
             app.UseCors(builder =>
-                builder.WithOrigins("http://localhost:9080")
+                builder.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             string secretKey = Configuration[ "JwtBearer:SigningKey" ];
