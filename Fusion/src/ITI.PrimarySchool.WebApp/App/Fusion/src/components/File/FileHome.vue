@@ -5,18 +5,63 @@
         </el-row>
 
         <el-row :gutter="20">
-            <el-col :span="10" :offset="6"><div>Envoyer un fichier :</div></el-col>
+            <el-col :span="10"><div>Envoyer un fichier :</div></el-col>
         </el-row>
-
-        <input type="file" @change="OnFileChanged">
-        <button @click="onUpload">Upload !</button>
+        <form @submit="onSubmit($event)">
+            <div class="large-12 medium-12 small-12 cell">
+                <label>File
+                    <input type="file"  @change="handleFileUpload"/>
+                </label>
+                    <input type ="submit" value="Upload"/>
+            </div>
+        </form>
     </div>
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+import FileApiService from '../../services/FileApiService'
+
 export default {
     data(){
+        return {
+            selectedFile: null,
+            fd: new FormData()
+        }
+    },
 
+    methods: {
+        ...mapActions(['notifyLoading', 'notifyError']),
+        ...mapActions(['executeAsyncRequest']),
+        
+        handleFileUpload (event) {
+            this.selectedFile = event.target.files[0];
+        },
+
+        async onSubmit(e) {
+            e.preventDefault();
+            
+            var errors = [];
+            this.errors = errors;
+            if(errors.length  == 0) {
+                try {
+                    this.notifyLoading(true);
+
+                    this.fd.append('file', this.selectedFile, this.selectedFile.name);
+
+                    if(this.fd == null) console.log("null");
+
+                    await this.executeAsyncRequest(() => FileApiService.stockFileAsync(this.fd));
+                    this.$router.replace('/file');
+                }
+                catch(error){
+                    this.notifyError(error);
+                }
+                finally {
+                    this.notifyLoading(false);
+                }
+            }
+        }
     }
 }
 </script>

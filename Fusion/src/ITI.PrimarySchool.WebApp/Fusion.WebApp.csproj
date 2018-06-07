@@ -9,6 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="FileManager\" />
+    <Folder Include="Models\FileViewModels\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
