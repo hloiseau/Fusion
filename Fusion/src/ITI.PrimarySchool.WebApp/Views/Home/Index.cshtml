@@ -7,87 +7,95 @@
 <!DOCTYPE html>
 
 <html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>SPA</title>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>SPA</title>
 
-    @Html.Partial("_AppStyles")
-</head>
-<body>
-    <div id="app"></div>
+        @Html.Partial("_AppStyles")
+    </head>
+    <body>
+        <div id="app"></div>
+    
+        <script>
+            (function () {
+                var PrimarySchool = (function () {
+                    var identity = null;
 
-    <script>
-        (function () {
-            var PrimarySchool = (function () {
-                var identity = null;
+                    var getIdentity = function () {
+                        return identity;
+                    };
 
-                var getIdentity = function () {
-                    return identity;
-                };
+                    var setIdentity = function (i) {
+                        identity = i;
+                    };
 
-                var setIdentity = function (i) {
-                    identity = i;
-                };
+                    return {
+                        getIdentity: getIdentity,
+                        setIdentity: setIdentity
+                    };
+                })();
 
-                return {
-                    getIdentity: getIdentity,
-                    setIdentity: setIdentity
-                };
+                this.ITI = this.ITI || {};
+                this.ITI.PrimarySchool = PrimarySchool;
             })();
 
-            this.ITI = this.ITI || {};
-            this.ITI.PrimarySchool = PrimarySchool;
-        })();
+            src="https://cdn.pubnub.com/pubnub-3.7.13.min.js";
+            src="https://code.jquery.com/jquery-1.12.0.min.js";
 
-        src="https://cdn.pubnub.com/pubnub-3.7.13.min.js";
-        src="https://code.jquery.com/jquery-1.12.0.min.js";
-
-        $(document).ready(function () {
-            var pubnub = PUBNUB({
-                subscribe_key: 'demo'
-            });
-            pubnub.subscribe({
-                channel: "pubnub-html5-notification-demo", // Subscribing to PubNub's channel
-                message: function (message) {
-                    console.log(message);
-                    bamboula(message.text);
-                }
-            })
-        });
-
-        function bamboula(message) {
-            if (message == undefined) {
-                message = "°-° undifind °-°";
-            };
-            // Let's check if the browser supports notifications
-            if (!("Notification" in window)) {
-                alert("This browser does not support desktop notification");
-            }
-            // Let's check whether notification permissions have already been granted
-            else if (Notification.permission === "granted") {
-                // If it's okay let's create a notification
-                var notification = new Notification(message);
-            }
-            // Otherwise, we need to ask the user for permission
-            else if (Notification.permission !== 'denied') {
-                Notification.requestPermission(function (permission) {
-                    // If the user accepts, let's create a notification
-                    if (permission === "granted") {
-                        var notification = new Notification("Hi there!");   
-                    }
+            $(document).ready(function () {
+                var pubnub = PUBNUB({
+                    subscribe_key: 'demo'
                 });
+                pubnub.subscribe({
+                    channel: "pubnub-html5-notification-demo", // Subscribing to PubNub's channel
+                    message: function (message) {
+                        console.log(message);
+                        bamboula(message.text);
+                    }
+                })
+            });
+
+            function bamboula(message) {
+                if (message == undefined) {
+                    message = "°-° undifind °-°";
+                };
+                // Let's check if the browser supports notifications
+                if (!("Notification" in window)) {
+                    alert("This browser does not support desktop notification");
+                }
+                // Let's check whether notification permissions have already been granted
+                else if (Notification.permission === "granted") {
+                    // If it's okay let's create a notification
+                    var notification = new Notification(message);
+                }
+                // Otherwise, we need to ask the user for permission
+                else if (Notification.permission !== 'denied') {
+                    Notification.requestPermission(function (permission) {
+                        // If the user accepts, let's create a notification
+                        if (permission === "granted") {
+                            var notification = new Notification("Hi there!");   
+                        }
+                    });
+                }
             }
-        }
 
-        bamboula('Bienvenue ! \n petit coquin ');
+            bamboula('Bienvenue ! \n petit coquin ');
 
+        </script>
+    <script src="~/lib/signalr/signalr.js"></script>
+    <script>
+        connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+        connection.start().catch(err => console.error(err.toString()));
     </script>
-    <environment names="Development">
-        <script type="text/javascript" src="http://localhost:8080/dist/primary-school.js"></script>
-    </environment>
+        <environment names="Development">
+            <script type="text/javascript" src="http://localhost:8080/dist/primary-school.js"></script>
+        </environment>
 
-    <environment names="Staging,Production">
-        <script type="text/javascript" src="~/dist/primary-school.js"></script>
-    </environment>
-</body>
+        <environment names="Staging,Production">
+            <script type="text/javascript" src="~/dist/primary-school.js"></script>
+        </environment>
+    </body>
 </html>

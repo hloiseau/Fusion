@@ -27,7 +27,7 @@ namespace Fusion.WebApp
                
                 string strNJson =
                     @"{
-                    ""to"": ""/topics/googleId"",                  
+                    ""to"": ""/topics/googleId"",
                     ""data"": {
                         ""title"": ""@title"",
                         ""text"": ""@text"",

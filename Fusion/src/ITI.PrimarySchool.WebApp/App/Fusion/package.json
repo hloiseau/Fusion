@@ -41,5 +41,9 @@
     "vue-template-compiler": "2.5.16",
     "webpack": "3.11.0",
     "webpack-dev-server": "2.11.1"
-  }
+  },
+  "version": "1.0.0",
+  "main": "webpack.config.js",
+  "keywords": [],
+  "license": "ISC"
 }
