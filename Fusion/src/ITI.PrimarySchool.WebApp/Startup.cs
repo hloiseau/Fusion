@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNet.SignalR;
 
 namespace Fusion.WebApp
 {
@@ -37,6 +38,7 @@ namespace Fusion.WebApp
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();
             services.AddSingleton<GoogleAuthenticationManager>();
+            services.AddSignalR();
 
 
             string secretKey = Configuration[ "JwtBearer:SigningKey" ];
