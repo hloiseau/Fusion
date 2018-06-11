@@ -2,30 +2,33 @@
   <div id="app">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <header>
-  
-      
+
+
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <router-link class="navbar-brand" to="/">ITI.PrimarySchool</router-link>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+          aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <button onclick="bamboula('name_exemple :\nmessage_exemple')">Notify me!</button> <!-- message <= 25 of length => else just a notif like "new message of contact_name" -->
+        <button onclick="bamboula('name_exemple :\nmessage_exemple')">Notify me!</button>
+        <!-- message <= 25 of length => else just a notif like "new message of contact_name" -->
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent" v-if="auth.isConnected">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
               <router-link class="nav-link" to="/contacts">Contacts</router-link>
             </li>
-           <!--<li class="nav-item">
+            <!--<li class="nav-item">
               <router-link class="nav-link" to="/SMS">SMS</router-link>
             </li>-->
           </ul>
 
           <ul class="navbar-nav my-2 my-md-0">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
                 {{ auth.email }}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -48,34 +51,49 @@
 </template>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script>
+  import AuthService from '../services/AuthService'
+  import {
+    mapGetters,
+    mapActions
+  } from 'vuex'
+  import '../directives/requiredProviders'
 
-import AuthService from '../services/AuthService'
-import { mapGetters, mapActions } from 'vuex'
-import '../directives/requiredProviders'
-
-export default {
-  computed: {
-    ...mapGetters(['isLoading']),
-    auth: () => AuthService
+  export default {
+    data() {
+      return {
+        signalR: require("@aspnet/signalr"),
+        connection: new signalR.HubConnectionBuilder()
+        .withUrl("/vue")
+        .build()
+      }
+    },
+    mounted() {
+      this.signalR = require("@aspnet/signalr")
+      this.connection = new signalR.HubConnectionBuilder().withUrl("/vue").build()
+      this.connection.on("send", data => {
+        console.log(data)
+      })
+      this.connection.start().then(() => connection.invoke("send", "Hello"))
+    },
+    computed: {
+      ...mapGetters(['isLoading']),
+      auth: () => AuthService
+    }
   }
-}
-
 </script>
 
 <style lang="scss" scoped>
-.progress {
-  margin: 0px;
-  padding: 0px;
-  height: 5px;
-}
+  .progress {
+    margin: 0px;
+    padding: 0px;
+    height: 5px;
+  }
 
-a.router-link-active {
-  font-weight: bold;
-}
-
-
+  a.router-link-active {
+    font-weight: bold;
+  }
 </style>
 
 <style lang="scss">
-@import "../styles/global.scss";
+  @import "../styles/global.scss";
 </style>

