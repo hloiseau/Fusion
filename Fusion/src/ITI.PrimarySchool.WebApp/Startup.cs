@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNet.SignalR;
 
 namespace Fusion.WebApp
 {
@@ -39,7 +38,6 @@ namespace Fusion.WebApp
             services.AddSingleton<TokenService>();
             services.AddSingleton<GoogleAuthenticationManager>();
             services.AddSignalR();
-
 
             string secretKey = Configuration[ "JwtBearer:SigningKey" ];
             SymmetricSecurityKey signingKey = new SymmetricSecurityKey( Encoding.ASCII.GetBytes( secretKey ) );
@@ -102,6 +100,11 @@ namespace Fusion.WebApp
             SymmetricSecurityKey signingKey = new SymmetricSecurityKey( Encoding.ASCII.GetBytes( secretKey ) );
 
             app.UseAuthentication();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<VueHub>("/Vue");
+            });
 
             app.UseMvc( routes =>
             {

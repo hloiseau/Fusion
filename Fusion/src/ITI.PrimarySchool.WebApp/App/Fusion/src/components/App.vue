@@ -61,19 +61,17 @@
   export default {
     data() {
       return {
-        signalR: require("@aspnet/signalr"),
-        connection: new signalR.HubConnectionBuilder()
-        .withUrl("/vue")
-        .build()
+        signalR: null,
+        connection: null
       }
     },
     mounted() {
-      this.signalR = require("@aspnet/signalr")
-      this.connection = new signalR.HubConnectionBuilder().withUrl("/vue").build()
+      var signalR = require("@aspnet/signalr")
+      this.connection = new signalR.HubConnectionBuilder().withUrl("/Vue").build()
       this.connection.on("send", data => {
         console.log(data)
       })
-      this.connection.start().then(() => connection.invoke("send", "Hello"))
+      this.connection.start().then(() => this.connection.invoke("send", "Hello"))
     },
     computed: {
       ...mapGetters(['isLoading']),
