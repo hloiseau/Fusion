@@ -19,6 +19,8 @@ namespace Fusion.DAL
 
         public async Task<Result<int>> ReciveContactList(string name, string mail, string number)
         {
+            string[] names = name.Split(' ');
+            if (names.Length <= 1){names[1] = null;}
             string pattern = "^\\+\\d{2}";
             string replacement = "0";
             Regex rgx = new Regex(pattern);
@@ -27,8 +29,8 @@ namespace Fusion.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@firstName", name);
-                p.Add("@LastName", null);
+                p.Add("@firstName", names[0]);
+                p.Add("@LastName", names[1]);
                 p.Add("@mail", mail);
                 p.Add("@PhoneNumber", result);
                 p.Add("@ContactId", dbType: DbType.Int32, direction: ParameterDirection.Output);
