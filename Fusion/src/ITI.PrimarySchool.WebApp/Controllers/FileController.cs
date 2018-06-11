@@ -33,8 +33,10 @@ namespace Fusion.WebApp.Controllers
             if (file == null) throw new Exception("File is null");
             if (file.Length == 0) throw new Exception("File is empty");
 
-            string path_UserName = "C:\\Users\\"+ Environment.UserName + "Documents";
-            string path_to_Images = path_UserName + "" + file.FileName;
+            string path_UserName = "C:\\Users\\"+ Environment.UserName + "\\Documents\\FusionFile";
+            string path_to_Images = path_UserName + "\\" + file.FileName;
+
+            CreateFolder(path_UserName);
 
             using (var stream = new FileStream(path_to_Images, FileMode.Create))
             {
@@ -42,8 +44,17 @@ namespace Fusion.WebApp.Controllers
             }
 
             ViewData["FilePath"] = path_to_Images;
-            return Ok(path_to_Images);
 
+            string result = NotificationFactory.SendNotificationFromFirebaseCloud("File sending to number", file.FileName, "file");
+            return Ok();
+        }
+
+        private void CreateFolder(string path)
+        {
+            if(!Directory.Exists(path)) { 
+                Directory.CreateDirectory(path);
+                Console.WriteLine("The directory was created successfully at {0}.", Directory.GetCreationTime(path));
+            }
         }
     }
 }
