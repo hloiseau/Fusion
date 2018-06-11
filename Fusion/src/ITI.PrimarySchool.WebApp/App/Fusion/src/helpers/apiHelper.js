@@ -64,3 +64,15 @@ export async function deleteAsync(url) {
     .then(checkErrors)
     .then(toJSON);
 }
+
+export async function postFormDataAsync(url, data) {
+    return await fetch(url, {
+        method: 'POST',
+        body: data,
+        headers: {
+            'Authorization': `Bearer ${AuthService.accessToken}`
+        }
+    })
+    .then(checkErrors)
+    .then(toJSON);
+}

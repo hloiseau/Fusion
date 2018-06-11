@@ -23,8 +23,7 @@ import TeacherAssign from './components/teachers/TeacherAssign.vue'
 import ContactList from './Components/contacts/ContactList.vue'
 import sendSMS from './components/contacts/sendSMS.vue'
 
-import SMSList from './components/SMS/SMSList.vue'
-import ContactSMS from './components/SMS/SMSContact.vue'
+import FileHome from './components/file/FileHome.vue'
 
 import FollowingList from './components/github/FollowingList.vue'
 
@@ -53,8 +52,7 @@ const routes = [
     { path: '/contacts', component: ContactList, beforeEnter: requireAuth },
     { path: '/contacts/sendSMS/:id', component: sendSMS, beforeEnter: requireAuth },
 
-    { path: '/SMS', component: SMSList, beforeEnter: requireAuth },
-    { path: '/SMS/Contact/:id', component: ContactSMS, beforeEnter: requireAuth },
+    { path: '/file', component: FileHome, beforeEnter: requireAuth },
 
     { path: '/github/following', component: FollowingList, beforeEnter: requireAuth, meta: { requiredProviders: ['GitHub'] } }
 ];

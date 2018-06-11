@@ -11,6 +11,7 @@
   "dependencies": {
     "@aspnet/signalr": "^1.0.0",
     "ajv": "^6.4.0",
+    "axios": "^0.18.0",
     "babel-polyfill": "6.26.0",
     "bootstrap": "4.0.0",
     "element-ui": "^2.3.3",
@@ -42,5 +43,9 @@
     "vue-template-compiler": "2.5.16",
     "webpack": "3.11.0",
     "webpack-dev-server": "2.11.1"
-  }
+  },
+  "version": "1.0.0",
+  "main": "webpack.config.js",
+  "keywords": [],
+  "license": "ISC"
 }
