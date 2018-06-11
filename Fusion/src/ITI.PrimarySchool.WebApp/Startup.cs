@@ -100,10 +100,10 @@ namespace Fusion.WebApp
 
             app.UseAuthentication();
 
-            app.UseSignalR(routes =>
+            /*app.UseSignalR(routes =>
             {
                 routes.MapHub<VueHub>("/Vue");
-            });
+            });*/
 
             app.UseMvc( routes =>
             {

@@ -10,10 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fusion.WebApp.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerAuthentication.AuthenticationScheme)]
     public class FileController : Controller
     {
         private readonly IHostingEnvironment _appEnvironment;
+        private IFormFile _file { get; set; }
 
         public FileController(IHostingEnvironment appEnvironment)
         {
@@ -33,6 +33,8 @@ namespace Fusion.WebApp.Controllers
             if (file == null) throw new Exception("File is null");
             if (file.Length == 0) throw new Exception("File is empty");
 
+            _file = file;
+
             string path_UserName = "C:\\Users\\"+ Environment.UserName + "\\Documents\\FusionFile";
             string path_to_Images = path_UserName + "\\" + file.FileName;
 
@@ -49,6 +51,19 @@ namespace Fusion.WebApp.Controllers
             return Ok();
         }
 
+        [HttpGet("getfile")]
+        public async Task<IActionResult> SendFile([FromBody] String fileName)
+        {
+            string path_UserName = "C:\\Users\\" + Environment.UserName + "\\Documents\\FusionFile";
+            string path_to_Images = path_UserName + "\\" + fileName;
+
+            var path = Path.Combine(path_to_Images);
+            var stream = System.IO.File.OpenRead(path_to_Images);
+
+            return File(stream,"image/jpg","tessssst.jpg");
+            
+        }
+
         private void CreateFolder(string path)
         {
             if(!Directory.Exists(path)) { 
@@ -56,5 +71,8 @@ namespace Fusion.WebApp.Controllers
                 Console.WriteLine("The directory was created successfully at {0}.", Directory.GetCreationTime(path));
             }
         }
+
+
+
     }
 }

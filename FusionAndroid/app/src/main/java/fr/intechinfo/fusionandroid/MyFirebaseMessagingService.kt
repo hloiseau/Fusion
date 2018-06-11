@@ -8,6 +8,9 @@ import com.google.firebase.messaging.RemoteMessage
 import android.content.ContentValues.TAG
 import android.content.Context
 import org.webrtc.SessionDescription
+import okhttp3.ResponseBody
+
+
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -21,9 +24,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if(type == "sms"){
             sendSMS(strTitle, message)
         }
-        if(type == "file") {
-            DownloadFile(strTitle, message)
-        }
+        /*else if (type == "file"){
+            DownloadFile(message)
+        }*/
+
         SyncData()
     }
 
@@ -32,9 +36,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         sms.sendTextMessage(phoneNumber, null, messageBody, null, null)
     }
 
-    private fun DownloadFile(pathFile: String? , fileName: String?){
-
-    }
+    /*private fun DownloadFile(fileName: String?){
+        Log.d("DownloadFile", "MFile Downloading")
+        HttpExecute.BuildAPI().downloadFileWithDynamicUrlSync(fileName).execute()
+    }*/
 
     private fun SyncData() {
         val retrofitAPI = HttpExecute.BuildAPI()

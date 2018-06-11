@@ -7,6 +7,10 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Url
+import okhttp3.ResponseBody
+
+
 
 interface RetrofitAPI {
 
@@ -31,7 +35,6 @@ interface RetrofitAPI {
     @POST("/api/contact")
     fun SetNewCandidate(@Body iceCandidate: IceCandidate): Call<IceCandidate>
 
-    /*@Headers("'Content-Type': 'application/json'")
-    @GET("/api/file")
-    Call<ResponseBody> downloadFile(@Url String fileUrl);*/
+    @GET()
+    fun downloadFileWithDynamicUrlSync(@Url fileName: String?): Call<ResponseBody>
 }
