@@ -85,7 +85,7 @@ namespace Fusion.WebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure( IApplicationBuilder app, IHostingEnvironment env )
+        public void Configure( IApplicationBuilder app, IHostingEnvironment env)
         {
             if( env.IsDevelopment() )
             {
@@ -95,7 +95,8 @@ namespace Fusion.WebApp
             app.UseCors(builder =>
                 builder.AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader());
+                    .AllowAnyHeader()
+                    .AllowCredentials());
             string secretKey = Configuration[ "JwtBearer:SigningKey" ];
             SymmetricSecurityKey signingKey = new SymmetricSecurityKey( Encoding.ASCII.GetBytes( secretKey ) );
 
@@ -103,7 +104,7 @@ namespace Fusion.WebApp
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<VueHub>("/Vue");
+                routes.MapHub<VueHub>("/vue");
             });
 
             app.UseMvc( routes =>

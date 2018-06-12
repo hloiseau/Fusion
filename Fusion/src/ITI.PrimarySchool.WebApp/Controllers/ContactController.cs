@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Fusion.DAL;
-using Fusion.WebApp.Authentication;
 using Fusion.WebApp.Models.AccountViewModels;
-using Fusion.WebApp.Services;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Connections.Internal;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Fusion.WebApp.Controllers
 {
@@ -19,16 +14,19 @@ namespace Fusion.WebApp.Controllers
     public class ContactController : Controller
     {
         readonly ContactGateway _contactGateway;
+        private readonly IHubContext<VueHub> _hubContext;
 
-        public ContactController(ContactGateway contactGateway)
+        public ContactController(ContactGateway contactGateway, IHubContext<VueHub> hubContext)
         {
             _contactGateway = contactGateway;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetContactList()
         {
             IEnumerable<ContactData> result = await _contactGateway.ListAll();
+            await _hubContext.Clients.All.SendAsync("send", "Test");
             return Ok(result);
         }
 

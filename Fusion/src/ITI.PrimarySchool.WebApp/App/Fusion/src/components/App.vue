@@ -12,7 +12,8 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <button onclick="bamboula('name_exemple :\nmessage_exemple')">Notify me!</button>
+        <!--<button onclick="bamboula('name_exemple :\nmessage_exemple')">Notify me!</button>
+        <button v-on:click="invoke()">lulz</button> -->
         <!-- message <= 25 of length => else just a notif like "new message of contact_name" -->
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent" v-if="auth.isConnected">
@@ -50,6 +51,8 @@
   </div>
 </template>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="~/lib/signalr/signalr.js"></script>
+
 <script>
   import AuthService from '../services/AuthService'
   import {
@@ -66,16 +69,27 @@
       }
     },
     mounted() {
+      var notif = null
       var signalR = require("@aspnet/signalr")
-      this.connection = new signalR.HubConnectionBuilder().withUrl("/Vue").build()
+      this.connection = new signalR.HubConnectionBuilder().withUrl("/vue").configureLogging(signalR.LogLevel.Information).build()
+    
       this.connection.on("send", data => {
         console.log(data)
-      })
-      this.connection.start().then(() => this.connection.invoke("send", "Hello"))
+      });
+      this.connection.on("test", (name, message) =>{
+        notif = name + "\n" + message,
+        bamboula(notif)
+      });
+      this.connection.start().catch(err => console.log(err.toString()));
     },
     computed: {
       ...mapGetters(['isLoading']),
       auth: () => AuthService
+    },
+    methods:{
+      invoke() {
+        this.connection.invoke("smsReceived").catch(err => console.error(err.toString()));
+      }
     }
   }
 </script>
