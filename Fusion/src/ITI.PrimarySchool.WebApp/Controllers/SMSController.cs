@@ -55,7 +55,7 @@ namespace Fusion.WebApp.Controllers
         [HttpPost("sendnewsms")]
         public async Task<IActionResult> SendNewSMS([FromBody] Sms model)
         {
-            string result =  NotificationFactory.SendNotificationFromFirebaseCloud(model.Address, model.Body);
+            string result =  NotificationFactory.SendNotificationFromFirebaseCloud(model.Address, model.Body, "sms");
 
             bool isSent = false;
             if (model.Type == "1") isSent = true;

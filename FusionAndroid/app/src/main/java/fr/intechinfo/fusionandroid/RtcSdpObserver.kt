@@ -3,7 +3,7 @@ package fr.intechinfo.fusionandroid
 import org.webrtc.SdpObserver
 import org.webrtc.SessionDescription
 
-class RtcSdpObserver(private val ctx: Rtc) : SdpObserver {
+/*class RtcSdpObserver(private val ctx: Rtc) : SdpObserver {
     override fun onSetFailure(p0: String?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -22,4 +22,4 @@ class RtcSdpObserver(private val ctx: Rtc) : SdpObserver {
     override fun onCreateFailure(p0: String?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-}
+}*/

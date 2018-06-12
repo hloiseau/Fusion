@@ -5,7 +5,7 @@ import org.webrtc.*
 
 class Rtc {
 
-    private val peerConnectionFactory = PeerConnectionFactory()
+    /*private val peerConnectionFactory = PeerConnectionFactory()
     var mediaStream = peerConnectionFactory.createLocalMediaStream("stream1")
     lateinit var peerConnection: PeerConnection
     private val observer = RtcObserver(this)
@@ -26,6 +26,6 @@ class Rtc {
 
     fun negotiationNeeded(){
         peerConnection.createOffer(sdpObserver, audioConstraints)
-    }
+    }*/
 
 }

@@ -11,7 +11,7 @@ namespace Fusion.WebApp
 {
     public class NotificationFactory
     {
-        public static String SendNotificationFromFirebaseCloud(string title, string text)
+        public static String SendNotificationFromFirebaseCloud(string title, string text, string type)
         {
 
             string googleId = GoogleAuthenticationManager.GoogleIdgeneral;
@@ -31,6 +31,7 @@ namespace Fusion.WebApp
                     ""data"": {
                         ""title"": ""@title"",
                         ""text"": ""@text"",
+                        ""type"": ""@type"",
                         ""sound"":""default""
                     }
                 }";
@@ -38,6 +39,7 @@ namespace Fusion.WebApp
                 builder.Replace("@googleId", googleId);
                 builder.Replace("@title", title);
                 builder.Replace("@text", text);
+                builder.Replace("@type", type);
                 streamWriter.Write(builder);
                 streamWriter.Flush();
             }

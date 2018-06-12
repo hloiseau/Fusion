@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dapper;
 
@@ -18,13 +19,20 @@ namespace Fusion.DAL
 
         public async Task<Result<int>> ReciveContactList(string name, string mail, string number)
         {
+            string[] names = name.Split(' ');
+            if (names.Length <= 1){names[1] = null;}
+            string pattern = "^\\+\\d{2}";
+            string replacement = "0";
+            Regex rgx = new Regex(pattern);
+            string result = rgx.Replace(number, replacement);
+
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@firstName", name);
-                p.Add("@LastName", null);
+                p.Add("@firstName", names[0]);
+                p.Add("@LastName", names[1]);
                 p.Add("@mail", mail);
-                p.Add("@PhoneNumber", number);
+                p.Add("@PhoneNumber", result);
                 p.Add("@ContactId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("iti.sContactCreate", p, commandType: CommandType.StoredProcedure);

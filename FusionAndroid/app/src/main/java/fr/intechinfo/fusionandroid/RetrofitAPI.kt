@@ -4,8 +4,13 @@ import org.webrtc.IceCandidate
 import org.webrtc.SessionDescription
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Url
+import okhttp3.ResponseBody
+
+
 
 interface RetrofitAPI {
 
@@ -30,5 +35,6 @@ interface RetrofitAPI {
     @POST("/api/contact")
     fun SetNewCandidate(@Body iceCandidate: IceCandidate): Call<IceCandidate>
 
-    
+    @GET()
+    fun downloadFileWithDynamicUrlSync(@Url fileName: String?): Call<ResponseBody>
 }

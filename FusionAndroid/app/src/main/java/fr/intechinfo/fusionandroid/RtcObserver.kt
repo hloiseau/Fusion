@@ -6,7 +6,7 @@ import org.webrtc.MediaStream
 import org.webrtc.PeerConnection
 
 
-class RtcObserver(private val ctx: Rtc) : PeerConnection.Observer  {
+/*class RtcObserver(private val ctx: Rtc) : PeerConnection.Observer  {
     override fun onIceGatheringChange(p0: PeerConnection.IceGatheringState?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -38,4 +38,4 @@ class RtcObserver(private val ctx: Rtc) : PeerConnection.Observer  {
     override fun onRenegotiationNeeded() {
         ctx.negotiationNeeded()
     }
-}
+}*/
