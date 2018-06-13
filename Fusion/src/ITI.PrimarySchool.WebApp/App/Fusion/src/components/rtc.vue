@@ -14,8 +14,8 @@
         <div id="buttons">
             <select id="codec">
                 <!-- Codec values are matched with how they appear in the SDP.
-        For instance, opus matches opus/48000/2 in Chrome, and ISAC/16000
-        matches 16K iSAC (but not 32K iSAC). -->
+                For instance, opus matches opus/48000/2 in Chrome, and ISAC/16000
+                matches 16K iSAC (but not 32K iSAC). -->
                 <option value="opus">Opus</option>
                 <option value="ISAC">iSAC 16K</option>
                 <option value="G722">G722</option>
@@ -52,6 +52,7 @@
                     offerToReceiveVideo: 0,
                     voiceActivityDetection: false
                 },
+                connection: null
             }
         },
         mounted() {
@@ -61,6 +62,30 @@
             this.hangupButton = document.querySelector('button#hangupButton')
             this.codecSelector = document.querySelector('select#codec')
             this.hangupButton.disabled = true
+            var notif = null
+            var signalR = require("@aspnet/signalr")
+            this.connection = new signalR.HubConnectionBuilder().withUrl("/vue").configureLogging(signalR.LogLevel.Information)
+                .build()
+            var pc = this.pc
+            this.connection.on("sdp", sdp => {
+                if(!pc)
+                {
+                    this.startTalk()
+                }
+                pc.setRemoteDescription(new RTCSessionDescription(data), function(){
+                    if(pc.remoteDescription.type == 'offer'){
+                        pc.createAnswer(this.offerCreated)
+                    }
+                })
+            });
+            this.connection.on("candidate", candidate => {
+                if(!pc)
+                {
+                    this.startTalk()
+                }
+                pc.addIceCandidate(new RTCIceCandidate(candidate))
+            });
+            this.connection.start().catch(err => console.log(err.toString()));
         },
         methods: {
             trace(arg) {

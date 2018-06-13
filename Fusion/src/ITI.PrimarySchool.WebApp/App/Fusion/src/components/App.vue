@@ -5,7 +5,7 @@
 
 
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <router-link class="navbar-brand" to="/">ITI.PrimarySchool</router-link>
+        <router-link class="navbar-brand" to="/">Fusion</router-link>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
           aria-expanded="false" aria-label="Toggle navigation">
