@@ -58,6 +58,7 @@
 <script src="~/lib/signalr/signalr.js"></script>
 
 <script>
+  import SMSApiService from '../services/SMSApiService'
   import AuthService from '../services/AuthService'
   import {
     mapGetters,
@@ -86,7 +87,12 @@
       });
       this.connection.start().catch(err => console.log(err.toString()));
     },
-    methods: {
+    computed: {
+      ...mapGetters(['isLoading']),
+      auth: () => AuthService
+    },
+    methods:{
+      ...mapActions(['executeAsyncRequest']),
       async phone(e) {
         e.preventDefault();
         var errors = [];
@@ -99,13 +105,7 @@
             console.error(error);
           }
         }
-      }
-    },
-    computed: {
-      ...mapGetters(['isLoading']),
-      auth: () => AuthService
-    },
-    methods:{
+      },
       invoke() {
         this.connection.invoke("smsReceived").catch(err => console.error(err.toString()));
       }
