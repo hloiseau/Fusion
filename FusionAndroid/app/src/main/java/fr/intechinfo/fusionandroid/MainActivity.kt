@@ -1,6 +1,7 @@
 package fr.intechinfo.fusionandroid
 
 
+import android.app.Activity
 import android.content.Intent
 
 import android.support.design.widget.NavigationView
@@ -22,6 +23,15 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
+import android.provider.Settings.System.DEFAULT_RINGTONE_URI
+import android.media.RingtoneManager
+import android.media.Ringtone
+import android.provider.Settings
+import android.app.PendingIntent.getActivity
+import android.content.Context
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.os.Vibrator
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -37,7 +47,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     public override fun onStart() {
         super.onStart()
-        val account = GoogleSignIn.getLastSignedInAccount(this)
+        //val account = GoogleSignIn.getLastSignedInAccount(this)
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {

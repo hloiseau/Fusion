@@ -3,49 +3,48 @@
         <div class="mb-4">
             <h1>Envoyer un SMS</h1>
         </div>
-
-    <div v-for="i of sms">
-          <el-row :gutter="12"  v-if="i.direction == true">
-            <el-col v-if="i.direction == true" :span="8">
-            <el-card shadow="always">
-                 {{i.time}}
-                
-                 {{i.message}}
-            </el-card> 
-            </el-col>
-        </el-row>
-        <el-row :gutter="12"  v-if="i.direction == false">
-            <el-col v-if="i.direction == false" :span="8" :offset="3">
-            <el-card shadow="always" class="box-card">
-                 {{i.time}}
-                
-                 {{i.message}}
-            </el-card> 
-            </el-col>
-        </el-row>    
-    </div>
-
-
-    <form @submit="onSubmit($event)">
-        <div class="alert alert-danger" v-if="errors.length > 0">
-            <b>Les champs suivants semblent invalides : </b>
-
-            <ul>
-                <li v-for="e of errors">{{e}}</li>
-            </ul>
+        
+        <div v-for="i of sms">
+            <el-row :gutter="12"  v-if="i.direction == true">
+                <el-col v-if="i.direction == true" :span="8">
+                <el-card shadow="always">
+                    {{i.time}}
+                    
+                    {{i.message}}
+                </el-card> 
+                </el-col>
+            </el-row>
+            <el-row :gutter="12"  v-if="i.direction == false">
+                <el-col v-if="i.direction == false" :span="8" :offset="3">
+                <el-card shadow="always" class="box-card">
+                    {{i.time}}
+                    
+                    {{i.message}}
+                </el-card> 
+                </el-col>
+            </el-row>    
         </div>
 
-        <div class="form-group">
+        <form @submit="onSubmit($event)">
+            <div class="alert alert-danger" v-if="errors.length > 0">
+                <b>Les champs suivants semblent invalides : </b>
 
-                <label class="required">Numero:</label>
-                <input type="text" v-model="item.address" class="form-control" required>
+                <ul>
+                    <li v-for="e of errors">{{e}}</li>
+                </ul>
+            </div>
 
-            <label class="required">Message</label>
-            <input type="text" v-model="item.body" class="form-control" required>
-        </div>
+            <div class="form-group">
 
-        <button type="submit" class="btn btn-primary">Envoyer un SMS</button>
-    </form>
+                    <label class="required">Numero:</label>
+                    <input type="text" v-model="item.address" class="form-control" required>
+
+                <label class="required">Message</label>
+                <input type="text" v-model="item.body" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Envoyer un SMS</button>
+        </form>
     </div>
 </template>
 

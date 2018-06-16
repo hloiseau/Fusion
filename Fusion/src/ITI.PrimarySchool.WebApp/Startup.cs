@@ -107,7 +107,7 @@ namespace Fusion.WebApp
 
             app.UseMvc( routes =>
             {
-                routes.MapRoute(
+                routes.MapRoute(    
                     name: "default",
                     template: "{controller}/{action}/{id?}",
                     defaults: new { controller = "Home", action = "Index" } );

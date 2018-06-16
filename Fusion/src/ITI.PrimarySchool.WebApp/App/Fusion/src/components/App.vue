@@ -14,6 +14,10 @@
 
         <button onclick="bamboula('name_exemple :\nmessage_exemple')">Notify me!</button>
         <!-- message <= 25 of length => else just a notif like "new message of contact_name" -->
+        
+        <form @submit="phone($event)">
+            <button type="submit" class="btn btn-primary">trouver mon telephone</button>
+        </form>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent" v-if="auth.isConnected">
           <ul class="navbar-nav mr-auto">
@@ -72,6 +76,21 @@
         console.log(data)
       })
       this.connection.start().then(() => this.connection.invoke("send", "Hello"))
+    },
+    methods: {
+      async phone(e) {
+        e.preventDefault();
+        var errors = [];
+        this.errors = errors;
+        if(errors.length == 0) {
+          try {
+            await this.executeAsyncRequest(() => SMSApiService.findPhone());
+          }
+          catch(error) {
+            console.error(error);
+          }
+        }
+      }
     },
     computed: {
       ...mapGetters(['isLoading']),

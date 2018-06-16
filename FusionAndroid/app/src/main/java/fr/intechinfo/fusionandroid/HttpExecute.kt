@@ -17,14 +17,13 @@ class HttpExecute(internal var _call: Call<*>) : Thread() {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
     }
 
     companion object {
 
         fun BuildAPI(): RetrofitAPI {
             val retrofit = Retrofit.Builder()
-                    .baseUrl("http://192.168.42.211:5000")
+                    .baseUrl("http://10.10.90.7:5000")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
             return retrofit.create(RetrofitAPI::class.java!!)
