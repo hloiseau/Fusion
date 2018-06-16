@@ -1,7 +1,7 @@
 <template>
     <div class="container p-3">
         <div class="text-center">
-            <h1 class="my-4">Bienvenue sur ITI.PrimarySchool</h1>
+            <h1 class="my-4">Bienvenue sur Fusion</h1>
 
             <el-button type="primary" @click="login('Google')">
                 <i class="fa fa-google" aria-hidden="true"></i> Se connecter via Google</el-button>

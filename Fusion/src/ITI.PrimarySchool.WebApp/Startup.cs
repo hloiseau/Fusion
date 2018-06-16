@@ -37,7 +37,7 @@ namespace Fusion.WebApp
             services.AddSingleton<UserService>();
             services.AddSingleton<TokenService>();
             services.AddSingleton<GoogleAuthenticationManager>();
-
+            services.AddSignalR();
             string secretKey = Configuration[ "JwtBearer:SigningKey" ];
             SymmetricSecurityKey signingKey = new SymmetricSecurityKey( Encoding.ASCII.GetBytes( secretKey ) );
 
@@ -100,10 +100,10 @@ namespace Fusion.WebApp
 
             app.UseAuthentication();
 
-            /*app.UseSignalR(routes =>
+            app.UseSignalR(routes =>
             {
                 routes.MapHub<VueHub>("/Vue");
-            });*/
+            });
 
             app.UseMvc( routes =>
             {

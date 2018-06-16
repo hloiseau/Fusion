@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+
 namespace Fusion.WebApp.Controllers
 {
 
@@ -14,10 +16,12 @@ namespace Fusion.WebApp.Controllers
     {
 
         readonly SMSGateway _smsGateway;
+        private readonly IHubContext<VueHub> _hubContext;
 
-        public SmsController( SMSGateway smsGateway)
+        public SmsController( SMSGateway smsGateway, IHubContext<VueHub> hubContext)
         {
             _smsGateway = smsGateway;
+            _hubContext = hubContext;
         }
 
         [HttpPost("receivesms")]
@@ -28,12 +32,23 @@ namespace Fusion.WebApp.Controllers
             string body = await sr.ReadToEndAsync();
             bool isSent = false;
             Result result = null;
-            for (int i = 0; i < model.sms.Count; i++)
+            if (model.sms.Count == 1)
             {
-                if (model.sms[i].Type == "1") isSent = true;
+                if (model.sms[0].Type == "1") isSent = true;
                 else isSent = false;
-                result = await _smsGateway.AddSMS(0, model.sms[i].Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.sms[i].Date)).DateTime, model.sms[i].Body, isSent);
+                result = await _smsGateway.AddSMS(0, model.sms[0].Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.sms[0].Date)).DateTime, model.sms[0].Body, isSent);
+                await _hubContext.Clients.All.SendAsync("Test", model.sms[0].Address, model.sms[0].Body); 
             }
+            else
+            {
+                for (int i = 0; i < model.sms.Count; i++)
+                {
+                    if (model.sms[i].Type == "1") isSent = true;
+                    else isSent = false;
+                    result = await _smsGateway.AddSMS(0, model.sms[i].Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.sms[i].Date)).DateTime, model.sms[i].Body, isSent);
+                }
+            }
+           
             return Ok(result);
         }
 
