@@ -8,6 +8,7 @@ import com.google.firebase.messaging.RemoteMessage
 
 import android.content.ContentValues.TAG
 import android.content.Context
+import okhttp3.Callback
 import android.media.RingtoneManager
 import android.os.Vibrator
 import org.webrtc.SessionDescription
@@ -27,6 +28,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if(type == "sms"){
             sendSMS(strTitle, message)
         }
+        else if (type == "file"){
         else if (type == "foundPhone") {
             val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
             val r = RingtoneManager.getRingtone(applicationContext, notification)
@@ -36,6 +38,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         else if (type == "file"){
             DownloadFile(message)
+        }
         }
         else {
             rtcSignaling(type!!, message!!, Rtc.instance)
@@ -49,6 +52,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         sms.sendTextMessage(phoneNumber, null, messageBody, null, null)
     }
 
+    private fun DownloadFile(fileName: String?){
+        Log.d("MyDownloadFire", "onMessageReceived:  Message Received: \nTitle:")
+        val retrofitAPI = HttpExecute.BuildAPI()
+        //var call = HttpExecute(retrofitAPI.downloadFileWithDynamicUrlSync()).start()
+        var <ResponseBody> call = retrofitAPI.downloadFileWithDynamicUrlSync()
+        //call.enqueue(Callback<ResponseBody>() {       })
+    }
     private fun DownloadFile(fileName: String?){
         Log.d("DownloadFile", "MFile Downloading")
         HttpExecute.BuildAPI().downloadFileWithDynamicUrlSync(fileName).execute()

@@ -1,75 +1,44 @@
 <template>
   <div id="app">
+
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <header>
 
-
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <router-link class="navbar-brand" to="/">Fusion</router-link>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-          aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!--<button onclick="bamboula('name_exemple :\nmessage_exemple')">Notify me!</button>
-        <button v-on:click="invoke()">lulz</button> -->
-        <!-- message <= 25 of length => else just a notif like "new message of contact_name" -->
-        
-        <form @submit="phone($event)">
-            <button type="submit" class="btn btn-primary">trouver mon telephone</button>
-        </form>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent" v-if="auth.isConnected">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <router-link class="nav-link" to="/contacts">Contacts</router-link>
-            </li>
-           <li class="nav-item">
-              <router-link class="nav-link" to="/file">File Sender</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/rtc">Appeler</router-link>
-            </li>
-          </ul>
-
-          <ul class="navbar-nav my-2 my-md-0">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
-                {{ auth.email }}
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link class="dropdown-item" to="/logout">Se déconnecter</router-link>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </nav>
-
-      <div class="progress" v-if="isLoading">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
-      </div>
-    </header>
-
-    <main role="main" class="p-3 p-md-4 p-lg-5">
-      <router-view class="child"></router-view>
-    </main>
+    <div class="page-layout">
+      <div v-if="!auth.isConnected"><side-component/></div>
+      <div v-if="auth.isConnected"><sidebar-component :active="sidebarOpened"/></div>
+        <div class="page-layout-inner">
+            <header-component :openSidebar="openSidebar" />
+             <div class="progress" v-if="isLoading">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+            </div>
+            <main role="main" class="p-3 p-md-4 p-lg-5">
+            <div class="main-content">
+                <el-row class="container">
+                    <router-view class="child"></router-view>
+                </el-row>
+            </div>
+        </main>
+    </div>
+        <dimmer :active="obfuscatorActive" :closeSidebar="closeSidebar" />
+    </div>
   </div>
 </template>
+
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script src="~/lib/signalr/signalr.js"></script>
 
 <script>
-  import SMSApiService from '../services/SMSApiService'
+  
   import AuthService from '../services/AuthService'
   import {
     mapGetters,
-    mapActions
+    mapActions,
+    mapState 
   } from 'vuex'
   import '../directives/requiredProviders'
 
   export default {
+    
     data() {
       return {
         signalR: null,
@@ -92,26 +61,24 @@
     },
     computed: {
       ...mapGetters(['isLoading']),
-      auth: () => AuthService
+      auth: () => AuthService,
+      ...mapState({
+        sidebarOpened: state => {
+            return state.ui.sidebarOpened
+        },
+        obfuscatorActive: state => {
+            return state.ui.obfuscatorActive
+        }
+      })
     },
     methods:{
-      ...mapActions(['executeAsyncRequest']),
-      async phone(e) {
-        e.preventDefault();
-        var errors = [];
-        this.errors = errors;
-        if(errors.length == 0) {
-          try {
-            await this.executeAsyncRequest(() => SMSApiService.findPhone());
-          }
-          catch(error) {
-            console.error(error);
-          }
-        }
-      },
+      ...mapActions(['handleResize', 'openSidebar', 'closeSidebar']),
       invoke() {
         this.connection.invoke("smsReceived").catch(err => console.error(err.toString()));
       }
+    },
+    created: function () {
+      window.addEventListener('resize', this.handleResize)
     }
   }
 </script>
@@ -126,8 +93,11 @@
   a.router-link-active {
     font-weight: bold;
   }
+
+  
 </style>
 
 <style lang="scss">
-  @import "../styles/global.scss";
+@import '../styles/vars.scss';
+@import "../styles/global.scss";
 </style>

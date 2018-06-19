@@ -29,8 +29,10 @@ import android.media.Ringtone
 import android.provider.Settings
 import android.app.PendingIntent.getActivity
 import android.content.Context
+import android.content.IntentFilter
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.os.BatteryManager
 import android.os.Vibrator
 
 
@@ -48,6 +50,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     public override fun onStart() {
         super.onStart()
         //val account = GoogleSignIn.getLastSignedInAccount(this)
+    }
+
+    public fun batteryStatus(){
+        val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter -> this.registerReceiver(null, ifilter)
+        }
+        val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+        val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL
+
+        // How are we charging?
+        val chargePlug: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) ?: -1
+        val usbCharge: Boolean = chargePlug == BatteryManager.BATTERY_PLUGGED_USB
+        val acCharge: Boolean = chargePlug == BatteryManager.BATTERY_PLUGGED_AC
+
+        val batteryPct: Float? = batteryStatus?.let { intent ->
+            val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+            val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+            level / scale.toFloat()
+        }
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
@@ -81,6 +101,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        batteryStatus()
         //Configure all views
         this.configureToolBar()
         this.configureDrawerLayout()
