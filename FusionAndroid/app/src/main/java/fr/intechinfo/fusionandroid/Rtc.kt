@@ -4,6 +4,10 @@ import android.content.Context
 import org.webrtc.*
 import org.webrtc.PeerConnection
 import org.webrtc.PeerConnection.IceServer
+import org.webrtc.MediaConstraints
+import com.google.firebase.components.Dependency.optional
+
+
 
 
 
@@ -21,10 +25,12 @@ class Rtc private constructor() {
         PeerConnectionFactory.initializeAndroidGlobals(context, true, false, false, null)
         peerConnectionFactory = PeerConnectionFactory()
         mediaStream = peerConnectionFactory.createLocalMediaStream("stream1")
-        /*val constraint1 = MediaConstraints.KeyValuePair("audio", "true")
-        val constraint2 = MediaConstraints.KeyValuePair("video", "false")
-        audioConstraints.mandatory.add(constraint1)
-        audioConstraints.mandatory.add(constraint2)*/
+        audioConstraints.optional.add(MediaConstraints.KeyValuePair(
+                "DtlsSrtpKeyAgreement", "true"))
+        audioConstraints.mandatory.add(MediaConstraints.KeyValuePair(
+                "OfferToReceiveAudio", "true"))
+        audioConstraints.mandatory.add(MediaConstraints.KeyValuePair(
+                "OfferToReceiveVideo", "false"))
         val audioSource = peerConnectionFactory.createAudioSource(audioConstraints)
         val audioTrack = peerConnectionFactory.createAudioTrack("comm1", audioSource)
         mediaStream.addTrack(audioTrack)

@@ -24,14 +24,14 @@ namespace Fusion.WebApp.Controllers
         [HttpPost("descriptionandroid")]
         public async Task DescriptionAndroid([FromBody] RtcViewModel model)
         {
-            await _hubContext.Clients.All.SendAsync("Sdp", model.Sdp);
+            await _hubContext.Clients.All.SendAsync("Sdp", model.Desc);
         }
 
         [HttpPost("candidateandroid")]
         public async Task CandidateAndroid([FromBody] RtcViewModel model)
         {
 
-            await _hubContext.Clients.All.SendAsync("Candidate", model.Candidate);
+            await _hubContext.Clients.All.SendAsync("Candidate", model.IceCandidate);
         }
 
         [HttpPost("descriptionvue")]
@@ -45,11 +45,6 @@ namespace Fusion.WebApp.Controllers
         {
             NotificationFactory.SendNotificationFromFirebaseCloud(null, model.Candidate, "candidate");
         }
-
-
-        
-        
-        
     }
 }
 

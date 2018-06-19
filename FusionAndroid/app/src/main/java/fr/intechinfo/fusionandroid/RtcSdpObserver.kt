@@ -17,7 +17,7 @@ class RtcSdpObserver : SdpObserver {
 
     override fun onCreateSuccess(p0: SessionDescription?) {
         Rtc.instance.peerConnection!!.setLocalDescription(this, p0)
-        HttpExecute(HttpExecute.BuildAPI().SetLocalDesc(RtcInfo(null, Rtc.instance.peerConnection!!.localDescription.description))).start()
+        HttpExecute(HttpExecute.BuildAPI().SetLocalDesc(RtcInfo(null, Rtc.instance.peerConnection!!.localDescription))).start()
     }
 
 

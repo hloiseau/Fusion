@@ -66,12 +66,12 @@
             var signalR = require("@aspnet/signalr")
             this.connection = new signalR.HubConnectionBuilder().withUrl("/vue").configureLogging(signalR.LogLevel.Information)
                 .build()
-            var pc = this.pc
+            var pc = this.pc 
             this.connection.on("sdp", sdp => {
                 if (this.pc == null) {
                     this.startTalk()
                 }
-                this.pc.setRemoteDescription(new RTCSessionDescription(sdp), function () {
+                this.pc.setRemoteDescription(new RTCSessionDescription({type:sdp.type.toLowerCase(),sdp: sdp.sdp}), function () {
                     if (this.pc.remoteDescription.type == 'offer') {
                         this.pc.createAnswer(this.offerCreated)
                     }
