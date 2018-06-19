@@ -21,8 +21,8 @@
                 <option value="G722">G722</option>
                 <option value="PCMU">PCMU</option>
             </select>
-            <button v-on:click="call()" id="callButton">Call</button>
-            <button v-on:click="hangup()" id="hangupButton">Hang Up</button>
+            <button v-on:click="startTalk()" id="callButton">Call</button>
+            <!--<button v-on:click="hangup()" id="hangupButton">Hang Up</button>-->
         </div>
     </div>
 </template>
@@ -61,29 +61,28 @@
             this.callButton = document.querySelector('button#callButton')
             this.hangupButton = document.querySelector('button#hangupButton')
             this.codecSelector = document.querySelector('select#codec')
-            this.hangupButton.disabled = true
+            //this.hangupButton.disabled = true
             var notif = null
             var signalR = require("@aspnet/signalr")
             this.connection = new signalR.HubConnectionBuilder().withUrl("/vue").configureLogging(signalR.LogLevel.Information)
                 .build()
             var pc = this.pc
             this.connection.on("sdp", sdp => {
-                if(!pc)
-                {
+                if (this.pc == null) {
                     this.startTalk()
                 }
-                pc.setRemoteDescription(new RTCSessionDescription(data), function(){
-                    if(pc.remoteDescription.type == 'offer'){
-                        pc.createAnswer(this.offerCreated)
+                this.pc.setRemoteDescription(new RTCSessionDescription(sdp), function () {
+                    if (this.pc.remoteDescription.type == 'offer') {
+                        this.pc.createAnswer(this.offerCreated)
                     }
                 })
             });
             this.connection.on("candidate", candidate => {
-                if(!pc)
-                {
+                console.log(candidate)
+                if (this.pc == null) {
                     this.startTalk()
                 }
-                pc.addIceCandidate(new RTCIceCandidate(candidate))
+                this.pc.addIceCandidate(new RTCIceCandidate(candidate))
             });
             this.connection.start().catch(err => console.log(err.toString()));
         },
@@ -96,28 +95,30 @@
                 var pc = this.pc
                 pc.setLocalDescription(desc, function () {
                     RtcApiService.postDescAsync(
-                        pc.localDecription
+                        desc
                     );
                 }, this.trace("post sdp"))
                 this.pc = pc
+
             },
             startTalk() {
-                this.pc = new RTCPeerConnection({
-                    iceServers: null
-                })
+                this.pc = new RTCPeerConnection()
                 this.pc.onicecandidate = function (evt) {
                     if (evt.candidate) {
                         RtcApiService.postCandAsync(evt.candidate)
                     }
                 }
                 var pc = this.pc
+                var offerCreated = this.offerCreated
                 this.pc.onnegotiationneeded = function () {
-                    pc.createOffer(offerCreated, this.trace("create offer"))
+                    pc.createOffer(offerCreated, function () {
+                        console.log("create offer")
+                    })
                 }
                 this.pc = pc
                 var audio2 = this.audio2
                 this.pc.onaddstream = function (e) {
-                    audio2.src = URL.createObjectURL(e.stream)
+                    audio2.srcObject = stream
                 }
                 this.audio2 = audio2
                 var audio1 = this.audio1
@@ -126,9 +127,11 @@
                     audio: true,
                     video: false
                 }, function (stream) {
-                    audio1.src = URL.createObjectURL(stream)
+                    audio1.srcObject = stream
                     pc.addStream(stream)
-                }, this.trace("addstream"))
+                }, function (err) {
+                    console.log(err)
+                })
             }
         }
     }
