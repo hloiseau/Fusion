@@ -163,14 +163,15 @@ class PermissionUtil internal constructor() {
             // The request code used in ActivityCompat.requestPermissions()
             // and returned in the Activity's onRequestPermissionsResult()
             // int PERMISSION_ALL = 1;
-            val PERMISSIONS = arrayOf(Manifest.permission.READ_SMS, Manifest.permission.SEND_SMS, Manifest.permission.READ_CONTACTS, Manifest.permission.READ_PHONE_STATE)
+            val PERMISSIONS = arrayOf(Manifest.permission.READ_SMS, Manifest.permission.SEND_SMS, Manifest.permission.READ_CONTACTS, Manifest.permission.READ_PHONE_STATE, Manifest.permission.VIBRATE)
             if (!hasPermissions(activity, *PERMISSIONS)) {
-                showMessageOKCancel(activity, "These permissions are mandatory for the application. Please allow access.",
-                        DialogInterface.OnClickListener { dialog, which ->
-                            if (!hasPermissions(activity, *PERMISSIONS)) {
-                                ActivityCompat.requestPermissions(activity, PERMISSIONS, REQUEST_EXTERNAL_STORAGE)
-                            }
-                        })
+                showMessageOKCancel(activity,
+                "These permissions are mandatory for the application. Please allow access.",
+                DialogInterface.OnClickListener { dialog, which ->
+                    if (!hasPermissions(activity, *PERMISSIONS)) {
+                        ActivityCompat.requestPermissions(activity, PERMISSIONS, REQUEST_EXTERNAL_STORAGE)
+                    }
+                })
             }
 
             setGAlleryPermissionIntent()

@@ -18,6 +18,10 @@ class SMSApiService {
     async createSMSAsync(model) {
         return await postAsync(`${endpoint}/sendnewsms`, model);
     }
+
+    async findPhone() {
+        return await postAsync(`${endpoint}/foundPhone`);
+    }
 }
 
 export default new SMSApiService()
