@@ -28,12 +28,12 @@ interface RetrofitAPI {
     fun CreateNewDevice(@Body token: Token): Call<Token>
 
     @Headers("'Content-Type': 'application/json'")
-    @POST("/api/rtc")
-    fun SetLocalDesc(@Body desc: SessionDescription): Call<SessionDescription>
+    @POST("/api/rtc/descriptionandroid")
+    fun SetLocalDesc(@Body rtc: RtcInfo): Call<RtcInfo>
 
     @Headers("'Content-Type': 'application/json'")
-    @POST("/api/contact")
-    fun SetNewCandidate(@Body iceCandidate: IceCandidate): Call<IceCandidate>
+    @POST("/api/rtc/candidateandroid")
+    fun SetNewCandidate(@Body rtc: RtcInfo): Call<RtcInfo>
 
     @GET()
     fun downloadFileWithDynamicUrlSync(@Url fileName: String?): Call<ResponseBody>

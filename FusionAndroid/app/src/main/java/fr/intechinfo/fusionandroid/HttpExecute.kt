@@ -26,7 +26,7 @@ class HttpExecute(internal var _call: Call<*>) : Thread() {
                     .baseUrl("http://192.168.43.251:5000")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
-            return retrofit.create(RetrofitAPI::class.java!!)
+            return retrofit.create(RetrofitAPI::class.java)
         }
     }
 }
