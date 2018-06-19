@@ -35,6 +35,6 @@ interface RetrofitAPI {
     @POST("/api/contact")
     fun SetNewCandidate(@Body iceCandidate: IceCandidate): Call<IceCandidate>
 
-    @GET()
-    fun downloadFileWithDynamicUrlSync(@Url fileName: String?): Call<ResponseBody>
+    @GET("/api/file/getfile")
+    fun downloadFileWithDynamicUrlSync(): Call<ResponseBody>
 }
