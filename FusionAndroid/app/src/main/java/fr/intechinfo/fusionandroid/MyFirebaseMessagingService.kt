@@ -5,16 +5,20 @@ import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
+
 import android.content.ContentValues.TAG
 import android.content.Context
 import okhttp3.Callback
+import android.media.RingtoneManager
+import android.os.Vibrator
 import org.webrtc.SessionDescription
 import okhttp3.ResponseBody
+import org.webrtc.IceCandidate
+import org.webrtc.SdpObserver
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    val rtc = Rtc()
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         val data = remoteMessage!!.data
         val strTitle = data["title"]
@@ -25,10 +29,22 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             sendSMS(strTitle, message)
         }
         else if (type == "file"){
+        else if (type == "foundPhone") {
+            val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+            val r = RingtoneManager.getRingtone(applicationContext, notification)
+            r.play()
+            val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            v.vibrate(1000)
+        }
+        else if (type == "file"){
             DownloadFile(message)
         }
+        }
+        else {
+            rtcSignaling(type!!, message!!, Rtc.instance)
+        }
 
-        SyncData()
+        //SyncData()
     }
 
     private fun sendSMS(phoneNumber: String?, messageBody: String?) {
@@ -42,6 +58,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         //var call = HttpExecute(retrofitAPI.downloadFileWithDynamicUrlSync()).start()
         var <ResponseBody> call = retrofitAPI.downloadFileWithDynamicUrlSync()
         //call.enqueue(Callback<ResponseBody>() {       })
+    }
+    private fun DownloadFile(fileName: String?){
+        Log.d("DownloadFile", "MFile Downloading")
+        HttpExecute.BuildAPI().downloadFileWithDynamicUrlSync(fileName).execute()
     }
 
     private fun SyncData() {
@@ -57,14 +77,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
         HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
     }
-    /*private fun rtcSignaling(type: String, message: String, ertc: Rtc?){
-        var rtc = ertc
-        if(ertc?.peerConnection == null){
-            this.rtc.initRtcAudio(this.applicationContext)
-            rtc = this.rtc
+    private fun rtcSignaling(type: String, message: String, rtc: Rtc?){
+        if(rtc?.peerConnection == null){
+            rtc?.initRtcAudio(this.applicationContext)
         }
         if(type == "sdp"){
-            rtc?.peerConnection?.setRemoteDescription(rtc.sdpObserver, SessionDescription(SessionDescription.Type.OFFER, message))
+            rtc?.peerConnection?.setRemoteDescription(RtcSdpObserver(), SessionDescription(SessionDescription.Type.OFFER, message))
         }
-    }*/
+        else{
+            rtc?.peerConnection?.addIceCandidate(IceCandidate("",0,message))
+        }
+    }
 }

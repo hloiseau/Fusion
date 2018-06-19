@@ -7,10 +7,10 @@ class RtcApiService {
 
     }
     async postDescAsync(model) {
-        return await postAsync(endpoint+"/desc", model);
+        return await postAsync(endpoint + "/descriptionvue", model);
     }
     async postCandAsync(model){
-        return await postAsync(endpoint+"/cand", model);
+        return await postAsync(endpoint + "/candidatevue", model);
     }
 }
 

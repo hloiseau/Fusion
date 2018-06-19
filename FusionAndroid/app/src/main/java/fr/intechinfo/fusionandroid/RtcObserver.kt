@@ -1,41 +1,45 @@
 package fr.intechinfo.fusionandroid
 
+import android.util.Log
 import org.webrtc.DataChannel
 import org.webrtc.IceCandidate
 import org.webrtc.MediaStream
 import org.webrtc.PeerConnection
 
 
-/*class RtcObserver(private val ctx: Rtc) : PeerConnection.Observer  {
+class RtcObserver : PeerConnection.Observer  {
     override fun onIceGatheringChange(p0: PeerConnection.IceGatheringState?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Log.d(TAG, p0?.toString())
     }
 
     override fun onAddStream(p0: MediaStream?) {
-        ctx.mediaStream = p0
+        Rtc.instance.mediaStream = p0!!
     }
 
      override fun onIceCandidate(p0: IceCandidate?) {
-        HttpExecute.BuildAPI().SetNewCandidate(p0!!).execute()
+         HttpExecute(HttpExecute.BuildAPI().SetNewCandidate(RtcInfo(p0!!.sdp, null))).start()
     }
 
     override fun onDataChannel(p0: DataChannel?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Log.d(TAG, p0?.toString())
     }
 
     override fun onSignalingChange(p0: PeerConnection.SignalingState?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Log.d(TAG, p0?.toString())
     }
 
     override fun onRemoveStream(p0: MediaStream?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Log.d(TAG, p0?.toString())
     }
 
     override fun onIceConnectionChange(p0: PeerConnection.IceConnectionState?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Log.d(TAG, p0?.toString())
     }
 
     override fun onRenegotiationNeeded() {
-        ctx.negotiationNeeded()
+        Rtc.instance.negotiationNeeded()
     }
-}*/
+    companion object {
+        val TAG = "RtcObserver"
+    }
+}
