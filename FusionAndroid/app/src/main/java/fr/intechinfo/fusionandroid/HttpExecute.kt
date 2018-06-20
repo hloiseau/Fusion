@@ -23,7 +23,7 @@ class HttpExecute(internal var _call: Call<*>) : Thread() {
 
         fun BuildAPI(): RetrofitAPI {
             val retrofit = Retrofit.Builder()
-                    .baseUrl("http://192.168.43.251:5000")
+                    .baseUrl("http://10.10.90.7:5000")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
             return retrofit.create(RetrofitAPI::class.java)

@@ -54,7 +54,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         HttpExecute.BuildAPI().downloadFileWithDynamicUrlSync(fileName).execute()
     }
 
-    private fun SyncData() {
+    protected fun SyncData() {
         val retrofitAPI = HttpExecute.BuildAPI()
         val cc = ContentCollector()
         val contactLs = ContactsList()

