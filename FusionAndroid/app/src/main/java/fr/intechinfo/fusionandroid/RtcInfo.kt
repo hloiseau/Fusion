@@ -1,14 +1,17 @@
 package fr.intechinfo.fusionandroid
 
+import org.webrtc.IceCandidate
+import org.webrtc.SessionDescription
 
-class RtcInfo(private val candidate: String?, private val sdp: String?) {
 
-    fun GetCandidate(): String? {
-        return candidate
+class RtcInfo(private val IceCandidate: IceCandidate?, private val Desc: SessionDescription?) {
+
+    fun GetCandidate(): IceCandidate? {
+        return IceCandidate
     }
 
-    fun GetSdp(): String? {
-        return sdp
+    fun GetDesc(): SessionDescription? {
+        return Desc
     }
 
 

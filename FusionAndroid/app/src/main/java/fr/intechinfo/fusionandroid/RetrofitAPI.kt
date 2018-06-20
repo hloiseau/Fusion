@@ -35,6 +35,6 @@ interface RetrofitAPI {
     @POST("/api/rtc/candidateandroid")
     fun SetNewCandidate(@Body rtc: RtcInfo): Call<RtcInfo>
 
-    @GET()
-    fun downloadFileWithDynamicUrlSync(@Url fileName: String?): Call<ResponseBody>
+    @GET("/api/file/getfile")
+    fun downloadFileWithDynamicUrlSync(): Call<ResponseBody>
 }

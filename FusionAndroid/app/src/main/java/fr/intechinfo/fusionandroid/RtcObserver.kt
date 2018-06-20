@@ -17,7 +17,7 @@ class RtcObserver : PeerConnection.Observer  {
     }
 
      override fun onIceCandidate(p0: IceCandidate?) {
-         HttpExecute(HttpExecute.BuildAPI().SetNewCandidate(RtcInfo(p0!!.sdp, null))).start()
+         HttpExecute(HttpExecute.BuildAPI().SetNewCandidate(RtcInfo(p0!!, null))).start()
     }
 
     override fun onDataChannel(p0: DataChannel?) {

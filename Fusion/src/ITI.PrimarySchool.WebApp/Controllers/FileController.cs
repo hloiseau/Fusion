@@ -52,10 +52,10 @@ namespace Fusion.WebApp.Controllers
         }
 
         [HttpGet("getfile")]
-        public async Task<IActionResult> SendFile([FromBody] String fileName)
+        public async Task<IActionResult> SendFile()
         {
             string path_UserName = "C:\\Users\\" + Environment.UserName + "\\Documents\\FusionFile";
-            string path_to_Images = path_UserName + "\\" + fileName;
+            string path_to_Images = path_UserName + "\\";
 
             var path = Path.Combine(path_to_Images);
             var stream = System.IO.File.OpenRead(path_to_Images);
