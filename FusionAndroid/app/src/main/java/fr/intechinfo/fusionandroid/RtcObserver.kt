@@ -8,6 +8,10 @@ import org.webrtc.PeerConnection
 
 
 class RtcObserver : PeerConnection.Observer  {
+    override fun onIceConnectionReceivingChange(p0: Boolean) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun onIceGatheringChange(p0: PeerConnection.IceGatheringState?) {
         Log.d(TAG, p0?.toString())
     }

@@ -28,7 +28,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if(type == "sms"){
             sendSMS(strTitle, message)
         }
-        else if (type == "file"){
         else if (type == "foundPhone") {
             val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
             val r = RingtoneManager.getRingtone(applicationContext, notification)
@@ -37,8 +36,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             v.vibrate(1000)
         }
         else if (type == "file"){
-            DownloadFile(message)
-        }
+            //DownloadFile(message)
         }
         else {
             rtcSignaling(type!!, message!!, Rtc.instance)
@@ -51,7 +49,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val sms = SmsManager.getDefault()
         sms.sendTextMessage(phoneNumber, null, messageBody, null, null)
     }
-
+/*
     private fun DownloadFile(fileName: String?){
         Log.d("MyDownloadFire", "onMessageReceived:  Message Received: \nTitle:")
         val retrofitAPI = HttpExecute.BuildAPI()
@@ -63,7 +61,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d("DownloadFile", "MFile Downloading")
         HttpExecute.BuildAPI().downloadFileWithDynamicUrlSync(fileName).execute()
     }
-
+*/
     protected fun SyncData() {
         val retrofitAPI = HttpExecute.BuildAPI()
         val cc = ContentCollector()
