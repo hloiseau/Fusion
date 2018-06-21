@@ -34,6 +34,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.BatteryManager
 import android.os.Vibrator
+import com.pubnub.api.Pubnub
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var toolbar: Toolbar? = null
     private var drawerLayout: DrawerLayout? = null
     private var navigationView: NavigationView? = null
-
+    lateinit var mPubNub: Pubnub
     private var fragmentNews: Fragment? = null
 
     private val RC_SIGN_IN = 28
@@ -50,6 +51,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     public override fun onStart() {
         super.onStart()
         //val account = GoogleSignIn.getLastSignedInAccount(this)
+    }
+
+    fun initPubNub()
+    {
+        val stdbyChannel = "test" + Constants.STDBY_SUFFIX
+        this.mPubNub = Pubnub(Constants.PUB_KEY, Constants.SUB_KEY)
+        this.mPubNub.setUUID("test")
+        this.mPubNub.subscribe(stdbyChannel, Callback(this))
     }
 
     public fun batteryStatus(){
@@ -125,6 +134,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val t = HttpExecute(stringCall)
         t.start()
         //syncDataTest();
+        initPubNub()
     }
 
     protected fun syncDataTest() {

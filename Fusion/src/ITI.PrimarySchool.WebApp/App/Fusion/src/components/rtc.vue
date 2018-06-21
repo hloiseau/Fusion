@@ -42,6 +42,9 @@
                 hangupButton: null,
                 codecSelector: null,
 
+                session: null,
+                phone: null,
+
                 pc: null,
                 localStream: null,
 
@@ -61,77 +64,35 @@
             this.callButton = document.querySelector('button#callButton')
             this.hangupButton = document.querySelector('button#hangupButton')
             this.codecSelector = document.querySelector('select#codec')
-            //this.hangupButton.disabled = true
-            var notif = null
-            var signalR = require("@aspnet/signalr")
-            this.connection = new signalR.HubConnectionBuilder().withUrl("/vue").configureLogging(signalR.LogLevel.Information)
-                .build()
-            var pc = this.pc 
-            this.connection.on("sdp", sdp => {
-                if (this.pc == null) {
-                    this.startTalk()
-                }
-                this.pc.setRemoteDescription(new RTCSessionDescription({type:sdp.type.toLowerCase(),sdp: sdp.sdp}), function () {
-                    if (this.pc.remoteDescription.type == 'offer') {
-                        this.pc.createAnswer(this.offerCreated)
-                    }
-                })
-            });
-            this.connection.on("candidate", candidate => {
-                console.log(candidate)
-                if (this.pc == null) {
-                    this.startTalk()
-                }
-                this.pc.addIceCandidate(new RTCIceCandidate(candidate))
-            });
-            this.connection.start().catch(err => console.log(err.toString()));
-        },
-        methods: {
-            trace(arg) {
-                var now = (window.performance.now() / 1000).toFixed(3);
-                console.log(now + ': ', arg);
-            },
-            offerCreated(desc) {
-                var pc = this.pc
-                pc.setLocalDescription(desc, function () {
-                    RtcApiService.postDescAsync(
-                        desc
-                    );
-                }, this.trace("post sdp"))
-                this.pc = pc
-
-            },
-            startTalk() {
-                this.pc = new RTCPeerConnection()
-                this.pc.onicecandidate = function (evt) {
-                    if (evt.candidate) {
-                        RtcApiService.postCandAsync(evt.candidate)
-                    }
-                }
-                var pc = this.pc
-                var offerCreated = this.offerCreated
-                this.pc.onnegotiationneeded = function () {
-                    pc.createOffer(offerCreated, function () {
-                        console.log("create offer")
-                    })
-                }
-                this.pc = pc
-                var audio2 = this.audio2
-                this.pc.onaddstream = function (e) {
-                    audio2.srcObject = stream
-                }
-                this.audio2 = audio2
-                var audio1 = this.audio1
-                pc = this.pc
-                navigator.getUserMedia({
+            var ready = false
+            this.phone = PHONE({
+                number: '1234',
+                autocam: true,
+                publish_key: 'pub-c-b840de4f-c044-4bc9-a823-c21724913221',
+                subscribe_key: 'sub-c-55b78e0a-745b-11e8-902b-b2b3cb3accda',
+                ssl: false,
+                media: {
                     audio: true,
                     video: false
-                }, function (stream) {
-                    audio1.srcObject = stream
-                    pc.addStream(stream)
-                }, function (err) {
-                    console.log(err)
+                }
+            })
+            this.phone.ready(function () {
+                ready = true
+                console.log(ready)
+            });
+            var audio = this.audio2
+            this.phone.receive(function(session){
+                session.connected(function(session){
+                    audio.srcObject = session.video
                 })
+            })
+            this.audio2 = audio
+
+        },
+        methods: {
+            startTalk() {
+                console.log("calling")
+                this.session = this.phone.dial('test-stdby')
             }
         }
     }

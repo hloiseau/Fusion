@@ -65,6 +65,13 @@ namespace Fusion.WebApp.Controllers
             return Ok(result);
         }
 
+        [HttpPost("newcall")]
+        public async Task NotifyNewCall([FromBody] string number)
+        {
+            await _hubContext.Clients.All.SendAsync("NewCall", number);
+        }
+
+
         [HttpPost("foundPhone")]
         public async Task<IActionResult> foundPhone()
         {

@@ -15,6 +15,15 @@ import Dimmer from './components/navigations/Dimmer/index.vue'
 
 Vue.use(ElementUI);
 
+Vue.use(require('vue-pubnub'), {
+  subscribeKey: "sub-c-55b78e0a-745b-11e8-902b-b2b3cb3accda", // Only the subscribeKey option is mandatory.
+  publishKey: "pub-c-b840de4f-c044-4bc9-a823-c21724913221",
+  logVerbosity: true,
+  ssl: true,
+  presenceTimeout: 130
+})
+
+
 Vue.component('header-component', Header);
 Vue.component('sidebar-component', Sidebar);
 Vue.component('side-component',SidebarHome);

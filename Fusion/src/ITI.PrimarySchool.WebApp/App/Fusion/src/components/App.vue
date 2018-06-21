@@ -57,6 +57,10 @@
         notif = name + "\n" + message,
         bamboula(notif)
       });
+      this.connection.on("newCall", number =>{
+        var notif = "Incoming Call \n From:" + number
+        bamboula(notif)
+      })
       this.connection.start().catch(err => console.log(err.toString()));
     },
     computed: {

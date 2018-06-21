@@ -28,7 +28,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if(type == "sms"){
             sendSMS(strTitle, message)
         }
-        else if (type == "file"){
         else if (type == "foundPhone") {
             val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
             val r = RingtoneManager.getRingtone(applicationContext, notification)
@@ -39,9 +38,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         else if (type == "file"){
             DownloadFile(message)
         }
-        }
         else {
-            rtcSignaling(type!!, message!!, Rtc.instance)
+            //rtcSignaling(type!!, message!!, Rtc.instance)
         }
 
         //SyncData()
@@ -59,10 +57,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         var <ResponseBody> call = retrofitAPI.downloadFileWithDynamicUrlSync()
         //call.enqueue(Callback<ResponseBody>() {       })
     }
-    private fun DownloadFile(fileName: String?){
+   /* private fun DownloadFile(fileName: String?){
         Log.d("DownloadFile", "MFile Downloading")
         HttpExecute.BuildAPI().downloadFileWithDynamicUrlSync(fileName).execute()
-    }
+    }*/
 
     private fun SyncData() {
         val retrofitAPI = HttpExecute.BuildAPI()
@@ -77,7 +75,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
         HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
     }
-    private fun rtcSignaling(type: String, message: String, rtc: Rtc?){
+    /*private fun rtcSignaling(type: String, message: String, rtc: Rtc?){
         if(rtc?.peerConnection == null){
             rtc?.initRtcAudio(this.applicationContext)
         }
@@ -87,5 +85,5 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         else{
             rtc?.peerConnection?.addIceCandidate(IceCandidate("",0,message))
         }
-    }
+    }*/
 }
