@@ -36,7 +36,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             v.vibrate(1000)
         }
         else if (type == "file"){
-            DownloadFile(message)
+            //DownloadFile(message)
         }
         else {
             //rtcSignaling(type!!, message!!, Rtc.instance)
@@ -49,7 +49,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val sms = SmsManager.getDefault()
         sms.sendTextMessage(phoneNumber, null, messageBody, null, null)
     }
-
+/*
     private fun DownloadFile(fileName: String?){
         Log.d("MyDownloadFire", "onMessageReceived:  Message Received: \nTitle:")
         val retrofitAPI = HttpExecute.BuildAPI()
