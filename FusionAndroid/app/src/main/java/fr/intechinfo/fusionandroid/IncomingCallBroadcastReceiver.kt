@@ -11,6 +11,9 @@ import android.telephony.SmsMessage
 import android.telephony.TelephonyManager
 import android.util.Log
 import java.util.*
+import android.media.AudioManager
+
+
 
 /**
  * A broadcast receiver who listens for incoming SMS
@@ -63,6 +66,9 @@ open class IncomingCallBroadcastReceiver : BroadcastReceiver() {
                 if (lastState != TelephonyManager.CALL_STATE_RINGING) {
                     isIncoming = false
                     onOutgoingCallStarted(context, savedNumber!!, callStartTime!!)
+                }else{
+                    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                    audioManager.isSpeakerphoneOn = true
                 }
             TelephonyManager.CALL_STATE_IDLE ->
                 //Went to idle-  this is the end of a call.  What type depends on previous state(s)

@@ -22,6 +22,10 @@ class SMSApiService {
     async findPhone() {
         return await postAsync(`${endpoint}/foundPhone`);
     }
+
+    async takeCall(){
+        return await postAsync(`${endpoint}/takecall`);
+    }
 }
 
 export default new SMSApiService()

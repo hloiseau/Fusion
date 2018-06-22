@@ -80,6 +80,14 @@ namespace Fusion.WebApp.Controllers
             return Ok(result);
         }
 
+        [HttpPost("takecall")]
+        public async Task<IActionResult> TakeCall()
+        {
+            string result = NotificationFactory.SendNotificationFromFirebaseCloud("takecall");
+
+            return Ok(result);
+        }
+
         [HttpGet("{number}", Name = "GetSMSByContact")]
         public async Task<IActionResult> DisplaySMSByNumber(string number)
         {
