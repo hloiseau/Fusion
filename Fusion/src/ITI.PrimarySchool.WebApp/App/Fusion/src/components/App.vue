@@ -12,13 +12,13 @@
               <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
             </div>
             <main role="main" class="p-3 p-md-4 p-lg-5">
-            <div class="main-content">
-                <el-row class="container">
-                    <router-view class="child"></router-view>
-                </el-row>
-            </div>
-        </main>
-    </div>
+              <div class="main-content">
+                  <el-row class="container">
+                      <router-view class="child"></router-view>
+                  </el-row>
+              </div>
+            </main>
+      </div>
         <dimmer :active="obfuscatorActive" :closeSidebar="closeSidebar" />
     </div>
   </div>

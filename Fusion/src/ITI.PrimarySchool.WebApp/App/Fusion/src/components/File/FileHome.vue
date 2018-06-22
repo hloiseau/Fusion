@@ -1,12 +1,10 @@
 <template>
     <div>
-        <el-row>
-            <el-col :span="24"><div class="title">File Manager</div></el-col>
-        </el-row>
-
+        <p></p>
         <el-row :gutter="20">
             <el-col :span="10"><div>Envoyer un fichier :</div></el-col>
         </el-row>
+        
         <form @submit="onSubmit($event)">
             <div class="large-12 medium-12 small-12 cell">
                 <label>File
@@ -15,6 +13,8 @@
                     <input type ="submit" value="Upload"/>
             </div>
         </form>
+        <p></p>         
+        <button><router-link :to="`file/FileUrlSender`">Go To URl sender</router-link></button>
     </div>
 </template>
 
@@ -75,11 +75,6 @@ export default {
     border-radius: 4px;
   }
 
- .title {
-    font-family: "Helvetica Neue";
-    color: rgb(111, 126, 131);
-    font-size: 28px;
-  }
 
 </style>
 

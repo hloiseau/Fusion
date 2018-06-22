@@ -1,4 +1,5 @@
 ﻿using System;
+using Fusion.WebApp.Models.FileViewModels;
 using System.IO;
 using System.Threading.Tasks;
 using Fusion.WebApp.Authentication;
@@ -72,7 +73,12 @@ namespace Fusion.WebApp.Controllers
             }
         }
 
-
+        [HttpPost("urlsend")]
+        public async Task<IActionResult> sendURL([FromBody] string link)
+        {
+            string result = NotificationFactory.SendNotificationFromFirebaseCloud("Sending URL", link, "URL");
+            return Ok();
+        }
 
     }
 }

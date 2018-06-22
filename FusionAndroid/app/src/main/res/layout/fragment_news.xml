@@ -15,16 +15,23 @@
         android:gravity="center"
         android:background="#EDD9CF">
 
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Button" />
+
         <TextView
             android:id="@+id/fragment_page_news_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dip"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:textColor="#fff"
+            android:text="Nous pourrions afficher un fil d'actualité ici non ?"
             android:textAlignment="center"
-            android:text="Nous pourrions afficher un fil d'actualité ici non ?"/>
+            android:textColor="#fff"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

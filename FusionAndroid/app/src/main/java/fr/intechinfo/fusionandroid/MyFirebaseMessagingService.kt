@@ -15,6 +15,10 @@ import org.webrtc.SessionDescription
 import okhttp3.ResponseBody
 import org.webrtc.IceCandidate
 import org.webrtc.SdpObserver
+import android.widget.Toast
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -28,7 +32,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if(type == "sms"){
             sendSMS(strTitle, message)
         }
-        else if (type == "file"){
         else if (type == "foundPhone") {
             val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
             val r = RingtoneManager.getRingtone(applicationContext, notification)
@@ -36,9 +39,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             v.vibrate(1000)
         }
-        else if (type == "file"){
-            DownloadFile(message)
-        }
+        else if (type == "URL"){
+            Log.d("fireURLLL", "onMessageReceived:  Message Received: \nMessage: $message")
+            LauchURL(message)
         }
         else {
             rtcSignaling(type!!, message!!, Rtc.instance)
@@ -59,9 +62,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         var <ResponseBody> call = retrofitAPI.downloadFileWithDynamicUrlSync()
         //call.enqueue(Callback<ResponseBody>() {       })
     }
-    private fun DownloadFile(fileName: String?){
-        Log.d("DownloadFile", "MFile Downloading")
-        HttpExecute.BuildAPI().downloadFileWithDynamicUrlSync(fileName).execute()
+
+    private fun LauchURL(url: String?) {
+            Toast.makeText(applicationContext, "Url Received", Toast.LENGTH_SHORT).show()
+
+            val uris = Uri.parse(url)
+            val browserIntent = Intent(Intent.ACTION_VIEW, uris)
+            startActivity(browserIntent)
     }
 
     private fun SyncData() {
