@@ -67,7 +67,7 @@ open class IncomingCallBroadcastReceiver : BroadcastReceiver() {
                     isIncoming = false
                     onOutgoingCallStarted(context, savedNumber!!, callStartTime!!)
                 }else{
-                   val  audioManager =  context.getSystemService(Context.AUDIO_SERVICE)as AudioManager
+                    val audioManager =  context.getSystemService(Context.AUDIO_SERVICE)as AudioManager
                     val thread = object : Thread() {
                         override fun run() {
                             try {
