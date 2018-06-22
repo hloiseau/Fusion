@@ -46,7 +46,7 @@ open class IncomingCallBroadcastReceiver : BroadcastReceiver() {
 
     protected open fun onIncomingCallStarted(ctx: Context, number: String, start: Date) {}
     protected open fun onOutgoingCallStarted(ctx: Context, number: String, start: Date) {}
-    protected open  fun onIncomingCallEnded(ctx: Context, number: String, start: Date, end: Date) {}
+    protected open fun onIncomingCallEnded(ctx: Context, number: String, start: Date, end: Date) {}
     protected open fun onOutgoingCallEnded(ctx: Context, number: String, start: Date, end: Date) {}
     protected open fun onMissedCall(ctx: Context, number: String, start: Date) {}
 
@@ -67,8 +67,24 @@ open class IncomingCallBroadcastReceiver : BroadcastReceiver() {
                     isIncoming = false
                     onOutgoingCallStarted(context, savedNumber!!, callStartTime!!)
                 }else{
-                    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                    audioManager.isSpeakerphoneOn = true
+                   val  audioManager =  context.getSystemService(Context.AUDIO_SERVICE)as AudioManager
+                    val thread = object : Thread() {
+                        override fun run() {
+                            try {
+                                while (true) {
+                                    Thread.sleep(3000)
+                                    audioManager.setMode(AudioManager.MODE_IN_CALL)
+                                    if (!audioManager.isSpeakerphoneOn())
+                                        audioManager.setSpeakerphoneOn(true)
+                                }
+                            } catch (e: InterruptedException) {
+                                e.printStackTrace()
+                            }
+
+                        }
+                    }
+
+                    thread.start()
                 }
             TelephonyManager.CALL_STATE_IDLE ->
                 //Went to idle-  this is the end of a call.  What type depends on previous state(s)

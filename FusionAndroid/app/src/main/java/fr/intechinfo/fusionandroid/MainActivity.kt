@@ -55,10 +55,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun initPubNub()
     {
-        val stdbyChannel = "test" + Constants.STDBY_SUFFIX
+      /*  val stdbyChannel = "test" + Constants.STDBY_SUFFIX
         this.mPubNub = Pubnub(Constants.PUB_KEY, Constants.SUB_KEY)
         this.mPubNub.setUUID("test")
-        this.mPubNub.subscribe(stdbyChannel, Callback(this))
+        this.mPubNub.subscribe("test", Callback(this))*/
+        Rtc.instance.initRtcAudio(this)
     }
 
     public fun batteryStatus(){

@@ -2,6 +2,7 @@ package fr.intechinfo.fusionandroid
 
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.provider.SyncStateContract
 import android.util.Log
 import com.google.android.gms.common.internal.Constants
@@ -26,7 +27,7 @@ class Rtc private constructor() {
         Log.d("Lord", "of the rings")
         PeerConnectionFactory.initializeAndroidGlobals(context, true, false, false, null)
         peerConnectionFactory = PeerConnectionFactory()
-        pnRTCClient = PnRTCClient(fr.intechinfo.fusionandroid.Constants.PUB_KEY, fr.intechinfo.fusionandroid.Constants.SUB_KEY )
+        pnRTCClient = PnRTCClient(fr.intechinfo.fusionandroid.Constants.PUB_KEY, fr.intechinfo.fusionandroid.Constants.SUB_KEY, "test" )
         audioConstraints.optional.add(MediaConstraints.KeyValuePair(
                 "DtlsSrtpKeyAgreement", "true"))
         audioConstraints.mandatory.add(MediaConstraints.KeyValuePair(
@@ -42,8 +43,10 @@ class Rtc private constructor() {
         val audioTrack = peerConnectionFactory.createAudioTrack("comm1", audioSource)
         mediaStream.addTrack(audioTrack)
         pnRTCClient.attachLocalMediaStream(mediaStream)
+        val  audioManager =  context.getSystemService(Context.AUDIO_SERVICE)as AudioManager
+        audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
         pnRTCClient.setMaxConnections(1)
-        pnRTCClient.listenOn("test-stdby")
+        pnRTCClient.listenOn("test")
     }
 
     companion object {

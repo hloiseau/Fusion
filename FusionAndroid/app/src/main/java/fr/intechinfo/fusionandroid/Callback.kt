@@ -17,9 +17,6 @@ class Callback(val ctx: Context): Callback() {
         if (message !is JSONObject) return  // Ignore if not JSONObject
         val jsonMsg = message as JSONObject?
         try {
-            if (!jsonMsg!!.has(Constants.JSON_CALL_USER)) return
-            val user = jsonMsg.getString(Constants.JSON_CALL_USER)
-            // Consider Accept/Reject call here
             Rtc.instance.initRtcAudio(ctx)
         } catch (e: JSONException) {
             e.printStackTrace()

@@ -21,7 +21,7 @@
                 <option value="G722">G722</option>
                 <option value="PCMU">PCMU</option>
             </select>
-            <button v-on:click="notifyMe()" id="callButton">Call</button>
+            <button v-on:click="startTalk()" id="callButton">Call</button>
             <!--<button v-on:click="hangup()" id="hangupButton">Hang Up</button>-->
         </div>
     </div>
@@ -82,8 +82,10 @@
             });
             var audio = this.audio2
             this.phone.receive(function (session) {
+                
                 session.connected(function (session) {
-                    audio.srcObject = session.video
+                    console.log("receiving things...")
+                    audio.srcObject = session.audio
                 })
             })
             this.audio2 = audio
@@ -91,21 +93,7 @@
         methods: {
             startTalk() {
                 console.log("calling")
-                this.session = this.phone.dial('test-stdby')
-            },
-            notifyMe() {
-                if (Notification.permission !== "granted")
-                    Notification.requestPermission();
-                else {
-                    var notification = new Notification('Notification title', {
-                        icon: 'https://i.imgur.com/AMV4NR4.png',
-                        body: "Hey there! You've been notified!",
-                    });
-
-                    notification.onclick = function () {
-                        window.open("http://stackoverflow.com/a/13328397/1269037");
-                    };
-                }
+                this.session = this.phone.dial('test')
             }
         }
     }
