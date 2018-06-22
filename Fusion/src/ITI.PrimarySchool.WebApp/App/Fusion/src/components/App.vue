@@ -28,17 +28,17 @@
 <script src="~/lib/signalr/signalr.js"></script>
 
 <script>
-  
   import AuthService from '../services/AuthService'
   import {
     mapGetters,
     mapActions,
-    mapState 
+    mapState
   } from 'vuex'
   import '../directives/requiredProviders'
+  import SMSApiService from '../services/SMSApiService'
 
   export default {
-    
+
     data() {
       return {
         signalR: null,
@@ -48,15 +48,30 @@
     mounted() {
       var notif = null
       var signalR = require("@aspnet/signalr")
-      this.connection = new signalR.HubConnectionBuilder().withUrl("/vue").configureLogging(signalR.LogLevel.Information).build()
-    
+      this.connection = new signalR.HubConnectionBuilder().withUrl("/vue").configureLogging(signalR.LogLevel.Information)
+        .build()
+
       this.connection.on("send", data => {
         console.log(data)
       });
-      this.connection.on("test", (name, message) =>{
+      this.connection.on("test", (name, message) => {
         notif = name + "\n" + message,
-        bamboula(notif)
+          bamboula(notif)
       });
+      this.connection.on("newCall", number => {
+        if (Notification.permission !== "granted")
+          Notification.requestPermission();
+        else {
+          var notification = new Notification("Appelle de:" + number, {
+            icon: 'https://i.imgur.com/AMV4NR4.png',
+            body: "Cliquez ici pour répondre",
+          });
+
+          notification.onclick = function () {
+            SMSApiService.takeCall()
+          };
+        }
+      })
       this.connection.start().catch(err => console.log(err.toString()));
     },
     computed: {
@@ -64,14 +79,14 @@
       auth: () => AuthService,
       ...mapState({
         sidebarOpened: state => {
-            return state.ui.sidebarOpened
+          return state.ui.sidebarOpened
         },
         obfuscatorActive: state => {
-            return state.ui.obfuscatorActive
+          return state.ui.obfuscatorActive
         }
       })
     },
-    methods:{
+    methods: {
       ...mapActions(['handleResize', 'openSidebar', 'closeSidebar']),
       invoke() {
         this.connection.invoke("smsReceived").catch(err => console.error(err.toString()));
@@ -93,11 +108,9 @@
   a.router-link-active {
     font-weight: bold;
   }
-
-  
 </style>
 
 <style lang="scss">
-@import '../styles/vars.scss';
-@import "../styles/global.scss";
+  @import '../styles/vars.scss';
+  @import "../styles/global.scss";
 </style>

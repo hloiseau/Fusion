@@ -35,6 +35,10 @@ interface RetrofitAPI {
     @POST("/api/rtc/candidateandroid")
     fun SetNewCandidate(@Body rtc: RtcInfo): Call<RtcInfo>
 
+    @Headers("'Content-Type': 'application/json'")
+    @POST("/api/sms/newcall")
+    fun NewCall(@Body number: String): Call<String>
+
     @GET("/api/file/getfile")
     fun downloadFileWithDynamicUrlSync(): Call<ResponseBody>
 }

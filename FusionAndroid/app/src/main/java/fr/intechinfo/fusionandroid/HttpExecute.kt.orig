@@ -26,11 +26,11 @@ class HttpExecute(internal var _call: Call<*>) : Thread() {
 <<<<<<< HEAD
                     .baseUrl("http://10.10.90.7:5000")
 =======
-                    .baseUrl("http://192.168.42.80:5000")
->>>>>>> d17bee6db850eecd8271ffadf287420a216a3045
+                    .baseUrl("http://192.168.1.38:5000")
+>>>>>>> 930315c5eb0a0d422099f3d9e7fca60316135d33
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
-            return retrofit.create(RetrofitAPI::class.java!!)
+            return retrofit.create(RetrofitAPI::class.java)
         }
     }
 }

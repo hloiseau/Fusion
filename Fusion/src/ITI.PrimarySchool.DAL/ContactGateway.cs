@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -19,12 +20,33 @@ namespace Fusion.DAL
 
         public async Task<Result<int>> ReciveContactList(string name, string mail, string number)
         {
+            string result = null;
             string[] names = name.Split(' ');
-            if (names.Length <= 1){names[1] = null;}
+            if (names.Length == 1)
+            {
+                Array.Resize(ref names, names.Length + 1);
+                names[names.Length - 1] = null;
+            }
+            if (names.Length < 1)
+            {
+                Array.Resize(ref names, names.Length + 1);
+                names[names.Length - 1] = null;
+                Array.Resize(ref names, names.Length + 1);
+                names[names.Length - 1] = null;
+            }
+            if (names.Length > 2)
+            {
+                names[0] = name;
+                names[1] = null;
+            }
+
             string pattern = "^\\+\\d{2}";
             string replacement = "0";
             Regex rgx = new Regex(pattern);
-            string result = rgx.Replace(number, replacement);
+            if (number != null)
+            {
+                result = rgx.Replace(number, replacement);
+            }            
 
             using (SqlConnection con = new SqlConnection(_connectionString))
             {

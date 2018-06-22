@@ -65,10 +65,25 @@ namespace Fusion.WebApp.Controllers
             return Ok(result);
         }
 
+        [HttpPost("newcall")]
+        public async Task NotifyNewCall([FromBody] string number)
+        {
+            await _hubContext.Clients.All.SendAsync("NewCall", number);
+        }
+
+
         [HttpPost("foundPhone")]
         public async Task<IActionResult> foundPhone()
         {
             string result = NotificationFactory.SendNotificationFromFirebaseCloud("foundPhone");
+
+            return Ok(result);
+        }
+
+        [HttpPost("takecall")]
+        public async Task<IActionResult> TakeCall()
+        {
+            string result = NotificationFactory.SendNotificationFromFirebaseCloud("takecall");
 
             return Ok(result);
         }
