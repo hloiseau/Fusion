@@ -7,18 +7,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using System.Diagnostics;
 
 namespace Fusion.WebApp.Controllers
 {
     [Route("api/[controller]")]
     public class FileController : Controller
     {
+        private readonly IHubContext<VueHub> _hubContext;
         private readonly IHostingEnvironment _appEnvironment;
-        private IFormFile _file { get; set; }
 
-        public FileController(IHostingEnvironment appEnvironment)
+        public FileController(IHostingEnvironment appEnvironment, IHubContext<VueHub> hubContext)
         {
             _appEnvironment = appEnvironment;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -33,8 +36,6 @@ namespace Fusion.WebApp.Controllers
         {
             if (file == null) throw new Exception("File is null");
             if (file.Length == 0) throw new Exception("File is empty");
-
-            _file = file;
 
             string path_UserName = "C:\\Users\\"+ Environment.UserName + "\\Documents\\FusionFile";
             string path_to_Images = path_UserName + "\\" + file.FileName;
@@ -77,6 +78,19 @@ namespace Fusion.WebApp.Controllers
         public async Task<IActionResult> sendURL([FromBody] string link)
         {
             string result = NotificationFactory.SendNotificationFromFirebaseCloud("Sending URL", link, "URL");
+            return Ok();
+        }
+
+        [HttpPost("receivedurl")]
+        public async Task NotifyUrRL([FromBody] string url)
+        {
+            await _hubContext.Clients.All.SendAsync("receivedURL", url);
+        }
+
+        [HttpPost("openurl")]
+        public async Task<IActionResult> OpenURL([FromBody] string link)
+        {
+            Process.Start(link);
             return Ok();
         }
 

