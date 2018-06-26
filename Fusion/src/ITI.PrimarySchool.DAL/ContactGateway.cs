@@ -64,6 +64,7 @@ namespace Fusion.DAL
 
                 Debug.Assert(status == 0);
                 return Result.Success(Status.Created, p.Get<int>("@ContactId"));
+                
             }
         }
 

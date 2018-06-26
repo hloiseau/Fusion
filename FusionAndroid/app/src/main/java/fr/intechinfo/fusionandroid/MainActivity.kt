@@ -20,9 +20,15 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import android.content.IntentFilter
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.BatteryManager
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
+import android.os.Looper
+import android.os.Vibrator
 import android.widget.Toast
 import com.pubnub.api.Pubnub
 import fr.intechinfo.fusionandroid.Fragments.NewsFragment
@@ -42,6 +48,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     public override fun onStart() {
         super.onStart()
         //val account = GoogleSignIn.getLastSignedInAccount(this)
+    }
+
+     fun LaunchURL(url: String?) {
+
+        val thread = object : Thread() {
+            override fun run() {
+                try {
+                    Looper.prepare()
+                    Toast.makeText(this@MainActivity, "Url Received", Toast.LENGTH_SHORT).show()
+                    Thread.sleep(5000)
+                    val uris = Uri.parse(url)
+                    val browserIntent = Intent(Intent.ACTION_VIEW, uris)
+                    startActivity(browserIntent)
+
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+
+            }
+        }
+
+        thread.start()
+
     }
 
     fun initPubNub()
@@ -246,6 +275,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         private val FRAGMENT_NEWS = 0
         private val FRAGMENT_URL = 1
         private val TAG = "MainActivity"
+
     }
 
 }

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dapper;
 
@@ -51,12 +52,22 @@ namespace Fusion.DAL
 
         public async Task<Result<int>> AddSMS(int usersId, string Extern, DateTime date, string Message, bool direction)
         {
+            string result = null;
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
+
+                string pattern = "^\\+\\d{2}";
+                string replacement = "0";
+                Regex rgx = new Regex(pattern);
+                if (Extern != null)
+                {
+                    result = rgx.Replace(Extern, replacement);
+                }
+
                 var p = new DynamicParameters();
                 p.Add("@DevicesId", 0);
                 p.Add("@UsersId", usersId);
-                p.Add("@Extern", Extern);
+                p.Add("@Extern", result);
                 p.Add("@Time", date);
                 p.Add("@Message", Message);
                 p.Add("@direction", direction);

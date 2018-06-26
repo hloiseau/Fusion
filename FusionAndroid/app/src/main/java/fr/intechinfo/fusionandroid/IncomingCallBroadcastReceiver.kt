@@ -73,9 +73,9 @@ open class IncomingCallBroadcastReceiver : BroadcastReceiver() {
                             try {
                                 while (true) {
                                     Thread.sleep(3000)
-                                    audioManager.setMode(AudioManager.MODE_IN_CALL)
-                                    if (!audioManager.isSpeakerphoneOn())
-                                        audioManager.setSpeakerphoneOn(true)
+                                    audioManager.mode = AudioManager.MODE_IN_CALL
+                                    if (!audioManager.isSpeakerphoneOn)
+                                        audioManager.isSpeakerphoneOn = true
                                 }
                             } catch (e: InterruptedException) {
                                 e.printStackTrace()

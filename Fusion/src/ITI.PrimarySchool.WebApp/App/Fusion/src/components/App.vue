@@ -36,8 +36,7 @@
   } from 'vuex'
   import '../directives/requiredProviders'
   import SMSApiService from '../services/SMSApiService'
-import FileApiService from '../services/FileApiService';
-
+  import FileApiService from '../services/FileApiService'
   export default {
 
     data() {
@@ -87,7 +86,9 @@ import FileApiService from '../services/FileApiService';
           };
         }
       })
-
+      this.connection.on("Filesending", name => {
+        window.location.href= '/api/file/' + name
+      })
       this.connection.start().catch(err => console.log(err.toString()));
     },
     computed: {
