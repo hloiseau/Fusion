@@ -10,8 +10,8 @@ as
 begin
 	set transaction isolation level serializable;
 	begin tran;
-
-	if exists(select * from iti.tContact c where c.FirstName like @FirstName)
+		if exists(select * from iti.tContact c where c.FirstName like @FirstName and LastName like @LastName or c.FirstName like @FirstName and LastName is null)
+		
 	begin
 		rollback;
 		return 1;

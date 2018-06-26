@@ -8,6 +8,17 @@ namespace Fusion.DAL
             : base( status, errorMessage )
         {
             if( !HasError ) Content = success;
+            else
+            {
+                if (errorMessage != "A Conctact with this name already exists.")
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("!!!!!!!!!!!!!!!!EROR!!!!!!!!!!!!!!!!!!!!!!");
+                    Console.WriteLine("Status : " + status);
+                    Console.WriteLine("ErrorMessage : " + errorMessage);
+                    Console.WriteLine("");
+                }
+            }
         }
 
         public TSuccess Content { get; }
