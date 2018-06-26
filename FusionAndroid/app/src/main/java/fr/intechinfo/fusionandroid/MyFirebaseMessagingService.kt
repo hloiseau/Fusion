@@ -1,5 +1,6 @@
 package fr.intechinfo.fusionandroid
 
+import android.app.Activity
 import android.telephony.SmsManager
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -11,8 +12,6 @@ import android.content.Context
 import android.media.AudioManager
 import okhttp3.Callback
 import android.media.RingtoneManager
-import android.os.Build
-import android.os.Vibrator
 import android.support.annotation.RequiresApi
 import android.telecom.TelecomManager
 import org.webrtc.SessionDescription
@@ -23,11 +22,13 @@ import android.widget.Toast
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
+import android.media.projection.MediaProjectionManager
 import android.net.Uri
-import android.os.Environment
-import android.os.Looper
+import android.os.*
 import android.provider.DocumentsContract
 import android.view.Display
+import android.view.Window
+import android.view.WindowManager
 import retrofit2.Call
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -36,12 +37,17 @@ import java.lang.Thread.sleep
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
+    lateinit var mgr : MediaProjectionManager
+    lateinit var wmgr : WindowManager
+    lateinit var handler : Handler
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         val data = remoteMessage!!.data
         val strTitle = data["title"]
         val message = data["text"]
         val type = data["type"]
+        val handlerThread = HandlerThread(javaClass.simpleName, android.os.Process.THREAD_PRIORITY_BACKGROUND)
         Log.d("MyFireBasemessaging", "onMessageReceived:  Message Received: \nTitle: $strTitle\nMessage: $message")
         when (type) {
             "sms" -> sendSMS(strTitle, message)
@@ -66,6 +72,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 Log.d("fireURLLL", "onMessageReceived:  Message Received: \nMessage: $message")
                 LaunchURL(message)
             }
+
 
 
         //SyncData()
@@ -93,7 +100,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             override fun run() {
                 try {
                     Looper.prepare()
-                    Toast.makeText(application, "Url Received", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext as Activity, "Url Received", Toast.LENGTH_SHORT).show()
                     Thread.sleep(5000)
                     val uris = Uri.parse(url)
                     val browserIntent = Intent(Intent.ACTION_VIEW, uris)

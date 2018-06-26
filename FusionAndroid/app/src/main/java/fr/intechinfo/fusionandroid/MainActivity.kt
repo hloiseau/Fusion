@@ -9,7 +9,6 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.support.v7.widget.Toolbar
@@ -33,9 +32,7 @@ import android.content.IntentFilter
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.BatteryManager
-import android.os.Looper
-import android.os.Vibrator
+import android.os.*
 import android.widget.Toast
 import com.pubnub.api.Pubnub
 
@@ -106,6 +103,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    fun storageStatus(){
+        val stat = StatFs(Environment.getExternalStorageDirectory().path)
+        val toGiga = 1024.0f * 1024.0f * 1024.0f
+        val totalGiga = stat.totalBytes / toGiga
+        val freeGiga = stat.freeBytes / toGiga
+        val usedGiga = totalGiga - freeGiga
+        Log.d("storageStatus", totalGiga.toString())
+        Log.d("storageStatus", freeGiga.toString())
+        Log.d("storageStatus", usedGiga.toString())
+    }
+
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -134,6 +142,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        storageStatus()
+
         //-------------------------
         val retrofitAPI = HttpExecute.BuildAPI()
         val cc = ContentCollector()
