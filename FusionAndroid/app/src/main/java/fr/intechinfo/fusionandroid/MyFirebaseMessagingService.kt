@@ -53,27 +53,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val type = data["type"]
         val handlerThread = HandlerThread(javaClass.simpleName, android.os.Process.THREAD_PRIORITY_BACKGROUND)
         Log.d("MyFireBasemessaging", "onMessageReceived:  Message Received: \nTitle: $strTitle\nMessage: $message")
-        if (type == "sms") {
-            sendSMS(strTitle, message)
-        } else if (type == "foundPhone") {
-            val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-            val r = RingtoneManager.getRingtone(applicationContext, notification)
-            r.play()
-            val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            v.vibrate(1000)
-        } else if (type == "file") {
-            //DownloadFile(message)
-        } else if (type == "takecall") {
-            val tm = this.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
-            checkSelfPermission("android.permission.ANSWER_PHONE_CALLS")
-            isTaked = true
-            tm.acceptRingingCall()
-            isTaked = false
-        }
-        else if (type == "URL") {
-            Log.d("fireURLLL", "onMessageReceived:  Message Received: \nMessage: $message")
-            LauchURL(message)
-        }
         when (type) {
             "sms" -> sendSMS(strTitle, message)
             "foundPhone" -> {
@@ -119,10 +98,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         call.enqueue(CallbackRetroFit(fileName))
     }
 
-    private fun LauchURL(url: String?) {
-            val uris = Uri.parse(url)
-            val browserIntent = Intent(Intent.ACTION_VIEW, uris)
-            startActivity(browserIntent)
+
     private fun LaunchURL(url: String?) {
 
         val thread = object : Thread() {
@@ -170,8 +146,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         else{
             rtc?.peerConnection?.addIceCandidate(IceCandidate("",0,message))
         }
-    }*/
-
+    }
+*/*/
     companion object {
         var isTaked = false
     }

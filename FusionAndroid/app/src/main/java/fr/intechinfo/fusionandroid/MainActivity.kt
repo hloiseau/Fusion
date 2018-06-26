@@ -29,7 +29,6 @@ import android.widget.Toast
 import android.os.Looper
 import android.os.Vibrator
 import android.os.*
-import android.widget.Toast
 import com.pubnub.api.Pubnub
 import fr.intechinfo.fusionandroid.Fragments.NewsFragment
 import fr.intechinfo.fusionandroid.Fragments.URLFragment

@@ -60,8 +60,6 @@ namespace Fusion.WebApp.Controllers
             if (file == null) throw new Exception("File is null");
             if (file.Length == 0) throw new Exception("File is empty");
 
-            _file = file;
-
             string path_UserName = "C:\\Users\\"+ Environment.UserName + "\\Documents\\FusionFile";
             string path_to_Images = path_UserName + "\\" + file.FileName;
 
