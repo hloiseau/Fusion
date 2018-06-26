@@ -14,6 +14,10 @@ class FileApiService {
         return await postAsync(`${endpoint}/urlsend`, model);
     }
 
+    async getFileAsync(model) {
+        return await getAsync(`${endpoint}/${model}`)
+    }
+
 }
 
 export default new FileApiService()

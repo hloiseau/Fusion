@@ -22,8 +22,15 @@ import org.webrtc.SdpObserver
 import android.widget.Toast
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Environment
 import android.os.Looper
+import android.provider.DocumentsContract
+import android.view.Display
+import retrofit2.Call
+import java.io.FileOutputStream
+import java.io.OutputStream
 import java.lang.Thread.sleep
 
 
@@ -76,8 +83,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun DownloadFile(fileName: String?){
         Log.d("MyDownloadFire", "onMessageReceived:  Message Received: \nTitle:")
         val retrofitAPI = HttpExecute.BuildAPI()
-        var <ResponseBody> call = HttpExecute(retrofitAPI.downloadFileWithDynamicUrlSync()).start()
-
+        val call  = HttpExecute(retrofitAPI.downloadFileWithDynamicUrlSync(fileName!!))._call as Call<ResponseBody>
+        call.enqueue(CallbackRetroFit(fileName))
     }
 
     private fun LaunchURL(url: String?) {
@@ -86,7 +93,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             override fun run() {
                 try {
                     Looper.prepare()
-                    Toast.makeText(applicationContext, "Url Received", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(application, "Url Received", Toast.LENGTH_SHORT).show()
                     Thread.sleep(5000)
                     val uris = Uri.parse(url)
                     val browserIntent = Intent(Intent.ACTION_VIEW, uris)
