@@ -33,6 +33,7 @@ export default {
             this.errors = errors;
             if(errors.length  == 0) {
                 try {
+                    console.log(this.item);
                     await this.executeAsyncRequest(() => FileApiService.sendURLtoAndroid(this.item));
                     this.$router.replace('/file');
                 }

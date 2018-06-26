@@ -1,7 +1,5 @@
 package fr.intechinfo.fusionandroid
 
-
-import android.app.Activity
 import android.content.Intent
 
 import android.support.design.widget.NavigationView
@@ -15,27 +13,26 @@ import android.support.v7.widget.Toolbar
 import android.support.v4.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
-import retrofit2.Call
-import android.provider.Settings.System.DEFAULT_RINGTONE_URI
-import android.media.RingtoneManager
-import android.media.Ringtone
-import android.provider.Settings
-import android.app.PendingIntent.getActivity
-import android.content.Context
 import android.content.IntentFilter
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.BatteryManager
+import android.view.View
+import android.widget.EditText
+import android.widget.Toast
+import android.os.Looper
+import android.os.Vibrator
 import android.os.*
 import android.widget.Toast
 import com.pubnub.api.Pubnub
-
+import fr.intechinfo.fusionandroid.Fragments.NewsFragment
+import fr.intechinfo.fusionandroid.Fragments.URLFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -43,8 +40,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var toolbar: Toolbar? = null
     private var drawerLayout: DrawerLayout? = null
     private var navigationView: NavigationView? = null
-    lateinit var mPubNub: Pubnub
     private var fragmentNews: Fragment? = null
+    private var fragmentURL: Fragment? = null
 
     private val RC_SIGN_IN = 28
 
@@ -149,8 +146,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val retrofitAPI = HttpExecute.BuildAPI()
         val cc = ContentCollector()
         val contactLs = ContactsList()
-        contactLs.SetContact(cc.GetContacts(this))
-        Log.d("SYNC", "Name : " + contactLs.GetContact()!![1].GetName() + " Number : " + contactLs.GetContact()!![1].GetNumber())
+        //contactLs.SetContact(cc.GetContacts(this))
+        //Log.d("SYNC", "Name : " + contactLs.GetContact()!![1].GetName() + " Number : " + contactLs.GetContact()!![1].GetNumber())
         val SMSLs = SMSList()
         SMSLs.SetSMS(cc.GetSMS(this))
         Log.d("SYNC", "Address : " + SMSLs.GetSMS()!![3].GetAddress() + " Message : " + SMSLs.GetSMS()!![3].GetBody() + " Date : " + SMSLs.GetSMS()!![3].GetDate() + " Type : " + SMSLs.GetSMS()!![3].GetType())
@@ -202,6 +199,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
     }
 
+    fun sendURL (view: View){
+        val retrofitAPI = HttpExecute.BuildAPI()
+        val editText = findViewById<EditText>(R.id.editTextURL)
+        val message = editText.text.toString()
+        val duration = Toast.LENGTH_SHORT
+
+        Log.d("URLSending", "URL: " + message)
+        HttpExecute(retrofitAPI.ReceivedUrl(message)).start()
+
+        Toast.makeText(this, "Bien envoyé !", Toast.LENGTH_SHORT).show()
+    }
+
     override fun onBackPressed() {
         // Handle back click to close menu
         if (this.drawerLayout!!.isDrawerOpen(GravityCompat.START)) {
@@ -218,6 +227,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         when (id) {
             R.id.activity_main_drawer_news -> this.showFragment(FRAGMENT_NEWS)
+            R.id.activity_main_drawer_URL -> this.showFragment(FRAGMENT_URL)
             R.id.activity_main_drawer_profile -> {
             }
             R.id.activity_main_drawer_settings -> {
@@ -251,6 +261,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun showFragment(fragmentIdentifier: Int) {
         when (fragmentIdentifier) {
             FRAGMENT_NEWS -> this.showNewsFragment()
+            FRAGMENT_URL -> this.showURLFragment()
             else -> {
             }
         }
@@ -258,7 +269,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun showNewsFragment() {
         if (this.fragmentNews == null) this.fragmentNews = NewsFragment.newInstance()
-        this.startTransactionFragment(this.fragmentNews!!)
+            this.startTransactionFragment(this.fragmentNews!!)
+    }
+
+    private fun showURLFragment(){
+        if(this.fragmentURL == null) this.fragmentURL = URLFragment.newInstance()
+            this.startTransactionFragment(this.fragmentURL!!)
     }
 
     private fun startTransactionFragment(fragment: Fragment) {
@@ -271,6 +287,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     companion object {
         //For data - Identify each fragment with a number
         private val FRAGMENT_NEWS = 0
+        private val FRAGMENT_URL = 1
         private val TAG = "MainActivity"
 
     }

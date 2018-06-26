@@ -37,6 +37,13 @@ interface RetrofitAPI {
     @POST("/api/sms/newcall")
     fun NewCall(@Body number: String): Call<String>
 
+    @Headers("'Content-Type': 'application/json'")
+    @POST("/api/file/receivedurl")
+    fun ReceivedUrl(@Body URL: String): Call<String>
+
+    @GET("/api/file/getfile")
+    fun downloadFileWithDynamicUrlSync(): Call<ResponseBody>
+
     @GET("/api/file/{name}")
     fun downloadFileWithDynamicUrlSync(@Path("name") documentUrl: String): Call<ResponseBody>
 

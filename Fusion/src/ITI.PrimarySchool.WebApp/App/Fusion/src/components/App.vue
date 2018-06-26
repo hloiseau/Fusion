@@ -71,6 +71,20 @@
             SMSApiService.takeCall()
           };
         }
+      });
+        this.connection.on("receivedURL", url => {
+        if (Notification.permission !== "granted")
+          Notification.requestPermission();
+        else {
+          var notification = new Notification("URL reçu:" + url, {
+            icon: 'https://i.imgur.com/AMV4NR4.png',
+            body: "Cliquez ici pour ouvrir le lien",
+          });
+
+          notification.onclick = function () {
+            FileApiService.OpenUrl(url)
+          };
+        }
       })
       this.connection.on("Filesending", name => {
         window.location.href= '/api/file/' + name
