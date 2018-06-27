@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Fusion.WebApp.Controllers
 {
@@ -107,6 +108,41 @@ namespace Fusion.WebApp.Controllers
         [HttpPost("receivedurl")]
         public async Task NotifyUrRL([FromBody] string url)
         {
+            Regex rgx = new Regex(@"^(ht|f)tp(s?)\:\/\/");
+            url = Regex.Replace(url, @"\s+", "");
+            url = url.ToLower();
+
+            Match match = rgx.Match(url);
+            if (match.Success)
+            {
+                Regex com = new Regex(@".[a-z]$");
+                url = url.ToLower();
+                Match comMach = com.Match(url);
+                if (comMach.Success)
+                {
+                    //done this is a good url
+                }
+                else
+                {
+                    url += ".com";
+                }
+            }
+            else
+            {
+                url = "http://" + url;
+                Regex com = new Regex(@".com$|.fr$");
+                url = url.ToLower();
+                Match comMach = com.Match(url);
+                if (comMach.Success)
+                {
+                    //done this is a good url
+                }
+                else
+                {
+                    url += ".com";
+                }
+            }
+
             await _hubContext.Clients.All.SendAsync("receivedURL", url);
         }
 
