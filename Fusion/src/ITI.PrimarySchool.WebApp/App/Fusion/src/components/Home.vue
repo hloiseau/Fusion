@@ -45,7 +45,7 @@ data(){
             if(errors.length  == 0) {
                 try {
                     console.log(this.item);
-                    await this.executeAsyncRequest(() => FileApiService.OpenUrl(this.item));
+                    window.open(this.item);
                 }
                 catch(error){
                     this.notifyError(error);
