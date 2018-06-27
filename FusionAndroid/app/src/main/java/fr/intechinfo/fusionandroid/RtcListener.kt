@@ -9,6 +9,5 @@ import org.webrtc.MediaStream
 class RtcListener : PnRTCListener() {
     override fun onMessage(peer: PnPeer?, message: Any?) {
         super.onMessage(peer, message)
-        Log.d("Hail", message.toString())
     }
 }

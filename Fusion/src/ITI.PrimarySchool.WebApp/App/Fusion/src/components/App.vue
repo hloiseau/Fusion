@@ -59,20 +59,27 @@
         console.log(data)
       });
       this.connection.on("test", (name, message) => {
-        notif = name + "\n" + message,
-          bamboula(notif)
+        if (Notification.permission !== "granted")
+          Notification.requestPermission();
+        else {
+          var notification = new Notification("SMS de : " + name, {
+            icon: 'https://i.imgur.com/AMV4NR4.png',
+            body: message,
+          });
+        }
       });
       this.connection.on("newCall", number => {
         if (Notification.permission !== "granted")
           Notification.requestPermission();
         else {
-          var notification = new Notification("Appelle de:" + number, {
+          var notification = new Notification("Appelle de : " + number, {
             icon: 'https://i.imgur.com/AMV4NR4.png',
             body: "Cliquez ici pour répondre",
           });
 
           notification.onclick = function () {
             SMSApiService.takeCall()
+            notification.close()
           };
         }
       });

@@ -116,7 +116,7 @@ namespace Fusion.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 ContactData contact = await con.QueryFirstOrDefaultAsync<ContactData>(
-                     "select ContactId, FirstName, LastName, Mail, PhoneNumber from iti.tContact where PhoneNumber like '@Number'",
+                     "select ContactId, FirstName, LastName, Mail, PhoneNumber from iti.tContact where PhoneNumber like @Number",
                     new { Number = number });
 
                 if (contact == null) return Result.Failure<ContactData>(Status.NotFound, "Contact not found.");

