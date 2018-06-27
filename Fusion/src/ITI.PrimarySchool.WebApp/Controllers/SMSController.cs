@@ -51,9 +51,9 @@ namespace Fusion.WebApp.Controllers
                     phone = Regex.Replace(phone, @"\s+", "");
                 }
                 Result<ContactData> contact = await _contactGateway.FindByNumber(phone);
-                if (contact.Content.PhoneNumber != null)
+                if (contact != null)
                 {
-                    await _hubContext.Clients.All.SendAsync("Test", contact.Content.FirstName, contact.Content.LastName, model.sms[0].Body);
+                    await _hubContext.Clients.All.SendAsync("Test", contact.Content.FirstName+" "+contact.Content.LastName, model.sms[0].Body);
                 }
                 else
                 {
@@ -89,7 +89,25 @@ namespace Fusion.WebApp.Controllers
         [HttpPost("newcall")]
         public async Task NotifyNewCall([FromBody] string number)
         {
-            await _hubContext.Clients.All.SendAsync("NewCall", number);
+            string pattern = "^\\+\\d{2}";
+            string replacement = "0";
+            string phone = "";
+            Regex rgx = new Regex(pattern);
+            if (number != null)
+            {
+                phone = rgx.Replace(number, replacement);
+                phone = Regex.Replace(phone, @"\s+", "");
+            }
+            Result<ContactData> contact = await _contactGateway.FindByNumber(phone);
+            if (contact != null)
+            {
+                await _hubContext.Clients.All.SendAsync("NewCall", contact.Content.FirstName+" "+contact.Content.LastName);
+            }
+            else
+            {
+                await _hubContext.Clients.All.SendAsync("NewCall", number);
+            }
+
         }
 
 

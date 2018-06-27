@@ -66,25 +66,6 @@ open class IncomingCallBroadcastReceiver : BroadcastReceiver() {
                 if (lastState != TelephonyManager.CALL_STATE_RINGING) {
                     isIncoming = false
                     onOutgoingCallStarted(context, savedNumber!!, callStartTime!!)
-                }else{
-                    val audioManager =  context.getSystemService(Context.AUDIO_SERVICE)as AudioManager
-                    val thread = object : Thread() {
-                        override fun run() {
-                            try {
-                                while (true) {
-                                    Thread.sleep(3000)
-                                    audioManager.mode = AudioManager.MODE_IN_CALL
-                                    if (!audioManager.isSpeakerphoneOn)
-                                        audioManager.isSpeakerphoneOn = true
-                                }
-                            } catch (e: InterruptedException) {
-                                e.printStackTrace()
-                            }
-
-                        }
-                    }
-
-                    thread.start()
                 }
             TelephonyManager.CALL_STATE_IDLE ->
                 //Went to idle-  this is the end of a call.  What type depends on previous state(s)

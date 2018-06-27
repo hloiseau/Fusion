@@ -3,11 +3,11 @@
         <div id="audio">
             <div>
                 <div class="label">Local audio:</div>
-                <audio id="audio1" autoplay controls muted></audio>
+                <video id="audio1" autoplay controls muted></video>
             </div>
             <div>
                 <div class="label">Remote audio:</div>
-                <audio id="audio2" autoplay controls></audio>
+                <video id="audio2" autoplay controls></video>
             </div>
         </div>
 
@@ -72,8 +72,8 @@
                 subscribe_key: 'sub-c-55b78e0a-745b-11e8-902b-b2b3cb3accda',
                 ssl: false,
                 media: {
-                    audio: true,
-                    video: false
+                    audio: false,
+                    video: true
                 }
             })
             this.phone.ready(function () {
@@ -85,7 +85,7 @@
                 
                 session.connected(function (session) {
                     console.log("receiving things...")
-                    audio.srcObject = session.audio
+                    audio.srcObject = session.video
                 })
             })
             this.audio2 = audio
