@@ -14,10 +14,6 @@ class FileApiService {
         return await postAsync(`${endpoint}/urlsend`, model);
     }
 
-    async OpenUrl(model){
-        return await postAsync(`${endpoint}/openurl`, model);
-    }
-
     async getFileAsync(model) {
         return await getAsync(`${endpoint}/${model}`)
     }
