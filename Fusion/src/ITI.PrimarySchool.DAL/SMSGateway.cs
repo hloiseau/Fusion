@@ -62,6 +62,7 @@ namespace Fusion.DAL
                 if (Extern != null)
                 {
                     result = rgx.Replace(Extern, replacement);
+                    result = Regex.Replace(result, @"\s+", "");
                 }
 
                 var p = new DynamicParameters();

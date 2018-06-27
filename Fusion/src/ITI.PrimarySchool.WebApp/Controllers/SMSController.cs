@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 
@@ -16,11 +17,13 @@ namespace Fusion.WebApp.Controllers
     {
 
         readonly SMSGateway _smsGateway;
+        readonly ContactGateway _contactGateway;
         private readonly IHubContext<VueHub> _hubContext;
 
-        public SmsController( SMSGateway smsGateway, IHubContext<VueHub> hubContext)
+        public SmsController( SMSGateway smsGateway, ContactGateway contactGateway, IHubContext<VueHub> hubContext)
         {
             _smsGateway = smsGateway;
+            _contactGateway = contactGateway;
             _hubContext = hubContext;
         }
 
@@ -34,10 +37,28 @@ namespace Fusion.WebApp.Controllers
             Result result = null;
             if (model.sms.Count == 1)
             {
+                string phone = "";
                 if (model.sms[0].Type == "1") isSent = true;
                 else isSent = false;
                 result = await _smsGateway.AddSMS(0, model.sms[0].Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.sms[0].Date)).DateTime, model.sms[0].Body, isSent);
-                await _hubContext.Clients.All.SendAsync("Test", model.sms[0].Address, model.sms[0].Body); 
+
+                string pattern = "^\\+\\d{2}";
+                string replacement = "0";
+                Regex rgx = new Regex(pattern);
+                if (model.sms[0].Address != null)
+                {
+                    phone = rgx.Replace(model.sms[0].Address, replacement);
+                    phone = Regex.Replace(phone, @"\s+", "");
+                }
+                Result<ContactData> contact = await _contactGateway.FindByNumber(phone);
+                if (contact.Content.PhoneNumber != null)
+                {
+                    await _hubContext.Clients.All.SendAsync("Test", contact.Content.FirstName, contact.Content.LastName, model.sms[0].Body);
+                }
+                else
+                {
+                    await _hubContext.Clients.All.SendAsync("Test", model.sms[0].Address, contact.Content.LastName, model.sms[0].Body);
+                }
             }
             else
             {
