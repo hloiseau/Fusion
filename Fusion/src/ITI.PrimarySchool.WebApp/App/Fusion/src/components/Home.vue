@@ -10,53 +10,14 @@
             </p>
         </div>
 
-        <form @submit="urlSubmit($event)">
-            <button type="submit" class="btn btn-primary">Envoyer</button>
-        </form>
     </section>
 </template>
 
 <script>
-  import {
-    mapGetters,
-    mapActions,
-    mapState
-  } from 'vuex'
-  import '../directives/requiredProviders'
-import FileApiService from '../services/FileApiService';
 
 export default {
-data(){
-        return {
-            item: "https://google.com/"
-        }
-    },
-
-    methods: {
-        ...mapActions(['notifyLoading', 'notifyError']),
-        ...mapActions(['executeAsyncRequest']),
-
-
-        async urlSubmit(e) {
-            e.preventDefault();
-            
-            var errors = [];
-            this.errors = errors;
-            if(errors.length  == 0) {
-                try {
-                    console.log(this.item);
-                    window.open(this.item);
-                }
-                catch(error){
-                    this.notifyError(error);
-                }
-                finally {
-                    this.notifyLoading(false);
-                }
-            }
-        }
-    }
 }
+
 </script>
 
 <style lang="scss">
