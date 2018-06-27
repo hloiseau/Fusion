@@ -23,7 +23,7 @@
     "popper.js": "1.14.1",
     "signalr": "^2.2.3",
     "sip.js": "^0.10.0",
-    "tslib": "^1.9.2",
+    "tslib": "^1.9.3",
     "vue": "2.5.16",
     "vue-pubnub": "^1.0.3",
     "vue-router": "3.0.1",
