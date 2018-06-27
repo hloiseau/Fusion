@@ -101,12 +101,19 @@ namespace Fusion.WebApp.Controllers
         [HttpPost("urlsend")]
         public async Task<IActionResult> sendURL([FromBody] string link)
         {
+            link = VerifyUrl(link);
             string result = NotificationFactory.SendNotificationFromFirebaseCloud("Sending URL", link, "URL");
             return Ok();
         }
 
         [HttpPost("receivedurl")]
         public async Task NotifyUrRL([FromBody] string url)
+        {
+            url = VerifyUrl(url);
+            await _hubContext.Clients.All.SendAsync("receivedURL", url);
+        }
+
+        private string VerifyUrl(string url)
         {
             Regex rgx = new Regex(@"^(ht|f)tp(s?)\:\/\/");
             url = Regex.Replace(url, @"\s+", "");
@@ -120,7 +127,7 @@ namespace Fusion.WebApp.Controllers
                 Match comMach = com.Match(url);
                 if (comMach.Success)
                 {
-                    //done this is a good url
+                    return url;
                 }
                 else
                 {
@@ -135,23 +142,14 @@ namespace Fusion.WebApp.Controllers
                 Match comMach = com.Match(url);
                 if (comMach.Success)
                 {
-                    //done this is a good url
+                    return url;
                 }
                 else
                 {
                     url += ".com";
                 }
             }
-
-            await _hubContext.Clients.All.SendAsync("receivedURL", url);
+            return url;
         }
-
-        [HttpPost("openurl")]
-        public async Task<IActionResult> OpenURL([FromBody] string link)
-        {
-            Process.Start(link);
-            return Ok();
-        }
-
     }
 }

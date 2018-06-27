@@ -98,15 +98,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         call.enqueue(CallbackRetroFit(fileName))
     }
 
-
     private fun LaunchURL(url: String?) {
 
         val thread = object : Thread() {
             override fun run() {
                 try {
-                    Looper.prepare()
-                    Toast.makeText(applicationContext as Activity, "Url Received", Toast.LENGTH_SHORT).show()
-                    Thread.sleep(5000)
                     val uris = Uri.parse(url)
                     val browserIntent = Intent(Intent.ACTION_VIEW, uris)
                     startActivity(browserIntent)
