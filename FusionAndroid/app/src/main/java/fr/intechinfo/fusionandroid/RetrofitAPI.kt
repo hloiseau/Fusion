@@ -1,15 +1,13 @@
 package fr.intechinfo.fusionandroid
 
+import com.google.gson.JsonElement
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.webrtc.IceCandidate
 import org.webrtc.SessionDescription
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
-import retrofit2.http.Url
 import okhttp3.ResponseBody
-
+import retrofit2.http.*
 
 
 interface RetrofitAPI {
@@ -39,6 +37,17 @@ interface RetrofitAPI {
     @POST("/api/sms/newcall")
     fun NewCall(@Body number: String): Call<String>
 
+    @Headers("'Content-Type': 'application/json'")
+    @POST("/api/file/receivedurl")
+    fun ReceivedUrl(@Body URL: String): Call<String>
+
     @GET("/api/file/getfile")
     fun downloadFileWithDynamicUrlSync(): Call<ResponseBody>
+
+    @GET("/api/file/{name}")
+    fun downloadFileWithDynamicUrlSync(@Path("name") documentUrl: String): Call<ResponseBody>
+
+    @Multipart
+    @POST("/api/file/fromAndroid")
+    fun uploadFile(@Part filePart: MultipartBody.Part): Call<JsonElement>
 }
