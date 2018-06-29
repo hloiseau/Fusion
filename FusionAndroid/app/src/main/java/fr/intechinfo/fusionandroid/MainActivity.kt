@@ -16,24 +16,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import android.content.IntentFilter
-import android.media.AudioManager
-import android.media.MediaPlayer
 import android.net.Uri
+import android.opengl.GLSurfaceView
 import android.os.BatteryManager
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import android.os.Looper
-import android.os.Vibrator
 import android.os.*
-import com.pubnub.api.Pubnub
 import fr.intechinfo.fusionandroid.Fragments.NewsFragment
+import fr.intechinfo.fusionandroid.Fragments.RtcFragment
 import fr.intechinfo.fusionandroid.Fragments.URLFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
 
     //For design
     private var toolbar: Toolbar? = null
@@ -41,6 +39,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var navigationView: NavigationView? = null
     private var fragmentNews: Fragment? = null
     private var fragmentURL: Fragment? = null
+    private var fragmentRtc: Fragment? = null
+
 
     private val RC_SIGN_IN = 28
 
@@ -64,24 +64,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
-
             }
         }
-
         thread.start()
+     }
 
-    }
-
-    fun initPubNub()
+    fun initPubNub(view: View)
     {
-      /*  val stdbyChannel = "test" + Constants.STDBY_SUFFIX
-        this.mPubNub = Pubnub(Constants.PUB_KEY, Constants.SUB_KEY)
-        this.mPubNub.setUUID("test")
-        this.mPubNub.subscribe("test", Callback(this))*/
+        val glSurfaceView = findViewById<GLSurfaceView>(R.id.gl_surface)
         Rtc.instance.initRtcAudio(this)
     }
 
-    public fun batteryStatus(){
+    fun hangUp(view: View){
+        Rtc.instance.pnRTCClient.closeAllConnections()
+    }
+
+    fun batteryStatus(){
         val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter -> this.registerReceiver(null, ifilter)
         }
         val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
@@ -163,6 +161,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         this.configureDrawerLayout()
         this.configureNavigationView()
 
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -175,13 +174,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         FirebaseMessaging.getInstance().subscribeToTopic("googleId")
         PermissionUtil.initPermissions(this)
         //val retrofitAPI = HttpExecute.BuildAPI()
-        val token = Token()
+       /* val token = Token()
         token.SetToken(FirebaseInstanceId.getInstance().token!!)
         val stringCall = retrofitAPI.CreateNewDevice(token)
         val t = HttpExecute(stringCall)
-        t.start()
+        t.start()*/
         //syncDataTest();
-        initPubNub()
+
     }
 
     protected fun syncDataTest() {
@@ -227,6 +226,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (id) {
             R.id.activity_main_drawer_news -> this.showFragment(FRAGMENT_NEWS)
             R.id.activity_main_drawer_URL -> this.showFragment(FRAGMENT_URL)
+            R.id.activity_main_drawer_Rtc -> this.showFragment(FRAGMENT_RTC)
             R.id.activity_main_drawer_profile -> {
             }
             R.id.activity_main_drawer_settings -> {
@@ -261,6 +261,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (fragmentIdentifier) {
             FRAGMENT_NEWS -> this.showNewsFragment()
             FRAGMENT_URL -> this.showURLFragment()
+            FRAGMENT_RTC ->this.showRtcFragment()
             else -> {
             }
         }
@@ -269,6 +270,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun showNewsFragment() {
         if (this.fragmentNews == null) this.fragmentNews = NewsFragment.newInstance()
             this.startTransactionFragment(this.fragmentNews!!)
+    }
+
+    private fun showRtcFragment() {
+        if (this.fragmentRtc == null) this.fragmentRtc = RtcFragment.newInstance()
+        this.startTransactionFragment(this.fragmentRtc!!)
+        Rtc.instance.initRtcAudio(this)
     }
 
     private fun showURLFragment(){
@@ -283,12 +290,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+
+
+
     companion object {
         //For data - Identify each fragment with a number
         private val FRAGMENT_NEWS = 0
         private val FRAGMENT_URL = 1
+        private val FRAGMENT_RTC = 2
         private val TAG = "MainActivity"
 
     }
-
 }

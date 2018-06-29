@@ -12,6 +12,10 @@
             android:id="@+id/activity_main_drawer_URL"
             android:icon="@drawable/ic_menu_export"
             android:title="Envoi d'URL" />
+        <item
+            android:id="@+id/activity_main_drawer_Rtc"
+            android:icon="@drawable/ic_menu_export"
+            android:title="Vids" />
     </group>
 
     <item android:title="Configuration">
