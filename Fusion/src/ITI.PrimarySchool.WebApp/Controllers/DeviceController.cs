@@ -18,7 +18,6 @@ namespace Fusion.WebApp.Controllers
             _deviceGateway = deviceGateway;
         }
 
-
         [HttpPost]
         public async Task<Result> Token([FromBody] TokenVewModel model)
         {

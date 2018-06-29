@@ -1,5 +1,6 @@
 package fr.intechinfo.fusionandroid
 
+import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 
 import android.support.design.widget.NavigationView
@@ -42,6 +43,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentNews: Fragment? = null
     private var fragmentURL: Fragment? = null
 
+    //For find the device name
+    private var mBluetoothAdapter: BluetoothAdapter = null
+
     private val RC_SIGN_IN = 28
 
     public override fun onStart() {
@@ -81,7 +85,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Rtc.instance.initRtcAudio(this)
     }
 
-    public fun batteryStatus(){
+    fun batteryStatus(){
         val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter -> this.registerReceiver(null, ifilter)
         }
         val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
@@ -196,6 +200,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
         HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
+    }
+
+    protected fun FindDeviceName(){
+
+        if(mBluetoothAdapter == null ){
+            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        }
+        val name = mBluetoothAdapter.name
+
+
     }
 
     fun sendURL (view: View){
