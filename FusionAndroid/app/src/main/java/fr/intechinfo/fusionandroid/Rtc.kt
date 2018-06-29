@@ -3,8 +3,11 @@ package fr.intechinfo.fusionandroid
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
+import android.opengl.GLSurfaceView
 import android.provider.SyncStateContract
+import android.util.AttributeSet
 import android.util.Log
+import android.view.View
 import com.google.android.gms.common.internal.Constants
 import org.webrtc.*
 import org.webrtc.PeerConnection
@@ -27,10 +30,11 @@ class Rtc private constructor() {
     var peerConnection: PeerConnection? = null
     val audioConstraints = MediaConstraints()
     lateinit var pnRTCClient: PnRTCClient
+    lateinit var localVideoSource : VideoSource
 
     private object Holder{val INSTANCE = Rtc()}
     fun initRtcAudio(context: Context) {
-        PeerConnectionFactory.initializeAndroidGlobals(context, false, true, true, null)
+        PeerConnectionFactory.initializeAndroidGlobals(context, true, true, true, null)
         peerConnectionFactory = PeerConnectionFactory()
         pnRTCClient = PnRTCClient(fr.intechinfo.fusionandroid.Constants.PUB_KEY, fr.intechinfo.fusionandroid.Constants.SUB_KEY, "test" )
         audioConstraints.optional.add(MediaConstraints.KeyValuePair(
@@ -42,11 +46,9 @@ class Rtc private constructor() {
 
         val params = PnSignalingParams(audioConstraints, null, null)
         pnRTCClient.setSignalParams(params)
-        pnRTCClient.attachRTCListener(RtcListener())
         mediaStream = peerConnectionFactory.createLocalMediaStream("stream1")
         //val audioSource = peerConnectionFactory.createAudioSource(this.pnRTCClient.audioConstraints())
         //val audioTrack = peerConnectionFactory.createAudioTrack("comm1", audioSource)
-        pnRTCClient.attachLocalMediaStream(mediaStream)
 
         val camNumber = VideoCapturerAndroid.getDeviceCount()
         val frontFacingCam = VideoCapturerAndroid.getNameOfFrontFacingDevice()
@@ -55,15 +57,22 @@ class Rtc private constructor() {
         val capturer = VideoCapturerAndroid.create(frontFacingCam)
 
         // First create a Video Source, then we can make a Video Track
-        val localVideoSource = peerConnectionFactory.createVideoSource(capturer, this.pnRTCClient.videoConstraints())
+        localVideoSource = peerConnectionFactory.createVideoSource(capturer, this.pnRTCClient.videoConstraints())
         val localVideoTrack = peerConnectionFactory.createVideoTrack("video", localVideoSource)
 
         mediaStream.addTrack(localVideoTrack)
-        val  audioManager =  context.getSystemService(Context.AUDIO_SERVICE)as AudioManager
-        audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
+
+
+        //VideoRendererGui.setView(view, null)
+
+        pnRTCClient.attachRTCListener(RtcListener(context))
+        pnRTCClient.attachLocalMediaStream(mediaStream)
+
         pnRTCClient.setMaxConnections(1)
         pnRTCClient.listenOn("test")
     }
+
+
 
 
 

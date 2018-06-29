@@ -2,10 +2,11 @@
     <div id="sidebar" :class="{'open': active}">
         <el-menu theme="light" router style="background-color: #4fe6cc;">
             <div class="logo-container">
-                <img class="logo" src="https://i.imgur.com/AMV4NR4.png" />
+                <img  class="logo" src="https://i.imgur.com/AMV4NR4.png" />
             </div>
             <el-menu-item index="/contacts">Contacts</el-menu-item>
             <el-menu-item index="/file">File Sender</el-menu-item>
+            <el-menu-item index="/rtc">Appel vidéo</el-menu-item>
        </el-menu>
    </div>
 </template>

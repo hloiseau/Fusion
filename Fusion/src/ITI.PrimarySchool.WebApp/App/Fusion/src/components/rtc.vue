@@ -1,28 +1,16 @@
 <template>
     <div>
-        <div id="audio">
-            <div>
-                <div class="label">Local audio:</div>
-                <video id="audio1" autoplay controls muted></video>
+        <div></div>
+        <div id="audio" class="audio">
+            <div id="buttons">
+                <button v-on:click="startTalk()" id="callButton" disabled>Call</button>
+                <button v-on:click="hangup()" id="hangupButton" disabled>Hang Up</button>
             </div>
             <div>
-                <div class="label">Remote audio:</div>
-                <video id="audio2" autoplay controls></video>
-            </div>
-        </div>
+                <div id="audio2">
 
-        <div id="buttons">
-            <select id="codec">
-                <!-- Codec values are matched with how they appear in the SDP.
-                For instance, opus matches opus/48000/2 in Chrome, and ISAC/16000
-                matches 16K iSAC (but not 32K iSAC). -->
-                <option value="opus">Opus</option>
-                <option value="ISAC">iSAC 16K</option>
-                <option value="G722">G722</option>
-                <option value="PCMU">PCMU</option>
-            </select>
-            <button v-on:click="startTalk()" id="callButton">Call</button>
-            <!--<button v-on:click="hangup()" id="hangupButton">Hang Up</button>-->
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -51,16 +39,16 @@
                 lastResult: null,
 
                 offerOptions: {
-                    offerToReceiveAudio: 1,
-                    offerToReceiveVideo: 0,
+                    offerToReceiveAudio: 0,
+                    offerToReceiveVideo: 1,
                     voiceActivityDetection: false
                 },
                 connection: null
             }
         },
         mounted() {
-            this.audio1 = document.querySelector('audio#audio1')
-            this.audio2 = document.querySelector('audio#audio2')
+            this.audio1 = document.querySelector('div#audio1')
+            this.audio2 = document.querySelector('div#audio2')
             this.callButton = document.querySelector('button#callButton')
             this.hangupButton = document.querySelector('button#hangupButton')
             this.codecSelector = document.querySelector('select#codec')
@@ -76,28 +64,41 @@
                     video: true
                 }
             })
-            this.phone.ready(function () {
-                ready = true
-                console.log(ready)
-            });
-            var audio = this.audio2
-            this.phone.receive(function (session) {
-                
-                session.connected(function (session) {
-                    console.log("receiving things...")
-                    audio.srcObject = session.video
-                })
-            })
-            this.audio2 = audio
+            this.phone.ready(this.readying)
+
+            this.phone.receive(this.receiving)
         },
         methods: {
             startTalk() {
                 console.log("calling")
+                this.callButton.disabled = true
+                this.hangupButton.disabled = false
                 this.session = this.phone.dial('test')
+            },
+            readying() {
+                this.callButton.disabled = false
+                console.log("ready")
+            },
+            hangup() {
+                this.callButton.disabled = false
+                this.hangupButton.disabled = true
+                this.phone.hangup()
+                var lol = document.getElementById('audio2')
+                lol.innerHTML = ''
+            },
+            receiving(session) {
+                session.connected(this.connecting)
+            },
+            connecting(session) {
+                console.log("receiving things...")
+                this.phone.$('audio2').appendChild(session.video);
             }
         }
     }
 </script>
 
 <style lang="scss">
+    .audio {
+        margin-top: 5%
+    }
 </style>
