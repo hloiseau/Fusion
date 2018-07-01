@@ -41,6 +41,10 @@ interface RetrofitAPI {
     @POST("/api/file/receivedurl")
     fun ReceivedUrl(@Body URL: String): Call<String>
 
+    @Headers("'Content-Type': 'application/json'")
+    @POST("/api/device/createdevice")
+    fun CreateDevice(@Body name: String): Call<String>
+
     @GET("/api/file/getfile")
     fun downloadFileWithDynamicUrlSync(): Call<ResponseBody>
 
