@@ -1,6 +1,6 @@
 package fr.intechinfo.fusionandroid
 
-import android.app.Activity
+import android.app.*
 import android.telephony.SmsManager
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -14,14 +14,12 @@ import okhttp3.Callback
 import android.media.RingtoneManager
 import android.support.annotation.RequiresApi
 import android.telecom.TelecomManager
-import org.webrtc.SessionDescription
 import okhttp3.ResponseBody
-import org.webrtc.IceCandidate
-import org.webrtc.SdpObserver
 import android.widget.Toast
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
 import android.os.*
@@ -30,10 +28,13 @@ import android.widget.EditText
 import android.os.Environment
 import android.os.Looper
 import android.provider.DocumentsContract
+import android.support.v4.app.NotificationCompat
 import android.view.Display
 import android.view.Window
 import android.view.WindowManager
+import org.webrtc.*
 import retrofit2.Call
+import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.lang.Thread.sleep
@@ -54,8 +55,24 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val handlerThread = HandlerThread(javaClass.simpleName, android.os.Process.THREAD_PRIORITY_BACKGROUND)
         Log.d("MyFireBasemessaging", "onMessageReceived:  Message Received: \nTitle: $strTitle\nMessage: $message")
         when (type) {
-            "sms" -> sendSMS(strTitle, message)
+            "sms" -> {
+                val mainHandler = Handler(Looper.getMainLooper())
+                val myRunnable = object : Runnable {
+                    override fun run() {
+                        Toast.makeText(applicationContext, "Envoie d'un SMS...", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                mainHandler.post(myRunnable)
+                sendSMS(strTitle, message)
+            }
             "foundPhone" -> {
+                val mainHandler = Handler(Looper.getMainLooper())
+                val myRunnable = object : Runnable {
+                    override fun run() {
+                        Toast.makeText(applicationContext, "Lancement de la sonnerie...", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                mainHandler.post(myRunnable)
                 val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
                 val r = RingtoneManager.getRingtone(applicationContext, notification)
                 r.play()
@@ -63,9 +80,23 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 v.vibrate(1000)
             }
             "file" -> {
+                val mainHandler = Handler(Looper.getMainLooper())
+                val myRunnable = object : Runnable {
+                    override fun run() {
+                        Toast.makeText(applicationContext, "Récéption d'un fichier...", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                mainHandler.post(myRunnable)
                 DownloadFile(message)
             }
             "takecall" -> {
+                val mainHandler = Handler(Looper.getMainLooper())
+                val myRunnable = object : Runnable {
+                    override fun run() {
+                        Toast.makeText(applicationContext, "Prise de l'appel...", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                mainHandler.post(myRunnable)
                 val tm = this.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
                 checkSelfPermission("android.permission.ANSWER_PHONE_CALLS")
                 isTaked = true
@@ -73,6 +104,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 isTaked = false
             }
             "URL" -> {
+                val mainHandler = Handler(Looper.getMainLooper())
+                val myRunnable = object : Runnable {
+                    override fun run() {
+                        Toast.makeText(applicationContext, "Récéption d'un lien...", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                mainHandler.post(myRunnable)
                 Log.d("fireURLLL", "onMessageReceived:  Message Received: \nMessage: $message")
                 LaunchURL(message)
             }
@@ -95,7 +133,26 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d("MyDownloadFire", "onMessageReceived:  Message Received: \nTitle:")
         val retrofitAPI = HttpExecute.BuildAPI()
         val call  = HttpExecute(retrofitAPI.downloadFileWithDynamicUrlSync(fileName!!))._call as Call<ResponseBody>
-        call.enqueue(CallbackRetroFit(fileName))
+        call.enqueue(CallbackRetroFit(fileName, applicationContext))
+
+        val path = Environment.getExternalStorageDirectory()
+        val file = File(path, fileName)
+        val intent = Intent()
+        intent.action = android.content.Intent.ACTION_VIEW
+        intent.setDataAndType(Uri.fromFile(file), "image/*")
+        val pIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        val notification = NotificationCompat.Builder(applicationContext, "OutputStream")
+                .setContentTitle("Fichier reçu")
+                .setContentText("Toucher ici pour l'ouvrir")
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentIntent(pIntent)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+        val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            setupChannels(notificationManager)
+        }
+        notificationManager.notify(0, notification.build())
     }
 
     private fun LaunchURL(url: String?) {
@@ -115,6 +172,23 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
 
         thread.start()
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private fun setupChannels(manager: NotificationManager){
+        val adminChannelName = getString(R.string.common_google_play_services_notification_channel_name);
+        val adminChannelDescription = getString(R.string.common_google_play_services_notification_ticker);
+
+        val adminChannel = NotificationChannel("OutputStream", adminChannelName, NotificationManager.IMPORTANCE_LOW);
+        adminChannel.setDescription(adminChannelDescription)
+        adminChannel.enableLights(true)
+        adminChannel.setLightColor(Color.CYAN)
+        adminChannel.enableVibration(true)
+        adminChannel.setBypassDnd(true)
+        adminChannel.setShowBadge(true)
+
+        manager.createNotificationChannel(adminChannel);
 
     }
 
