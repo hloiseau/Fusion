@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentRtc: Fragment? = null
 
     //For find the device name
-    private var mBluetoothAdapter: BluetoothAdapter = null
+    private var mBluetoothAdapter: BluetoothAdapter? = null
 
     private val RC_SIGN_IN = 28
 
@@ -160,6 +160,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         this.configureDrawerLayout()
         this.configureNavigationView()
 
+        this.findDeviceName()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -196,14 +197,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
     }
 
-    protected fun FindDeviceName(){
-
+    fun findDeviceName(){
+        val retrofitAPI = HttpExecute.BuildAPI()
         if(mBluetoothAdapter == null ){
             mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         }
-        val name = mBluetoothAdapter.name
-
-
+        val name = mBluetoothAdapter?.name
+        Log.d("FindName", "Name : " + name)
+        HttpExecute(retrofitAPI.CreateDevice(name)).start()
     }
 
     fun sendURL (view: View){

@@ -18,11 +18,11 @@ namespace Fusion.WebApp.Controllers
             _deviceGateway = deviceGateway;
         }
 
-        [HttpPost]
-        public async Task<Result> Token([FromBody] TokenVewModel model)
+        [HttpPost("createdevice")]
+        public async Task<IActionResult> CreateDevice([FromBody] string name)
         {
-            await _deviceGateway.AddDevice(model.Token);
-            return Result.Success();
+            await _deviceGateway.AddDevice(name);
+            return Ok();
         }
     }
 }

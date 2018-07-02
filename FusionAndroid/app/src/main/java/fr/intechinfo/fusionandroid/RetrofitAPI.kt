@@ -43,7 +43,7 @@ interface RetrofitAPI {
 
     @Headers("'Content-Type': 'application/json'")
     @POST("/api/device/createdevice")
-    fun CreateDevice(@Body name: String): Call<String>
+    fun CreateDevice(@Body name: String?): Call<String>
 
     @GET("/api/file/getfile")
     fun downloadFileWithDynamicUrlSync(): Call<ResponseBody>
