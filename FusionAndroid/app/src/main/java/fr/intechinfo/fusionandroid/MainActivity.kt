@@ -28,6 +28,7 @@ import android.widget.Toast
 import android.os.Looper
 import android.os.*
 import fr.intechinfo.fusionandroid.Fragments.HomeFragment
+import android.text.TextUtils
 import fr.intechinfo.fusionandroid.Fragments.NewsFragment
 import fr.intechinfo.fusionandroid.Fragments.RtcFragment
 import fr.intechinfo.fusionandroid.Fragments.URLFragment
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentHome: Fragment? = null
 
     //For find the device name
+    private var mBluetoothAdapter = Build.MANUFACTURER;
     private var mBluetoothAdapter: BluetoothAdapter? = null
 
     private val RC_SIGN_IN = 28
@@ -173,10 +175,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivityForResult(signInIntent, RC_SIGN_IN)
 
         //onNewIntent(intent)
-        FirebaseMessaging.getInstance().subscribeToTopic("EhannoM")
+        FirebaseMessaging.getInstance().subscribeToTopic("googleId")
         PermissionUtil.initPermissions(this)
         //val retrofitAPI = HttpExecute.BuildAPI()
-       /* val token = Token()
+        /*val token = Token()
         token.SetToken(FirebaseInstanceId.getInstance().token!!)
         val stringCall = retrofitAPI.CreateNewDevice(token)
         val t = HttpExecute(stringCall)
@@ -199,14 +201,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
     }
 
-    fun findDeviceName(){
+    fun findDeviceName() {
         val retrofitAPI = HttpExecute.BuildAPI()
-        if(mBluetoothAdapter == null ){
-            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        var manufacturer = Build.MANUFACTURER
+        var model = Build.MODEL
+        if (model.startsWith(manufacturer)) {
+             var name = capitalize(model).toString()
+            HttpExecute(retrofitAPI.CreateDevice(name)).start()
         }
-        val name = mBluetoothAdapter?.name
-        Log.d("FindName", "Name : " + name)
-        HttpExecute(retrofitAPI.CreateDevice(name)).start()
+        else {
+            var name = capitalize(manufacturer).toString() + " " + model
+            FirebaseMessaging.getInstance().subscribeToTopic(name)
+            HttpExecute(retrofitAPI.CreateDevice(name)).start()
+        }
+    }
+
+    private fun capitalize(str : String): String {
+        if (TextUtils.isEmpty(str)) {
+            return str
+        }
+        val arr = str.toCharArray()
+        var capitalizeNext = true
+        var phrase = ""
+        for (c in arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase += Character.toUpperCase(c)
+                capitalizeNext = false
+                continue
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true
+            }
+            phrase += c
+        }
+        return phrase
     }
 
     fun sendURL (view: View){
