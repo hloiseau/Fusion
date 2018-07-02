@@ -43,9 +43,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentURL: Fragment? = null
     private var fragmentRtc: Fragment? = null
 
-    //For find the device name
-    private var mBluetoothAdapter = Build.MANUFACTURER;
-
     private val RC_SIGN_IN = 28
 
     public override fun onStart() {
@@ -203,11 +200,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var manufacturer = Build.MANUFACTURER
         var model = Build.MODEL
         if (model.startsWith(manufacturer)) {
-             var name = capitalize(model).toString()
+             var name = capitalize(model)
+
             HttpExecute(retrofitAPI.CreateDevice(name)).start()
         }
         else {
-            var name = capitalize(manufacturer).toString() + " " + model
+            var name = capitalize(manufacturer) + " " + model
             HttpExecute(retrofitAPI.CreateDevice(name)).start()
         }
     }
