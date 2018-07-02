@@ -172,10 +172,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivityForResult(signInIntent, RC_SIGN_IN)
 
         //onNewIntent(intent)
-        FirebaseMessaging.getInstance().subscribeToTopic("googleId")
         PermissionUtil.initPermissions(this)
         //val retrofitAPI = HttpExecute.BuildAPI()
-       /* val token = Token()
+        /*val token = Token()
         token.SetToken(FirebaseInstanceId.getInstance().token!!)
         val stringCall = retrofitAPI.CreateNewDevice(token)
         val t = HttpExecute(stringCall)
@@ -208,6 +207,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         else {
             var name = capitalize(manufacturer).toString() + " " + model
+            FirebaseMessaging.getInstance().subscribeToTopic(name)
             HttpExecute(retrofitAPI.CreateDevice(name)).start()
         }
     }
