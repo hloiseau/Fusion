@@ -27,6 +27,7 @@ import android.widget.EditText
 import android.widget.Toast
 import android.os.Looper
 import android.os.*
+import fr.intechinfo.fusionandroid.Fragments.HomeFragment
 import fr.intechinfo.fusionandroid.Fragments.NewsFragment
 import fr.intechinfo.fusionandroid.Fragments.RtcFragment
 import fr.intechinfo.fusionandroid.Fragments.URLFragment
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentNews: Fragment? = null
     private var fragmentURL: Fragment? = null
     private var fragmentRtc: Fragment? = null
+    private var fragmentHome: Fragment? = null
 
     //For find the device name
     private var mBluetoothAdapter: BluetoothAdapter? = null
@@ -160,7 +162,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         this.configureDrawerLayout()
         this.configureNavigationView()
 
-        this.findDeviceName()
+        //this.findDeviceName()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -171,7 +173,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivityForResult(signInIntent, RC_SIGN_IN)
 
         //onNewIntent(intent)
-        FirebaseMessaging.getInstance().subscribeToTopic("googleId")
+        FirebaseMessaging.getInstance().subscribeToTopic("EhannoM")
         PermissionUtil.initPermissions(this)
         //val retrofitAPI = HttpExecute.BuildAPI()
        /* val token = Token()
@@ -237,6 +239,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.activity_main_drawer_news -> this.showFragment(FRAGMENT_NEWS)
             R.id.activity_main_drawer_URL -> this.showFragment(FRAGMENT_URL)
             R.id.activity_main_drawer_Rtc -> this.showFragment(FRAGMENT_RTC)
+            R.id.activity_main_drawer_Home -> this.showFragment(fr.intechinfo.fusionandroid.MainActivity.FRAGMENT_HOME)
             R.id.activity_main_drawer_profile -> {
             }
             R.id.activity_main_drawer_settings -> {
@@ -271,7 +274,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (fragmentIdentifier) {
             FRAGMENT_NEWS -> this.showNewsFragment()
             FRAGMENT_URL -> this.showURLFragment()
-            FRAGMENT_RTC ->this.showRtcFragment()
+            FRAGMENT_RTC -> this.showRtcFragment()
+            FRAGMENT_HOME -> this.showHomeFragment()
             else -> {
             }
         }
@@ -293,6 +297,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             this.startTransactionFragment(this.fragmentURL!!)
     }
 
+    private fun showHomeFragment() {
+        if (this.fragmentHome == null) this.fragmentHome = HomeFragment.newInstance()
+        this.startTransactionFragment(this.fragmentHome!!)
+    }
+
     private fun startTransactionFragment(fragment: Fragment) {
         if (!fragment.isVisible) {
             supportFragmentManager.beginTransaction()
@@ -301,13 +310,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-
-
     companion object {
         //For data - Identify each fragment with a number
         private val FRAGMENT_NEWS = 0
         private val FRAGMENT_URL = 1
         private val FRAGMENT_RTC = 2
+        private val FRAGMENT_HOME = 3
         private val TAG = "MainActivity"
 
     }
