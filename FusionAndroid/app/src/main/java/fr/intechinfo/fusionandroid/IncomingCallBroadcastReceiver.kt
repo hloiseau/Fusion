@@ -12,7 +12,10 @@ import android.telephony.TelephonyManager
 import android.util.Log
 import java.util.*
 import android.media.AudioManager
-
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
+import kotlin.coroutines.experimental.coroutineContext
 
 
 /**
@@ -66,6 +69,16 @@ open class IncomingCallBroadcastReceiver : BroadcastReceiver() {
                 if (lastState != TelephonyManager.CALL_STATE_RINGING) {
                     isIncoming = false
                     onOutgoingCallStarted(context, savedNumber!!, callStartTime!!)
+                }else{
+                    val mainHandler = Handler(context.getMainLooper())
+                    val myRunnable = object : Runnable {
+                        override fun run() {
+                            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                            audioManager.setSpeakerphoneOn(true)
+                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
+                        }
+                    }
+                    mainHandler.post(myRunnable)
                 }
             TelephonyManager.CALL_STATE_IDLE ->
                 //Went to idle-  this is the end of a call.  What type depends on previous state(s)
