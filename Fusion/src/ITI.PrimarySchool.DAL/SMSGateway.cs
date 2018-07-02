@@ -45,7 +45,7 @@ namespace Fusion.DAL
             using( SqlConnection con = new SqlConnection( _connectionString ) )
             {
                 return await con.QueryAsync<SMSData>(
-                    "select SMSId, DevicesId, UsersId, Extern, [Time], [Message],direction from iti.tSMS where Extern = @Number order by [Time]",
+                    "with bottom as(select top(10) SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS where Extern = @Number order by [Time] desc) select * from bottom order by[Time]",
                     new { Number = number } );
             }
         }

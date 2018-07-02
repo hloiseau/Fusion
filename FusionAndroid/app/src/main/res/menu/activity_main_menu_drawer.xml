@@ -16,6 +16,10 @@
             android:id="@+id/activity_main_drawer_Rtc"
             android:icon="@drawable/ic_menu_export"
             android:title="Vids" />
+        <item
+            android:id="@+id/activity_main_drawer_Home"
+            android:icon="@drawable/ic_menu_export"
+            android:title="Home" />
     </group>
 
     <item android:title="Configuration">
