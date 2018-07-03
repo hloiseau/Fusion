@@ -1,5 +1,6 @@
 package fr.intechinfo.fusionandroid
 
+import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 
@@ -19,6 +20,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.opengl.GLSurfaceView
 import android.os.BatteryManager
@@ -27,6 +29,7 @@ import android.widget.EditText
 import android.widget.Toast
 import android.os.Looper
 import android.os.*
+import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import fr.intechinfo.fusionandroid.Fragments.NewsFragment
 import fr.intechinfo.fusionandroid.Fragments.RtcFragment
@@ -50,6 +53,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     public override fun onStart() {
         super.onStart()
+
+
         //val account = GoogleSignIn.getLastSignedInAccount(this)
     }
 
@@ -136,23 +141,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+
+        PermissionUtil.initPermissions(this)
 
         storageStatus()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.PROCESS_OUTGOING_CALLS)
+                == PackageManager.PERMISSION_GRANTED) {
+            //-------------------------
+            val retrofitAPI = HttpExecute.BuildAPI()
+            val cc = ContentCollector()
+            val contactLs = ContactsList()
+            contactLs.SetContact(cc.GetContacts(this))
+            //Log.d("SYNC", "Name : " + contactLs.GetContact()!![1].GetName() + " Number : " + contactLs.GetContact()!![1].GetNumber())
+            val SMSLs = SMSList()
+            SMSLs.SetSMS(cc.GetSMS(this))
+            Log.d("SYNC", "Address : " + SMSLs.GetSMS()!![3].GetAddress() + " Message : " + SMSLs.GetSMS()!![3].GetBody() + " Date : " + SMSLs.GetSMS()!![3].GetDate() + " Type : " + SMSLs.GetSMS()!![3].GetType())
 
-        //-------------------------
-        val retrofitAPI = HttpExecute.BuildAPI()
-        val cc = ContentCollector()
-        val contactLs = ContactsList()
-        contactLs.SetContact(cc.GetContacts(this))
-        //Log.d("SYNC", "Name : " + contactLs.GetContact()!![1].GetName() + " Number : " + contactLs.GetContact()!![1].GetNumber())
-        val SMSLs = SMSList()
-        SMSLs.SetSMS(cc.GetSMS(this))
-        Log.d("SYNC", "Address : " + SMSLs.GetSMS()!![3].GetAddress() + " Message : " + SMSLs.GetSMS()!![3].GetBody() + " Date : " + SMSLs.GetSMS()!![3].GetDate() + " Type : " + SMSLs.GetSMS()!![3].GetType())
-
-        HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
-        HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
-        //-----------------------------------------
-        super.onCreate(savedInstanceState)
+            HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
+            HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
+            //-----------------------------------------
+        }
         setContentView(R.layout.activity_main)
 
         batteryStatus()
@@ -172,7 +182,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivityForResult(signInIntent, RC_SIGN_IN)
 
         //onNewIntent(intent)
-        PermissionUtil.initPermissions(this)
         //val retrofitAPI = HttpExecute.BuildAPI()
         /*val token = Token()
         token.SetToken(FirebaseInstanceId.getInstance().token!!)
@@ -207,7 +216,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         else {
             var name = capitalize(manufacturer).toString() + " " + model
-            FirebaseMessaging.getInstance().subscribeToTopic(name)
+            FirebaseMessaging.getInstance().subscribeToTopic(name.replace(' ', '_', ignoreCase = true))
             HttpExecute(retrofitAPI.CreateDevice(name)).start()
         }
     }
