@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         this.configureDrawerLayout()
         this.configureNavigationView()
 
-        //this.findDeviceName()
+        this.findDeviceName()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -217,7 +217,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             HttpExecute(retrofitAPI.CreateDevice(name)).start()
         }
         else {
-            var name = capitalize(manufacturer).toString() + " " + model
+            var name = capitalize(manufacturer) + " " + model
             FirebaseMessaging.getInstance().subscribeToTopic(name.replace(' ', '_', ignoreCase = true))
             HttpExecute(retrofitAPI.CreateDevice(name)).start()
         }
