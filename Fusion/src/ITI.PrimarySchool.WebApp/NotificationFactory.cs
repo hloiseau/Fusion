@@ -36,7 +36,7 @@ namespace Fusion.WebApp
                     }
                 }";
                 StringBuilder builder = new StringBuilder(strNJson);
-                builder.Replace("@googleId", "googleId");
+                builder.Replace("@googleId", "EhannoM");
                 builder.Replace("@title", title);
                 builder.Replace("@text", text);
                 builder.Replace("@type", type);
