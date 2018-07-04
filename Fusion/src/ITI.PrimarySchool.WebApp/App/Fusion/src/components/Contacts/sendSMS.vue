@@ -1,7 +1,9 @@
 <template>
     <div>
+        <p></p>
+        </br></br>
         <div class="mb-4">
-            <h1>Envoyer un SMS</h1>
+            <h1 <h1 style="color: #02758c;">SMS</h1>
         </div>
 
         <div v-for="i of sms">

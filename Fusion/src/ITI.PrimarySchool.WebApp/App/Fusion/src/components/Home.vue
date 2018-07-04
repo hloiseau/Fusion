@@ -1,12 +1,19 @@
 <template>
     <div>
-        <p></p>
-        <el-card v-for="i of DeviceList" :key="i.DevicesId" class="box-card">
-            <div slot="header" class="clearfix">
-                <img src="https://i.imgur.com/0jdQr6n.png" class="miniature">
-                <span>{{ i.name }}</span>
-                <table>
-                    <tr>
+    <p></p></br></br>
+    <div style="display: flex; flex-wrap: wrap;">
+        <div class="element" v-for="i of DeviceList" :key="i.DevicesId" style="padding: 10px;">
+        <el-card class="box-card">
+        <div slot="header" class="clearfix">
+            <img  v-if="i.type == 'Mobile'" src="https://i.imgur.com/0jdQr6n.png" class="miniature">
+            <span>{{ i.name }}</span>
+            <table>
+                <tr>
+                    <td><span>Batterie</span></td>
+                    <td width="50%"></td>
+                    <td><span>Stockage</span></td>
+                </tr>
+            <tr><!-- Juste changer la valeur du % par la valeur de la battery-->
                         <td>
                             <span v-if="pourcentBattery != null">Batterie</span>
                         </td>
@@ -33,10 +40,9 @@
                     <div v-if="i.type == 'Mobile'">
                         <el-row>
                             <router-link :to="`/contacts`">
-                                <el-button type="primary">
+            <el-button type="success" >
                                     <i class="fa fa-users" aria-hidden="true"></i> Contacts
                                 </el-button>
-                            </router-link>
 
                             <router-link :to="`/file`">
                                 <el-button type="primary">
@@ -68,6 +74,8 @@
                 </el-collapse-item>
             </el-collapse>
         </el-card>
+        </div>
+        </div>
     </div>
 </template>
 
