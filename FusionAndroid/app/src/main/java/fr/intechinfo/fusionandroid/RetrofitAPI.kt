@@ -1,5 +1,6 @@
 package fr.intechinfo.fusionandroid
 
+import com.google.android.gms.auth.api.signin.internal.Storage
 import com.google.gson.JsonElement
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -44,6 +45,10 @@ interface RetrofitAPI {
     @Headers("'Content-Type': 'application/json'")
     @POST("/api/device/createdevice")
     fun CreateDevice(@Body name: String?): Call<String>
+
+    @Headers("'Content-Type': 'application/json'")
+    @POST("/api/device/receivestoragedata")
+    fun SendStorageData(@Body storage: MainActivity.Storage): Call<MainActivity.Storage>
 
     @GET("/api/file/getfile")
     fun downloadFileWithDynamicUrlSync(): Call<ResponseBody>

@@ -114,7 +114,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 Log.d("fireURLLL", "onMessageReceived:  Message Received: \nMessage: $message")
                 LaunchURL(message)
             }
-
+            "storage" -> {
+                this.storageStatus();
+            }
 
 
         //SyncData()
@@ -122,6 +124,20 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
         //SyncData()
+    }
+
+    public data class Storage (val totalGiga: Float, val freeGiga: Float, val usedGiga: Float)
+    fun storageStatus(){
+        val stat = StatFs(Environment.getExternalStorageDirectory().path)
+        val toGiga = 1024.0f * 1024.0f * 1024.0f
+        val totalGiga = stat.totalBytes / toGiga
+        val freeGiga = stat.freeBytes / toGiga
+        val usedGiga = totalGiga - freeGiga
+        Log.d("storageStatus", totalGiga.toString())
+        Log.d("storageStatus", freeGiga.toString())
+        Log.d("storageStatus", usedGiga.toString())
+
+        HttpExecute(HttpExecute.BuildAPI().SendStorageData(MainActivity.Storage(totalGiga, freeGiga, usedGiga))).start()
     }
 
     private fun sendSMS(phoneNumber: String?, messageBody: String?) {

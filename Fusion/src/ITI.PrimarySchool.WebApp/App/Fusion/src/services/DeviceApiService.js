@@ -19,6 +19,10 @@ class DeviceApiService {
         return await putAsync(`${endpoint}/${model.classId}`, model);
     }
 
+    async sendRequesttoAndroid() {
+        return await postAsync(`${endpoint}/storagesend`);
+    }
+
 }
 
 export default new DeviceApiService()

@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Folder Include="FileManager\" />
-    <Folder Include="Models\DeviceViewModels\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

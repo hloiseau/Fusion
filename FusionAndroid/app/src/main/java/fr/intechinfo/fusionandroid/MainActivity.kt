@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    public data class Storage (val totalGiga: Float, val freeGiga: Float, val usedGiga: Float)
     fun storageStatus(){
         val stat = StatFs(Environment.getExternalStorageDirectory().path)
         val toGiga = 1024.0f * 1024.0f * 1024.0f
