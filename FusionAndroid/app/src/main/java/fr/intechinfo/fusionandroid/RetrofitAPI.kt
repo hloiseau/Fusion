@@ -15,11 +15,11 @@ interface RetrofitAPI {
 
     @Headers("'Content-Type': 'application/json'")
     @POST("/api/contact/sync")
-    fun CreateContacts(@Body lsContact: ContactsList): Call<ContactsList>
+    fun CreateContacts(@Body lsContact: ContactsList, name:String): Call<ContactsList>
 
     @Headers("'Content-Type': 'application/json'")
     @POST("/api/sms/receivesms")
-    fun CreateSMS(@Body lsSMS: SMSList): Call<SMSList>
+    fun CreateSMS(@Body lsSMS: SMSList, name:String): Call<SMSList>
 
     @Headers("'Content-Type': 'application/json'")
     @POST("/api/contact")
@@ -45,8 +45,6 @@ interface RetrofitAPI {
     @POST("/api/device/createdevice")
     fun CreateDevice(@Body name: String?): Call<String>
 
-    @GET("/api/file/getfile")
-    fun downloadFileWithDynamicUrlSync(): Call<ResponseBody>
 
     @GET("/api/file/{name}")
     fun downloadFileWithDynamicUrlSync(@Path("name") documentUrl: String): Call<ResponseBody>
