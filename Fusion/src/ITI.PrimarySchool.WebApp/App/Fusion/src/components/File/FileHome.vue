@@ -14,7 +14,7 @@
             </div>
         </form>
         <p></p>         
-        <button><router-link :to="`file/FileUrlSender`">Go To URl sender</router-link></button>
+        <!--<button><router-link :to="`file/FileUrlSender`">Go To URl sender</router-link></button>-->
     </div>
 </template>
 
