@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val glSurfaceView = findViewById<GLSurfaceView>(R.id.gl_surface)
         Rtc.instance.initRtcAudio(this)
     }
-
+    data class Battery (val batteryPct: Float, val isCharging: Boolean)
     fun batteryStatus(){
         val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter -> this.registerReceiver(null, ifilter)
         }
@@ -97,11 +97,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val batteryPct: Float? = batteryStatus?.let { intent ->
             val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
             val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
-            level / scale.toFloat()
+            level / scale.toFloat() * 100
         }
+
+        Log.d("batteryStatus", batteryPct.toString())
     }
 
-    public data class Storage (val totalGiga: Float, val freeGiga: Float, val usedGiga: Float)
+    data class Storage (val totalGiga: Float, val freeGiga: Float, val usedGiga: Float)
     fun storageStatus(){
         val stat = StatFs(Environment.getExternalStorageDirectory().path)
         val toGiga = 1024.0f * 1024.0f * 1024.0f

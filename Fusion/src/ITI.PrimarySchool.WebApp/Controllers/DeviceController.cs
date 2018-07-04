@@ -49,5 +49,12 @@ namespace Fusion.WebApp.Controllers
             await _hubContext.Clients.All.SendAsync("StorageReceive", storageData.UsedGiga, storageData.TotalGiga);
             return Ok();
         }
+
+        [HttpPost("receivebatterydata")]
+        public async Task<IActionResult> ReceiveBatteryData([FromBody]BatteryViewModel batteryData)
+        {
+            await _hubContext.Clients.All.SendAsync("BatteryReceive", batteryData.BatteryPct, batteryData.IsCharging);
+            return Ok();
+        }
     }
 }
