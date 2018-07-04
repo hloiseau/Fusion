@@ -4,7 +4,8 @@
         <form @submit="urlSubmit($event)">
             <label>Envoyer cette URL :</label>
             <input type="text" v-model="item" class="form-control">
-            <button type="submit" class="btn btn-primary">Envoyer</button>
+            
+            <el-button  type="submit" class="btn btn-primary">Envoyer</el-button>
         </form>
     </div>
 </template>
@@ -35,7 +36,7 @@ export default {
                 try {
                     console.log(this.item);
                     await this.executeAsyncRequest(() => FileApiService.sendURLtoAndroid(this.item));
-                    this.$router.replace('/file');
+                    this.$router.replace('/');
                 }
                 catch(error){
                     this.notifyError(error);

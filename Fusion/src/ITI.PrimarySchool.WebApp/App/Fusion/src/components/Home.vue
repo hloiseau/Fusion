@@ -38,7 +38,7 @@
 
                 <el-row>
                 <el-button type="primary"  v-on:click="findPhone($event)">
-                    <i class="fa fa-volume-control-phone" aria-hidden="true"></i> Faire vibrer
+                    <i class="fa fa-volume-control-phone" aria-hidden="true"></i> Trouver mon téléphone
                 </el-button>
                 </el-row>
             </div>
