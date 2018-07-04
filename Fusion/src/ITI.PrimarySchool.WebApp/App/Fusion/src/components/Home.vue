@@ -8,21 +8,21 @@
                 <table>
                     <tr>
                         <td>
-                            <span>Batterie</span>
+                            <span v-if="pourcentBattery != null">Batterie</span>
                         </td>
                         <td width="50%"></td>
                         <td>
-                            <span>Stockage</span>
+                            <span v-if="pourcentStockage != null" >Stockage</span>
                         </td>
                     </tr>
                     <tr>
                         <!-- Juste changer la valeur du % par la valeur de la battery-->
                         <td>
-                            <el-progress type="circle" width=80 :percentage="pourcentBattery" color="lightgreen"></el-progress>
+                            <el-progress v-if="pourcentBattery != null" type="circle" width=80 :percentage=pourcentBattery color="lightgreen"></el-progress>
                         </td>
                         <td width="50%"></td>
                         <td>
-                            <el-progress type="circle" width=80 :percentage=pourcentStockage.toFixed(2) color="lightblue"></el-progress>
+                            <el-progress v-if="pourcentStockage != null" type="circle" width=80 :percentage=pourcentStockage.toFixed(2) color="lightblue"></el-progress>
                         </td>
                     </tr>
                 </table>

@@ -27,7 +27,8 @@
                     <th>Prénom</th>
                     <th>Nom</th>
                     <th>Mail</th>
-                    <th>Phone Number</th>
+                    <th> Téléphone
+                    </th>
                     <th> Opérations</th>
                 </tr>
             </thead>
