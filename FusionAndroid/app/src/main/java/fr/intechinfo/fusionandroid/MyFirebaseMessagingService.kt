@@ -18,6 +18,7 @@ import okhttp3.ResponseBody
 import android.widget.Toast
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.projection.MediaProjectionManager
@@ -116,6 +117,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
             "storage" -> {
                 this.storageStatus();
+                this.batteryStatus()
             }
 
 
@@ -124,6 +126,27 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
         //SyncData()
+    }
+
+    fun batteryStatus(){
+        val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter -> this.registerReceiver(null, ifilter)
+        }
+        val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+        val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL
+
+        // How are we charging?
+        val chargePlug: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) ?: -1
+        val usbCharge: Boolean = chargePlug == BatteryManager.BATTERY_PLUGGED_USB
+        val acCharge: Boolean = chargePlug == BatteryManager.BATTERY_PLUGGED_AC
+
+        val batteryPct: Float? = batteryStatus?.let { intent ->
+            val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+            val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+            level / scale.toFloat() * 100
+        }
+        HttpExecute(HttpExecute.BuildAPI().SendBatteryData(MainActivity.Battery(batteryPct!!, isCharging))).start()
+
+        Log.d("batteryStatus", batteryPct.toString())
     }
 
     public data class Storage (val totalGiga: Float, val freeGiga: Float, val usedGiga: Float)
