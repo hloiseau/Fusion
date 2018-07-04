@@ -46,5 +46,17 @@ namespace Fusion.DAL
                 return Result.Success(Status.Created, p.Get<int>("@DevicesId"));
             }
         }
+
+        public async Task<DeviceData> FindByName(string name)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstAsync<DeviceData>(
+                    @"select s.DevicesId
+                    from iti.tDevices s
+                    where s.Name = @Name;",
+                    new { Name = name});
+            }
+        }
     }
 }

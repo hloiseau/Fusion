@@ -14,11 +14,13 @@ namespace Fusion.WebApp.Controllers
     public class ContactController : Controller
     {
         readonly ContactGateway _contactGateway;
+        readonly DeviceGateway _deviceGateway;
         private readonly IHubContext<VueHub> _hubContext;
 
-        public ContactController(ContactGateway contactGateway, IHubContext<VueHub> hubContext)
+        public ContactController(ContactGateway contactGateway, DeviceGateway deviceGateway, IHubContext<VueHub> hubContext)
         {
             _contactGateway = contactGateway;
+            _deviceGateway = deviceGateway;
             _hubContext = hubContext;
         }
 
@@ -38,15 +40,18 @@ namespace Fusion.WebApp.Controllers
         }
 
         [HttpPost("sync")]
-        public async Task<IActionResult> ReciveContactList([FromBody] ContactVewModel model)
+        public async Task<IActionResult> ReciveContactList([FromBody] ContactVewModel model, [FromBody] string name)
         {
             Request.Body.Seek(0, SeekOrigin.Begin);
             StreamReader sr = new StreamReader(Request.Body);
             string body = await sr.ReadToEndAsync();
             Result result = null;
+
+            DeviceData deviceid = await _deviceGateway.FindByName(name);
+            
             for (int i = 0; i < model.Contacts.Count; i++)
             {
-                result = await _contactGateway.ReciveContactList(model.Contacts[i].Name, null, model.Contacts[i].Number);
+                result = await _contactGateway.ReciveContactList(deviceid.DevicesId, model.Contacts[i].Name, null, model.Contacts[i].Number);
             }
             return Ok(result);
         }

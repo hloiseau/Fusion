@@ -18,7 +18,7 @@ namespace Fusion.DAL
             _connectionString = connectionString;
         }
 
-        public async Task<Result<int>> ReciveContactList(string name, string mail, string number)
+        public async Task<Result<int>> ReciveContactList(int device, string name, string mail, string number)
         {
             string result = null;
             string[] names = name.Split(' ');
@@ -47,11 +47,12 @@ namespace Fusion.DAL
             {
                 result = rgx.Replace(number, replacement);
                 result = Regex.Replace(result, @"\s+", "");
-            }            
+            }
 
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
+                p.Add("@deviceId", device);
                 p.Add("@firstName", names[0]);
                 p.Add("@LastName", names[1]);
                 p.Add("@mail", mail);

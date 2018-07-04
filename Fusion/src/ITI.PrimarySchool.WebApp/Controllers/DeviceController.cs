@@ -31,5 +31,6 @@ namespace Fusion.WebApp.Controllers
             await _deviceGateway.AddDevice(name);
             return Ok();
         }
+        
     }
 }

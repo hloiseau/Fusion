@@ -142,6 +142,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        this.findDeviceName()
 
         PermissionUtil.initPermissions(this)
 
@@ -158,8 +159,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             SMSLs.SetSMS(cc.GetSMS(this))
             Log.d("SYNC", "Address : " + SMSLs.GetSMS()!![3].GetAddress() + " Message : " + SMSLs.GetSMS()!![3].GetBody() + " Date : " + SMSLs.GetSMS()!![3].GetDate() + " Type : " + SMSLs.GetSMS()!![3].GetType())
 
-            HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
-            HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
+            var manufacturer = Build.MANUFACTURER
+            var model = Build.MODEL
+            var name: String
+            if (model.startsWith(manufacturer)) {
+                name = capitalize(model)
+            }
+            else {
+                name = capitalize(manufacturer) + " " + model
+                name.replace(' ', '_', ignoreCase = true)
+            }
+
+            HttpExecute(retrofitAPI.CreateContacts(contactLs, name)).start()
+            HttpExecute(retrofitAPI.CreateSMS(SMSLs, name)).start()
             //-----------------------------------------
         }
         setContentView(R.layout.activity_main)
@@ -169,8 +181,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         this.configureToolBar()
         this.configureDrawerLayout()
         this.configureNavigationView()
-
-        this.findDeviceName()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -193,7 +203,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    protected fun syncDataTest() {
+    /*protected fun syncDataTest() {
         val retrofitAPI = HttpExecute.BuildAPI()
         val cc = ContentCollector()
         val contactLs = ContactsList()
@@ -205,7 +215,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         HttpExecute(retrofitAPI.CreateContacts(contactLs)).start()
         HttpExecute(retrofitAPI.CreateSMS(SMSLs)).start()
-    }
+    }*/
 
     fun findDeviceName() {
         val retrofitAPI = HttpExecute.BuildAPI()

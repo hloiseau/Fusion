@@ -1,5 +1,6 @@
 create proc iti.sContactUpdate
 (
+	@DeviceId int,
     @FirstName nvarchar(32),
     @LastName  nvarchar(32),
 	@Mail nvarchar(32),
@@ -17,13 +18,13 @@ begin
 		return 1;
 	end;
 
-	if exists(select * from iti.tContact c where c.ContactId <> @ContactId and c.FirstName = @FirstName and c.LastName = @LastName and c.Mail = @Mail and PhoneNumber = @PhoneNumber)
+	if exists(select * from iti.tContact c where c.DeviceId <> @DeviceId and c.ContactId <> @ContactId and c.FirstName = @FirstName and c.LastName = @LastName and c.Mail = @Mail and PhoneNumber = @PhoneNumber)
 	begin
 		rollback;
 		return 2;
 	end;
 
-    update iti.tContact set FirstName = @FirstName, LastName = @LastName, Mail = @Mail, PhoneNumber = @PhoneNumber where ContactId = @ContactId;
+    update iti.tContact set DeviceId = @DeviceId, FirstName = @FirstName, LastName = @LastName, Mail = @Mail, PhoneNumber = @PhoneNumber where ContactId = @ContactId;
 	commit;
     return 0;
 end;
