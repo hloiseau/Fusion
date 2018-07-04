@@ -1,80 +1,80 @@
 <template>
     <div>
-    <p></p></br></br>
-    <div style="display: flex; flex-wrap: wrap;">
-        <div class="element" v-for="i of DeviceList" :key="i.DevicesId" style="padding: 10px;">
-        <el-card class="box-card">
-        <div slot="header" class="clearfix">
-            <img  v-if="i.type == 'Mobile'" src="https://i.imgur.com/0jdQr6n.png" class="miniature">
-            <span>{{ i.name }}</span>
-            <table>
-                <tr>
-                    <td><span>Batterie</span></td>
-                    <td width="50%"></td>
-                    <td><span>Stockage</span></td>
-                </tr>
-            <tr><!-- Juste changer la valeur du % par la valeur de la battery-->
-                        <td>
-                            <span v-if="pourcentBattery != null">Batterie</span>
-                        </td>
-                        <td width="50%"></td>
-                        <td>
-                            <span v-if="pourcentStockage != null" >Stockage</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <!-- Juste changer la valeur du % par la valeur de la battery-->
-                        <td>
-                            <el-progress v-if="pourcentBattery != null" type="circle" width=80 :percentage=pourcentBattery color="lightgreen"></el-progress>
-                        </td>
-                        <td width="50%"></td>
-                        <td>
-                            <el-progress v-if="pourcentStockage != null" type="circle" width=80 :percentage=pourcentStockage.toFixed(2) color="lightblue"></el-progress>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <el-collapse accordion>
-                <el-collapse-item title="Actions" name="1">
-                    <div v-if="i.type == 'Mobile'">
-                        <el-row>
-                            <router-link :to="`/contacts`">
-            <el-button type="success" >
-                                    <i class="fa fa-users" aria-hidden="true"></i> Contacts
-                                </el-button>
-
-                            <router-link :to="`/file`">
-                                <el-button type="primary">
-                                    <i class="fa fa-file" aria-hidden="true"></i> Envoyer un fichier
-                                </el-button>
-                            </router-link>
-                        </el-row>
-
-                        <el-row>
-                            <router-link :to="`/file/FileUrlSender`">
-                                <el-button type="primary">
-                                    <i class="fa fa-link" aria-hidden="true"></i> Envoyer un URL
-                                </el-button>
-                            </router-link>
-
-                            <router-link :to="`/rtc`">
-                                <el-button type="primary">
-                                    <i class="fa fa-phone" aria-hidden="true"></i> Appel-vidéo
-                                </el-button>
-                            </router-link>
-                        </el-row>
-
-                        <el-row>
-                            <el-button type="primary" v-on:click="findPhone($event)">
-                                <i class="fa fa-volume-control-phone" aria-hidden="true"></i> Trouver mon téléphone
-                            </el-button>
-                        </el-row>
+        <p></p>
+        </br>
+        </br>
+        <div style="display: flex; flex-wrap: wrap;">
+            <div class="element" v-for="i of DeviceList" :key="i.DevicesId" style="padding: 10px;">
+                <el-card class="box-card">
+                    <div slot="header" class="clearfix">
+                        <img v-if="i.type == 'Mobile'" src="https://i.imgur.com/0jdQr6n.png" class="miniature">
+                        <span>{{ i.name }}</span>
+                        <table>
+                            <tr>
+                                <td>
+                                    <span v-if="pourcentBattery != null">Batterie</span>
+                                </td>
+                                <td width=50%></td>
+                                <td>
+                                    <span v-if="pourcentStockage != null">Stockage</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <!-- Juste changer la valeur du % par la valeur de la battery-->
+                                <td>
+                                    <el-progress v-if="pourcentBattery != null" type="circle" width=80 :percentage=pourcentBattery color="lightgreen"></el-progress>
+                                </td>
+                                <td width="50%"></td>
+                                <td>
+                                    <el-progress v-if="pourcentStockage != null" type="circle" width=80 :percentage=pourcentStockage.toFixed(2) color="lightblue"></el-progress>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                </el-collapse-item>
-            </el-collapse>
-        </el-card>
-        </div>
+
+                    <el-collapse accordion>
+                        <el-collapse-item title="Actions" name="1">
+                            <center>
+                                <div v-if="i.type == 'Mobile'">
+                                    <el-row>
+                                        <router-link :to="`/contacts`">
+                                            <el-button type="success">
+                                                <i class="fa fa-users" aria-hidden="true"></i> Contacts
+                                            </el-button>
+                                        </router-link>
+
+                                        <router-link :to="`/file`">
+                                            <el-button type="success">
+                                                <i class="fa fa-file" aria-hidden="true"></i> Envoyer un fichier
+                                            </el-button>
+                                        </router-link>
+                                    </el-row>
+
+                                    <el-row>
+                                        <router-link :to="`/file/FileUrlSender`">
+                                            <el-button type="success">
+                                                <i class="fa fa-link" aria-hidden="true"></i> Envoyer un URL
+                                            </el-button>
+                                        </router-link>
+
+                                        <router-link :to="`/rtc`">
+                                            <el-button type="success">
+                                                <i class="fa fa-phone" aria-hidden="true"></i> Appel-vidéo
+                                            </el-button>
+                                        </router-link>
+                                    </el-row>
+
+                                    <el-row>
+                                        <el-button type="success" v-on:click="findPhone($event)">
+                                            <i class="fa fa-volume-control-phone" aria-hidden="true"></i> Trouver mon téléphone
+                                        </el-button>
+                                    </el-row>
+                                </div>
+                            </center>
+                        </el-collapse-item>
+                    </el-collapse>
+                </el-card>
+            </div>
         </div>
     </div>
 </template>
@@ -111,6 +111,7 @@
 
             this.connection.on("batteryReceive", (battery, isCharging) => {
                 this.pourcentBattery = battery;
+                this.isCharging = isCharging;
                 console.log(this.pourcentBattery);
             })
             this.connection.start().catch(err => console.log(err.toString()));

@@ -27,7 +27,6 @@
                     <th>ID</th>
                     <th>Prénom</th>
                     <th>Nom</th>
-                    <th>Mail</th>
                     <th> Téléphone
                     </th>
                     <th> Opérations</th>
