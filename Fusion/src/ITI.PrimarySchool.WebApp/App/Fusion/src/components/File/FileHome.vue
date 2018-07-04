@@ -8,9 +8,9 @@
         <form @submit="onSubmit($event)">
             <div class="large-12 medium-12 small-12 cell">
                 <label>File
-                    <input type="file"  @change="handleFileUpload"/>
+                    <input type="file"   @change="handleFileUpload"/>
                 </label>
-                    <input type ="submit" value="Upload"/>
+                    <input type ="submit"  class="btn btn-primary" value="Upload"/>
             </div>
         </form>
         <p></p>         
