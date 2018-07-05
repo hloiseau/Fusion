@@ -18,11 +18,19 @@ namespace Fusion.WebApp.Controllers
             _deviceGateway = deviceGateway;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetContactList()
+        {
+            IEnumerable<DeviceData> result = await _deviceGateway.ListAll();
+            return Ok(result);
+        }
+
         [HttpPost("createdevice")]
         public async Task<IActionResult> CreateDevice([FromBody] string name)
         {
             await _deviceGateway.AddDevice(name);
             return Ok();
         }
+        
     }
 }

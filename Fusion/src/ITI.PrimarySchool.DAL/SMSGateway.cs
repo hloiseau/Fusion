@@ -50,7 +50,7 @@ namespace Fusion.DAL
             }
         }
 
-        public async Task<Result<int>> AddSMS(int usersId, string Extern, DateTime date, string Message, bool direction)
+        public async Task<Result<int>> AddSMS(int usersId, string Extern, DateTime date, string Message, bool direction, int deviceId)
         {
             string result = null;
             using (SqlConnection con = new SqlConnection(_connectionString))
@@ -66,7 +66,7 @@ namespace Fusion.DAL
                 }
 
                 var p = new DynamicParameters();
-                p.Add("@DevicesId", 0);
+                p.Add("@DevicesId", deviceId);
                 p.Add("@UsersId", usersId);
                 p.Add("@Extern", result);
                 p.Add("@Time", date);

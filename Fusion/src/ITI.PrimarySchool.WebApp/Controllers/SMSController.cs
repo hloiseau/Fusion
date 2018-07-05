@@ -18,18 +18,23 @@ namespace Fusion.WebApp.Controllers
 
         readonly SMSGateway _smsGateway;
         readonly ContactGateway _contactGateway;
+        readonly DeviceGateway _deviceGateway;
         private readonly IHubContext<VueHub> _hubContext;
 
-        public SmsController( SMSGateway smsGateway, ContactGateway contactGateway, IHubContext<VueHub> hubContext)
+        public SmsController(SMSGateway smsGateway, ContactGateway contactGateway, DeviceGateway deviceGateway, IHubContext<VueHub> hubContext)
         {
             _smsGateway = smsGateway;
             _contactGateway = contactGateway;
+            _deviceGateway = deviceGateway;
             _hubContext = hubContext;
         }
 
         [HttpPost("receivesms")]
-        public async Task<IActionResult> ReceiveSMSList([FromBody] SMSViewModel model)
+        public async Task<IActionResult> ReceiveSMSList([FromBody] SMSViewModel model, [FromBody] string name)
         {
+            DeviceData deviceid = await _deviceGateway.FindByName(name);
+            
+
             Request.Body.Seek(0, SeekOrigin.Begin);
             StreamReader sr = new StreamReader(Request.Body);
             string body = await sr.ReadToEndAsync();
@@ -40,7 +45,7 @@ namespace Fusion.WebApp.Controllers
                 string phone = "";
                 if (model.sms[0].Type == "1") isSent = true;
                 else isSent = false;
-                result = await _smsGateway.AddSMS(0, model.sms[0].Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.sms[0].Date)).DateTime, model.sms[0].Body, isSent);
+                result = await _smsGateway.AddSMS(0, model.sms[0].Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.sms[0].Date)).DateTime, model.sms[0].Body, isSent, deviceid.DevicesId);
 
                 string pattern = "^\\+\\d{2}";
                 string replacement = "0";
@@ -66,7 +71,7 @@ namespace Fusion.WebApp.Controllers
                 {
                     if (model.sms[i].Type == "1") isSent = true;
                     else isSent = false;
-                    result = await _smsGateway.AddSMS(0, model.sms[i].Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.sms[i].Date)).DateTime, model.sms[i].Body, isSent);
+                    result = await _smsGateway.AddSMS(0, model.sms[i].Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.sms[i].Date)).DateTime, model.sms[i].Body, isSent, deviceid.DevicesId);
                 }
             }
            
@@ -81,7 +86,7 @@ namespace Fusion.WebApp.Controllers
             bool isSent = false;
             if (model.Type == "1") isSent = true;
             else isSent = false;
-            await _smsGateway.AddSMS(0, model.Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.Date)).DateTime, model.Body, isSent);
+            await _smsGateway.AddSMS(0, model.Address, DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(model.Date)).DateTime, model.Body, isSent, 0);
 
             return Ok(result);
         }

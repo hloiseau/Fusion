@@ -6,6 +6,8 @@ namespace Fusion.DAL
     {
         public int ContactId { get; set; }
 
+        public int DeviceId { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

@@ -1,5 +1,6 @@
 create proc iti.sContactCreate
 (
+	@DeviceId int,
 	@FirstName nvarchar(32),
     @LastName  nvarchar(32),
 	@Mail nvarchar(32),
@@ -17,7 +18,7 @@ begin
 		return 1;
 	end;
 
-    insert into iti.tContact(FirstName, LastName, Mail, PhoneNumber) values(@FirstName, @LastName, @Mail, @PhoneNumber);
+    insert into iti.tContact(DeviceId, FirstName, LastName, Mail, PhoneNumber) values(@DeviceId, @FirstName, @LastName, @Mail, @PhoneNumber);
 	set @ContactId = scope_identity();
 	commit;
     return 0;

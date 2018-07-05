@@ -18,6 +18,14 @@ namespace Fusion.DAL
             _connectionString = connectionString;
         }
 
+        public async Task<IEnumerable<DeviceData>> ListAll()
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryAsync<DeviceData>(@"select DevicesId, Name, Type, Token from iti.tDevices where DevicesId <> 0");
+            }
+        }
+
         public async Task<Result<int>> AddDevice(string name)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
@@ -36,6 +44,18 @@ namespace Fusion.DAL
 
                 Debug.Assert(status == 0);
                 return Result.Success(Status.Created, p.Get<int>("@DevicesId"));
+            }
+        }
+
+        public async Task<DeviceData> FindByName(string name)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryFirstAsync<DeviceData>(
+                    @"select s.DevicesId
+                    from iti.tDevices s
+                    where s.Name = @Name;",
+                    new { Name = name});
             }
         }
     }
