@@ -22,7 +22,7 @@
                             <tr>
                                 <!-- Juste changer la valeur du % par la valeur de la battery-->
                                 <td>
-                                    <el-progress v-if="pourcentBattery != null" type="circle" width=80 :percentage=pourcentBattery color="lightgreen"></el-progress>
+                                    <el-progress v-if="pourcentBattery != null" type="circle" width=80 :percentage=pourcentBattery.toFixed(2) color="lightgreen"></el-progress>
                                 </td>
                                 <td width="50%"></td>
                                 <td>
