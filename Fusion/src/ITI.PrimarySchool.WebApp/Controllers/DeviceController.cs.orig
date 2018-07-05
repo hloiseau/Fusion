@@ -35,6 +35,9 @@ namespace Fusion.WebApp.Controllers
             await _deviceGateway.AddDevice(name);
             return Ok();
         }
+<<<<<<< HEAD
+        
+=======
 
         [HttpPost("storagesend")]
         public IActionResult RequestStorageDataAndroid()
@@ -56,6 +59,6 @@ namespace Fusion.WebApp.Controllers
             await _hubContext.Clients.All.SendAsync("BatteryReceive", batteryData.BatteryPct, batteryData.IsCharging);
             return Ok();
         }
-        
+>>>>>>> 8368291797cbe6005ead4108e6e6dd79f392463d
     }
 }

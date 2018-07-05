@@ -18,6 +18,7 @@ import okhttp3.ResponseBody
 import android.widget.Toast
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.projection.MediaProjectionManager
@@ -114,7 +115,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 Log.d("fireURLLL", "onMessageReceived:  Message Received: \nMessage: $message")
                 LaunchURL(message)
             }
-
+            "storage" -> {
+                this.storageStatus();
+                this.batteryStatus()
+            }
 
 
         //SyncData()
@@ -122,6 +126,41 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
         //SyncData()
+    }
+
+    fun batteryStatus(){
+        val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter -> this.registerReceiver(null, ifilter)
+        }
+        val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+        val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL
+
+        // How are we charging?
+        val chargePlug: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) ?: -1
+        val usbCharge: Boolean = chargePlug == BatteryManager.BATTERY_PLUGGED_USB
+        val acCharge: Boolean = chargePlug == BatteryManager.BATTERY_PLUGGED_AC
+
+        val batteryPct: Float? = batteryStatus?.let { intent ->
+            val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+            val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+            level / scale.toFloat() * 100
+        }
+        HttpExecute(HttpExecute.BuildAPI().SendBatteryData(MainActivity.Battery(batteryPct!!, isCharging))).start()
+
+        Log.d("batteryStatus", batteryPct.toString())
+    }
+
+    public data class Storage (val totalGiga: Float, val freeGiga: Float, val usedGiga: Float)
+    fun storageStatus(){
+        val stat = StatFs(Environment.getExternalStorageDirectory().path)
+        val toGiga = 1024.0f * 1024.0f * 1024.0f
+        val totalGiga = stat.totalBytes / toGiga
+        val freeGiga = stat.freeBytes / toGiga
+        val usedGiga = totalGiga - freeGiga
+        Log.d("storageStatus", totalGiga.toString())
+        Log.d("storageStatus", freeGiga.toString())
+        Log.d("storageStatus", usedGiga.toString())
+
+        HttpExecute(HttpExecute.BuildAPI().SendStorageData(MainActivity.Storage(totalGiga, freeGiga, usedGiga))).start()
     }
 
     private fun sendSMS(phoneNumber: String?, messageBody: String?) {

@@ -46,6 +46,8 @@ interface RetrofitAPI {
     @POST("/api/device/createdevice")
     fun CreateDevice(@Body name: String?): Call<String>
 
+<<<<<<< HEAD
+=======
     @Headers("'Content-Type': 'application/json'")
     @POST("/api/device/receivestoragedata")
     fun SendStorageData(@Body storage: MainActivity.Storage): Call<MainActivity.Storage>
@@ -54,6 +56,9 @@ interface RetrofitAPI {
     @POST("/api/device/receivebatterydata")
     fun SendBatteryData(@Body storage: MainActivity.Battery): Call<MainActivity.Battery>
 
+    @GET("/api/file/getfile")
+    fun downloadFileWithDynamicUrlSync(): Call<ResponseBody>
+>>>>>>> 8368291797cbe6005ead4108e6e6dd79f392463d
 
     @GET("/api/file/{name}")
     fun downloadFileWithDynamicUrlSync(@Path("name") documentUrl: String): Call<ResponseBody>

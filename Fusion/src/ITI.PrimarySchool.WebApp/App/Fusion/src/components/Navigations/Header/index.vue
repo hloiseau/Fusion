@@ -9,7 +9,7 @@
         <span class="header-title" style='color:#2e3d49'>FUSION</span>
         <el-submenu class="header-menu" index="3">
             <template slot="title">Compte</template>
-                <el-menu-item index="/logout">Se déconnecter</el-menu-item>
+                <router-link :to="`/logout`"><el-menu-item>Se déconnecter</el-menu-item></router-link>
             </el-submenu>
         </el-menu>
     </header>

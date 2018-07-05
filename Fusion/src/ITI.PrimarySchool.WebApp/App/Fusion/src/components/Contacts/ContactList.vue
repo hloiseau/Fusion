@@ -1,8 +1,9 @@
 <template>
     <div>
         <p></p>
+        </br></br>
         <div class="mb-4 d-flex justify-content-between">
-            <h1>Gestion des Contacts</h1>
+            <h1 style="color: #02758c;">Gestion des Contacts</h1>
         </div>
         
         <!--<el-table :data="contactList" style="width: 100%">
@@ -26,8 +27,8 @@
                     <th>ID</th>
                     <th>Prénom</th>
                     <th>Nom</th>
-                    <th>Mail</th>
-                    <th>Phone Number</th>
+                    <th> Téléphone
+                    </th>
                     <th> Opérations</th>
                 </tr>
             </thead>
@@ -37,9 +38,8 @@
                     <td>{{ i.contactId }}</td>
                     <td>{{ i.firstName }}</td>
                     <td>{{ i.lastName }}</td>
-                    <td>{{ i.mail }}</td>
                     <td>{{ i.phoneNumber }}</td>
-                    <router-link :to="`contacts/sendSMS/${i.contactId}`"><i class="el-icon-message"></i></router-link>
+                    <router-link :to="`contacts/sendSMS/${i.contactId}`"><i class="fa fa-envelope-o fa-2x" aria-hidden="true "></i></router-link>
                 </tr>
             </tbody>
         </table>
