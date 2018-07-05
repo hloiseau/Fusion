@@ -129,6 +129,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    fun hangUp(view:View){
+        Rtc.instance.pnRTCClient.closeAllConnections()
+        startActivity(Intent(this, MainActivity::class.java))
+    }
+
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult<ApiException>(ApiException::class.java)

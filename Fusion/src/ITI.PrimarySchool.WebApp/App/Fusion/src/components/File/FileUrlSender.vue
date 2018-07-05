@@ -8,7 +8,7 @@
             <label>Envoyer cette URL :</label>
             <input type="text" v-model="item" class="form-control">
             </br>
-            <el-button  type="submit" class="btn btn-primary" style="background-color:#3f9dff; color:white;">Envoyer</el-button>
+            <button  type="submit" class="btn btn-primary" style="background-color:#3f9dff; color:white;">Envoyer</button>
         </form>
     </div>
 </template>
