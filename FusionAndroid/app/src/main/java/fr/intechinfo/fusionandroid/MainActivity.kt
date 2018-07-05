@@ -46,8 +46,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentHome: Fragment? = null
 
     //For find the device name
-    private var mBluetoothAdapter = Build.MANUFACTURER;
-    private var mBluetoothAdapter: BluetoothAdapter? = null
+    //private var mBluetoothAdapter = Build.MANUFACTURER;
+    //private var mBluetoothAdapter: BluetoothAdapter? = null
 
     private val RC_SIGN_IN = 28
 
@@ -266,7 +266,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.activity_main_drawer_news -> this.showFragment(FRAGMENT_NEWS)
             R.id.activity_main_drawer_URL -> this.showFragment(FRAGMENT_URL)
             R.id.activity_main_drawer_Rtc -> this.showFragment(FRAGMENT_RTC)
-            R.id.activity_main_drawer_Home -> this.showFragment(fr.intechinfo.fusionandroid.MainActivity.FRAGMENT_HOME)
             R.id.activity_main_drawer_profile -> {
             }
             R.id.activity_main_drawer_settings -> {
@@ -302,7 +301,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FRAGMENT_NEWS -> this.showNewsFragment()
             FRAGMENT_URL -> this.showURLFragment()
             FRAGMENT_RTC -> this.showRtcFragment()
-            FRAGMENT_HOME -> this.showHomeFragment()
             else -> {
             }
         }
@@ -324,11 +322,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             this.startTransactionFragment(this.fragmentURL!!)
     }
 
-    private fun showHomeFragment() {
-        if (this.fragmentHome == null) this.fragmentHome = HomeFragment.newInstance()
-        this.startTransactionFragment(this.fragmentHome!!)
-    }
-
     private fun startTransactionFragment(fragment: Fragment) {
         if (!fragment.isVisible) {
             supportFragmentManager.beginTransaction()
@@ -342,8 +335,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         private val FRAGMENT_NEWS = 0
         private val FRAGMENT_URL = 1
         private val FRAGMENT_RTC = 2
-        private val FRAGMENT_HOME = 3
         private val TAG = "MainActivity"
-
     }
 }

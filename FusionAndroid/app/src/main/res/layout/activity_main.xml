@@ -18,20 +18,41 @@
         >
 
         <!-- Toolbar -->
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/activity_main_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="#4ee6cb"
             app:theme="@style/ToolBarStyle"/>
 
         <!-- FrameLayout for our fragments -->
+
         <FrameLayout
             android:id="@+id/activity_main_frame_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="243dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="21dp"
+                    android:textAlignment="center"
+                    android:textSize="25dp"
+                    android:text="battery  = 69% lol" />
+            </RelativeLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
+
 
     <!-- 2 | NavigationView -->
     <android.support.design.widget.NavigationView
