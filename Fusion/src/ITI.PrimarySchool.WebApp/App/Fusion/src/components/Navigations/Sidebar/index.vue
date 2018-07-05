@@ -6,9 +6,9 @@
                 <img  class="logo" src="https://i.imgur.com/AMV4NR4.png" />
             </div>
             </router-link>
-            <el-menu-item index="/contacts">Contacts</el-menu-item>
+            <!--<el-menu-item index="/contacts">Contacts</el-menu-item>
             <el-menu-item index="/file">File Sender</el-menu-item>
-            <el-menu-item index="/rtc">Appel vidéo</el-menu-item>
+            <el-menu-item index="/rtc">Appel vidéo</el-menu-item>-->
        </el-menu>
    </div>
 </template>

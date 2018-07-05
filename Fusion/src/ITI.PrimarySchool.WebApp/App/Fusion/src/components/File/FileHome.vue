@@ -1,20 +1,17 @@
 <template>
     <div>
         <p></p>
-        <el-row :gutter="20">
-            <el-col :span="10"><div>Envoyer un fichier :</div></el-col>
-        </el-row>
-        
+        </br></br>
+        <h1 style="color: #02758c;">Envoyer un fichier / image</h1>
+        </br>
         <form @submit="onSubmit($event)">
             <div class="large-12 medium-12 small-12 cell">
-                <label>File
-                    <input type="file"  @change="handleFileUpload"/>
+                <label>Fichier : 
+                    <input type="file" @change="handleFileUpload"/>
                 </label>
-                    <input type ="submit" value="Upload"/>
+                    <input type ="submit" class="btn btn-primary" value="Upload"/>
             </div>
         </form>
-        <p></p>         
-        <button><router-link :to="`file/FileUrlSender`">Go To URl sender</router-link></button>
     </div>
 </template>
 

@@ -3,8 +3,8 @@
         <div></div>
         <div id="audio" class="audio">
             <div id="buttons">
-                <button v-on:click="startTalk()" id="callButton" disabled>Call</button>
-                <button v-on:click="hangup()" id="hangupButton" disabled>Hang Up</button>
+                <button  class="btn btn-primary" v-on:click="startTalk()" id="callButton" disabled>Call</button>
+                <button  class="btn btn-primary" v-on:click="hangup()" id="hangupButton" disabled>Hang Up</button>
             </div>
             <div>
                 <div id="audio2">

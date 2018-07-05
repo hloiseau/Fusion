@@ -1,10 +1,14 @@
 <template>
     <div>
         <p></p>
+        </br></br>
+        <h1 style="color: #02758c;">Envoyer un URL</h1>
+        </br>
         <form @submit="urlSubmit($event)">
             <label>Envoyer cette URL :</label>
             <input type="text" v-model="item" class="form-control">
-            <button type="submit" class="btn btn-primary">Envoyer</button>
+            </br>
+            <el-button  type="submit" class="btn btn-primary" style="background-color:#3f9dff; color:white;">Envoyer</el-button>
         </form>
     </div>
 </template>
@@ -35,7 +39,7 @@ export default {
                 try {
                     console.log(this.item);
                     await this.executeAsyncRequest(() => FileApiService.sendURLtoAndroid(this.item));
-                    this.$router.replace('/file');
+                    this.$router.replace('/');
                 }
                 catch(error){
                     this.notifyError(error);

@@ -48,8 +48,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentRtc: Fragment? = null
     private var fragmentHome: Fragment? = null
 
+<<<<<<< HEAD
+    //For find the device name
     //private var mBluetoothAdapter = Build.MANUFACTURER;
     //private var mBluetoothAdapter: BluetoothAdapter? = null
+
+=======
+>>>>>>> origin/ForumPI2
     private val RC_SIGN_IN = 28
 
     public override fun onStart() {
