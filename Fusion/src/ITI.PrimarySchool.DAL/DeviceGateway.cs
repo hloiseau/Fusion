@@ -18,14 +18,22 @@ namespace Fusion.DAL
             _connectionString = connectionString;
         }
 
-        public async Task<Result<int>> AddDevice(string token)
+        public async Task<IEnumerable<DeviceData>> ListAll()
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                return await con.QueryAsync<DeviceData>(@"select DevicesId, Name, Type, Token from iti.tDevices where DevicesId <> 0");
+            }
+        }
+
+        public async Task<Result<int>> AddDevice(string name)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@Name", "Device_test");
+                p.Add("@Name", name);
                 p.Add("@Type", "Mobile");
-                p.Add("@Token", token);
+                p.Add("@Token", "none");
                 p.Add("@DevicesId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("iti.sDevicesCreate", p, commandType: CommandType.StoredProcedure);

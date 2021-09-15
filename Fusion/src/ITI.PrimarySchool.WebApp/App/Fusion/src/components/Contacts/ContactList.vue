@@ -1,9 +1,11 @@
 <template>
     <div>
+        <p></p>
+        </br></br>
         <div class="mb-4 d-flex justify-content-between">
-            <h1>Gestion des Contacts</h1>
+            <h1 style="color: #02758c;">Gestion des Contacts</h1>
         </div>
-
+        
         <!--<el-table :data="contactList" style="width: 100%">
             <el-table-column prop="contactId" label="ID"></el-table-column>
             <el-table-column prop="firstName" label="Prénom"></el-table-column>
@@ -11,21 +13,22 @@
             <el-table-column prop="mail" label="mail"></el-table-column>
             <el-table-column prop="phoneNumber" label="Numéro"></el-table-column>
             <el-table-column label="Opérations">
-                 <template slot-scope="scope">
-                     <router-link :to="`Contacts/sendSMS/${contactList}`"><i class="el-icon-message"></i></router-link>
+                <template slot-scope="scope">
+                     <router-link :to="`Contacts/sendSMS/${contactList[0].contactId}`"><i class="el-icon-message"></i></router-link>
                 </template>
             </el-table-column>
-        </el-table>
-        ICI : {{contactList[contactId]}}-->
+        </el-table>-->
+        
+        
 
-        <<table class="table table-striped table-hover table-bordered">
+        <table class="table table-striped table-hover table-bordered">
             <thead>
                 <tr>    
                     <th>ID</th>
                     <th>Prénom</th>
                     <th>Nom</th>
-                    <th>Mail</th>
-                    <th>Phone Number</th>
+                    <th> Téléphone
+                    </th>
                     <th> Opérations</th>
                 </tr>
             </thead>
@@ -35,12 +38,11 @@
                     <td>{{ i.contactId }}</td>
                     <td>{{ i.firstName }}</td>
                     <td>{{ i.lastName }}</td>
-                    <td>{{ i.mail }}</td>
                     <td>{{ i.phoneNumber }}</td>
-                    <router-link :to="`contacts/sendSMS/${i.contactId}`"><i class="el-icon-message"></i></router-link>
+                    <router-link :to="`contacts/sendSMS/${i.contactId}`"><i class="fa fa-envelope-o fa-2x" aria-hidden="true "></i></router-link>
                 </tr>
             </tbody>
-        </table>-->
+        </table>
     </div>
 </template>
 
@@ -74,9 +76,9 @@ export default {
             }
         },
 
-        handleEdit(index, row) {
-            console.log(index, row);
-        }
+      GoToSendSMS(row) {
+        this.$refs.singleTable.setCurrentRow(row);
+      }
     }
 }
 </script>

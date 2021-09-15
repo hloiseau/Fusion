@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dapper;
 
@@ -22,7 +23,7 @@ namespace Fusion.DAL
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                return await con.QueryAsync<SMSData>(@"select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS");
+                return await con.QueryAsync<SMSData>(@"select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS  order by [Time]");
             }
         }
 
@@ -31,7 +32,7 @@ namespace Fusion.DAL
             using( SqlConnection con = new SqlConnection( _connectionString ) )
             {
                 SMSData sms = await con.QueryFirstOrDefaultAsync<SMSData>(
-                   "select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS where SMSId = smsId",
+                   "select SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS where SMSId = @smsId",
                     new { SMSId = smsId } );
 
                 if (sms == null) return Result.Failure<SMSData>(Status.NotFound, "SMS not found.");
@@ -44,19 +45,30 @@ namespace Fusion.DAL
             using( SqlConnection con = new SqlConnection( _connectionString ) )
             {
                 return await con.QueryAsync<SMSData>(
-                    "select SMSId, DevicesId, UsersId, Extern, [Time], [Message],direction from iti.tSMS where Extern = Number",
+                    "with bottom as(select top(10) SMSId, DevicesId, UsersId, Extern, [Time], [Message], direction from iti.tSMS where Extern = @Number order by [Time] desc) select * from bottom order by[Time]",
                     new { Number = number } );
             }
         }
 
         public async Task<Result<int>> AddSMS(int usersId, string Extern, DateTime date, string Message, bool direction)
         {
+            string result = null;
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
+
+                string pattern = "^\\+\\d{2}";
+                string replacement = "0";
+                Regex rgx = new Regex(pattern);
+                if (Extern != null)
+                {
+                    result = rgx.Replace(Extern, replacement);
+                    result = Regex.Replace(result, @"\s+", "");
+                }
+
                 var p = new DynamicParameters();
                 p.Add("@DevicesId", 0);
                 p.Add("@UsersId", usersId);
-                p.Add("@Extern", Extern);
+                p.Add("@Extern", result);
                 p.Add("@Time", date);
                 p.Add("@Message", Message);
                 p.Add("@direction", direction);

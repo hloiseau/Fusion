@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dapper;
 
@@ -18,13 +20,42 @@ namespace Fusion.DAL
 
         public async Task<Result<int>> ReciveContactList(string name, string mail, string number)
         {
+            string result = null;
+            string[] names = name.Split(' ');
+            if (names.Length == 1)
+            {
+                Array.Resize(ref names, names.Length + 1);
+                names[names.Length - 1] = null;
+            }
+            if (names.Length < 1)
+            {
+                Array.Resize(ref names, names.Length + 1);
+                names[names.Length - 1] = null;
+                Array.Resize(ref names, names.Length + 1);
+                names[names.Length - 1] = null;
+            }
+            if (names.Length > 2)
+            {
+                names[0] = name;
+                names[1] = null;
+            }
+
+            string pattern = "^\\+\\d{2}";
+            string replacement = "0";
+            Regex rgx = new Regex(pattern);
+            if (number != null)
+            {
+                result = rgx.Replace(number, replacement);
+                result = Regex.Replace(result, @"\s+", "");
+            }            
+
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 var p = new DynamicParameters();
-                p.Add("@firstName", name);
-                p.Add("@LastName", null);
+                p.Add("@firstName", names[0]);
+                p.Add("@LastName", names[1]);
                 p.Add("@mail", mail);
-                p.Add("@PhoneNumber", number);
+                p.Add("@PhoneNumber", result);
                 p.Add("@ContactId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 p.Add("@Status", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                 await con.ExecuteAsync("iti.sContactCreate", p, commandType: CommandType.StoredProcedure);
@@ -34,6 +65,7 @@ namespace Fusion.DAL
 
                 Debug.Assert(status == 0);
                 return Result.Success(Status.Created, p.Get<int>("@ContactId"));
+                
             }
         }
 
@@ -50,7 +82,7 @@ namespace Fusion.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 ContactData sms = await con.QueryFirstOrDefaultAsync<ContactData>(
-                   "select ContactId, FirstName, LastName, Mail, PhoneNumber from iti.tContact where ContactId = ContactId",
+                   "select ContactId, FirstName, LastName, Mail, PhoneNumber from iti.tContact where ContactId = @ContactId",
                     new { ContactId = ContactId });
 
                 if (sms == null) return Result.Failure<ContactData>(Status.NotFound, "Contact not found.");
@@ -84,7 +116,7 @@ namespace Fusion.DAL
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 ContactData contact = await con.QueryFirstOrDefaultAsync<ContactData>(
-                     "select SMSId, DevicesId, UsersId, Extern, [Time], [Message],direction from iti.tSMS where Extern = Number",
+                     "select ContactId, FirstName, LastName, Mail, PhoneNumber from iti.tContact where PhoneNumber like @Number",
                     new { Number = number });
 
                 if (contact == null) return Result.Failure<ContactData>(Status.NotFound, "Contact not found.");

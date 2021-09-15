@@ -7,6 +7,7 @@ import AuthService from '../services/AuthService'
  * @param {*} next 
  */
 export default function requireAuth(to, from, next) {
+
     if (!AuthService.isConnected) {
         next({
             path: '/login',

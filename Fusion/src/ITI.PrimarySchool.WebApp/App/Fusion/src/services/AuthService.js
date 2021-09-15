@@ -1,4 +1,4 @@
-class AuthService {
+class AuthService {    
     constructor() {
         this.allowedOrigins = [];
         this.providers = {};
@@ -100,6 +100,7 @@ class AuthService {
             cb();
         }
     }
+
 }
 
 export default new AuthService();

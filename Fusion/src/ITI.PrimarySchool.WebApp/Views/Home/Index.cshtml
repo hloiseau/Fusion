@@ -1,51 +1,111 @@
 ﻿﻿@using Fusion.WebApp.Services;
 @{
-    string email = ( string )ViewData[ "Email" ];
-    IEnumerable<string> providers = ( IEnumerable<string> )ViewData[ "Providers" ];
-    string providerNames = providers == null ? string.Empty : string.Join( ",", providers.Select( p => string.Format( "'{0}'", p ) ) );
+    string email = (string)ViewData["Email"];
+    IEnumerable<string> providers = (IEnumerable<string>)ViewData["Providers"];
+    string providerNames = providers == null ? string.Empty : string.Join(",", providers.Select(p => string.Format("'{0}'", p)));
 }
 <!DOCTYPE html>
 
 <html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>SPA</title>
+    <head>
+        <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+        <link rel="manifest" href=" /favicon/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+        <meta name="viewport" content="width=device-width" />
+        <title>SPA</title>
 
-    @Html.Partial("_AppStyles")
-</head>
-<body>
-    <div id="app"></div>
+        @Html.Partial("_AppStyles")
+    </head>
+    <body>
+        <div id="app"></div>
+        <script src="https://stephenlb.github.io/webrtc-sdk/js/webrtc-v2.js"></script>
 
-    <script>
-        (function () {
-            var PrimarySchool = (function () {
-                var identity = null;
+        <script>
+            (function () {
+                var PrimarySchool = (function () {
+                    var identity = null;
 
-                var getIdentity = function () {
-                    return identity;
-                };
+                    var getIdentity = function () {
+                        return identity;
+                    };
 
-                var setIdentity = function (i) {
-                    identity = i;
-                };
+                    var setIdentity = function (i) {
+                        identity = i;
+                    };
 
-                return {
-                    getIdentity: getIdentity,
-                    setIdentity: setIdentity
-                };
+                    return {
+                        getIdentity: getIdentity,
+                        setIdentity: setIdentity
+                    };
+                })();
+
+                this.ITI = this.ITI || {};
+                this.ITI.PrimarySchool = PrimarySchool;
             })();
 
-            this.ITI = this.ITI || {};
-            this.ITI.PrimarySchool = PrimarySchool;
-        })();
-    </script>
+            src="https://cdn.pubnub.com/pubnub-3.7.13.min.js";
+            src="https://code.jquery.com/jquery-1.12.0.min.js";
 
-    <environment names="Development">
-        <script type="text/javascript" src="http://localhost:8080/dist/primary-school.js"></script>
-    </environment>
+            $(document).ready(function () {
+                var pubnub = PUBNUB({
+                    subscribe_key: 'demo'
+                });
+                pubnub.subscribe({
+                    channel: "pubnub-html5-notification-demo", // Subscribing to PubNub's channel
+                    message: function (message) {
+                        console.log(message);
+                        bamboula(message.text);
+                    }
+                })
+            });
 
-    <environment names="Staging,Production">
-        <script type="text/javascript" src="~/dist/primary-school.js"></script>
-    </environment>
-</body>
+            function bamboula(message) {
+                if (message == undefined) {
+                    message = "°-° undifind °-°";
+                };
+                // Let's check if the browser supports notifications
+                if (!("Notification" in window)) {
+                    alert("This browser does not support desktop notification");
+                }
+                // Let's check whether notification permissions have already been granted
+                else if (Notification.permission === "granted") {
+                    // If it's okay let's create a notification
+                    var notification = new Notification(message);
+                }
+                // Otherwise, we need to ask the user for permission
+                else if (Notification.permission !== 'denied') {
+                    Notification.requestPermission(function (permission) {
+                        // If the user accepts, let's create a notification
+                        if (permission === "granted") {
+                            var notification = new Notification("Hi there!");   
+                        }
+                    });
+                }
+            }
+
+            bamboula('Bienvenue ! \n petit coquin ');
+       
+        </script>
+        <environment names="Development">
+            <script type="text/javascript" src="http://localhost:8080/dist/primary-school.js"></script>
+        </environment>
+
+        <environment names="Staging,Production">
+            <script type="text/javascript" src="~/dist/primary-school.js"></script>
+        </environment>
+    </body>
 </html>
